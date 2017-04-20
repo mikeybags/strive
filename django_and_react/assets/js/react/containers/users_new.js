@@ -1,9 +1,36 @@
 import React, {Component, PropTypes} from 'react';
+import _ from 'lodash'
 import {reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
-import {createUser, createSession} from '../actions/index';
+import {createUser} from '../actions/create_user';
+import {createSession} from '../actions/create_session';
 import {Link} from 'react-router';
+import { setCookie } from 'redux-cookie';
 
+const FIELDS = {
+  first_name: {
+    type: 'input',
+    label: 'First Name'
+  },
+  last_name: {
+    type: 'input',
+    label: 'Last Name'
+  },
+  email: {
+    type: 'input',
+    label: 'Email'
+  },
+  password: {
+    type: 'input',
+    label: 'Password'
+  },
+  confirm_password: {
+    type: 'input',
+    label: 'Confirm Password'
+  }
+}
+
+// const FIELDS =  ['first_name', 'last_name', 'email', 'password', 'confirm_password'];
 
 class UsersNew extends Component {
   constructor(props){
@@ -25,6 +52,8 @@ class UsersNew extends Component {
           this.setState({errors: data.errors});
         }
         else{
+          this.props.setCookie("id", data.id, {expires:7})
+          this.props.setCookie("name", data.first_name, {expires:7})
           this.props.createSession(data)
           this.context.router.push('home')
         }
@@ -113,4 +142,4 @@ export default reduxForm({
   form: 'UsersNewForm',
   fields: ['first_name', 'last_name', 'email', 'password', 'confirm_password'],
   validate
-},null, {createUser, createSession})(UsersNew)
+},null, {createUser, createSession, setCookie})(UsersNew)
