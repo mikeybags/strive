@@ -31,6 +31,10 @@ def task(request):
     elif request.method == 'GET':
         tasks = Task.objects.filter(user__id=request.session['id'])
         return JsonResponse({"tasks": tasks})
+    elif request.method == "PATCH":
+        completed = body['completed']
+        task = Task.objects.get(id=body['task_id'])
+        updated_task  = Task.objects.update_task(name=task.name, completed=task.completed)
     return JsonResponse({'error':'Wrong HTTP method'})
 
     def group(request):
