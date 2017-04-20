@@ -3,7 +3,7 @@ import {reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import {createUser, createSession} from '../actions/index';
 import {Link} from 'react-router';
-
+import { setCookie } from 'redux-cookie';
 
 class UsersNew extends Component {
   constructor(props){
@@ -115,4 +115,4 @@ export default reduxForm({
   form: 'UsersNewForm',
   fields: ['first_name', 'last_name', 'email', 'password', 'confirm_password'],
   validate
-},null, {createUser, createSession})(UsersNew)
+},null, {createUser, createSession, setCookie})(UsersNew)
