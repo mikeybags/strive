@@ -34,7 +34,7 @@ def task(request):
     elif request.method == "PATCH":
         completed = body['completed']
         task = Task.objects.get(id=body['task_id'])
-        print task
+        print "hello"
         updated_task  = Task.objects.update_task(name=task.name, completed=task.completed)
     return JsonResponse({'error':'Wrong HTTP method'})
 
