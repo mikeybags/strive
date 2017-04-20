@@ -7,8 +7,7 @@ class Feed extends Component {
     return (
       <div>
         <p>Your friend got a bunch of strive points</p>
-        <ReactingComponent />
-        <MyEmojiInput />
+
       </div>
     )
   }

@@ -65,8 +65,22 @@ class UsersNew extends Component {
     })
   }
 
+  renderField(fieldConfig, field){
+    const fieldHelper = this.props.fields[field];
+
+    return (
+      <div key={fieldConfig.label} className={`form-group ${fieldHelper.touched && fieldHelper.invalid ? 'has-danger' : ''}`}>
+        <label>{fieldConfig.label}</label>
+        <fieldConfig.type type="text" className="form-control" {...fieldHelper} />
+        <div className="text-help">
+          {fieldHelper.touched ? fieldHelper.error : ""}
+        </div>
+      </div>
+    )
+  }
+
   render(){
-    const { fields: {first_name, last_name, email, password, confirm_password}, handleSubmit } = this.props;
+    const { handleSubmit } = this.props;
     return(
       <div>
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
@@ -74,41 +88,7 @@ class UsersNew extends Component {
           <ul>
             {this.renderErrors()}
           </ul>
-          <div className={`form-group ${first_name.touched && first_name.invalid ? 'has-danger' : ''}`}>
-            <label>First Name</label>
-            <input type="text" className="form-control" {...first_name} />
-            <div className="text-help">
-              {first_name.touched ? first_name.error : ""}
-            </div>
-          </div>
-          <div className={`form-group ${last_name.touched && last_name.invalid ? 'has-danger' : ''}`}>
-            <label>Last Name</label>
-            <input type="text" className="form-control" {...last_name} />
-            <div className="text-help">
-              {last_name.touched ? last_name.error : ""}
-            </div>
-          </div>
-          <div className={`form-group ${email.touched && email.invalid ? 'has-danger' : ''}`}>
-            <label>Email</label>
-            <input type="text" className="form-control" {...email} />
-            <div className="text-help">
-              {email.touched ? email.error : ""}
-            </div>
-          </div>
-          <div className={`form-group ${password.touched && password.invalid ? 'has-danger' : ''}`}>
-            <label>Password</label>
-            <input type="password" className="form-control" {...password} />
-            <div className="text-help">
-              {password.touched ? password.error : ""}
-            </div>
-          </div>
-          <div className={`form-group ${confirm_password.touched && confirm_password.invalid ? 'has-danger' : ''}`}>
-            <label>Confirm Password</label>
-            <input type="password" className="form-control" {...confirm_password} />
-            <div className="text-help">
-              {confirm_password.touched ? confirm_password.error : ""}
-            </div>
-          </div>
+          {_.map(FIELDS, this.renderField.bind(this))}
 
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
@@ -120,26 +100,17 @@ class UsersNew extends Component {
 
 function validate(values){
   const errors = {};
-  if (!values.first_name) {
-    errors.first_name = "Enter a First Name"
-  }
-  if (!values.last_name) {
-    errors.last_name = "Enter a Last Name"
-  }
-  if (!values.email) {
-    errors.email = "Enter an email"
-  }
-  if (!values.password) {
-    errors.password = "Enter a password"
-  }
-  if (!values.confirm_password) {
-    errors.confirm_password = "Enter password confirmation"
-  }
+  _.each(FIELDS, (type, field) => {
+    if (!values[field]) {
+      errors[field] = `Required Field`;
+    }
+  });
+
   return errors;
 }
 
 export default reduxForm({
   form: 'UsersNewForm',
-  fields: ['first_name', 'last_name', 'email', 'password', 'confirm_password'],
+  fields: _.keys(FIELDS),
   validate
 },null, {createUser, createSession, setCookie})(UsersNew)
