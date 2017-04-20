@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
-import {createSession, login} from '../actions/index';
+import {createSession} from '../actions/create_session';
+import {login} from '../actions/login';
 import {Link} from 'react-router';
 import { setCookie } from 'redux-cookie';
 

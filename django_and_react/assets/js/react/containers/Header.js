@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {deleteSession, createSession, getSession} from '../actions/index'
+import {deleteSession} from '../actions/delete_session'
+import {createSession} from '../actions/create_session'
+import {getSession} from '../actions/get_session'
 import {Link} from 'react-router'
 import { getCookie, expireCookie } from 'redux-cookie';
 

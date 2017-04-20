@@ -1,4 +1,4 @@
-import {CREATE_SESSION, DELETE_SESSION} from '../actions/index'
+import {CREATE_SESSION, DELETE_SESSION} from '../actions/types'
 
 export default function(state = {}, action){
   switch(action.type){
