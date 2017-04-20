@@ -20,6 +20,14 @@ const FIELDS = {
     type: 'input',
     label: 'Email'
   },
+  username: {
+    type: 'input',
+    label: 'Username'
+  },
+  tag_line: {
+    type: 'input',
+    label: 'Tag Line (optional)'
+  },
   password: {
     type: 'input',
     label: 'Password'
@@ -64,6 +72,7 @@ class UsersNew extends Component {
       return (<li key={error}>{error}</li>)
     })
   }
+  
 
   renderField(fieldConfig, field){
     const fieldHelper = this.props.fields[field];
@@ -101,7 +110,7 @@ class UsersNew extends Component {
 function validate(values){
   const errors = {};
   _.each(FIELDS, (type, field) => {
-    if (!values[field]) {
+    if (!values[field] && field != "tag_line") {
       errors[field] = `Required Field`;
     }
   });
