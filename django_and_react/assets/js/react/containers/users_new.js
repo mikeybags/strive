@@ -1,10 +1,36 @@
 import React, {Component, PropTypes} from 'react';
+import _ from 'lodash'
 import {reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import {createUser} from '../actions/create_user';
 import {createSession} from '../actions/create_session';
 import {Link} from 'react-router';
 import { setCookie } from 'redux-cookie';
+
+const FIELDS = {
+  first_name: {
+    type: 'input',
+    label: 'First Name'
+  },
+  last_name: {
+    type: 'input',
+    label: 'Last Name'
+  },
+  email: {
+    type: 'input',
+    label: 'Email'
+  },
+  password: {
+    type: 'input',
+    label: 'Password'
+  },
+  confirm_password: {
+    type: 'input',
+    label: 'Confirm Password'
+  }
+}
+
+// const FIELDS =  ['first_name', 'last_name', 'email', 'password', 'confirm_password'];
 
 class UsersNew extends Component {
   constructor(props){
