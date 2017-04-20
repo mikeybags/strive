@@ -6,11 +6,15 @@ import App from './components/app';
 import UsersNew from './containers/users_new';
 import SessionsNew from './containers/sessions_new';
 import Home from './containers/home'
+import Profile from './containers/profile'
 
 export default (
   <Route path='/' component={App}>
     <IndexRoute component={UsersNew} />
     <Route path='login' component={SessionsNew} />
     <Route path='home' component={Home} />
+    <Route path='profile' component={Profile}>
+
+    </Route>
   </Route>
 );
