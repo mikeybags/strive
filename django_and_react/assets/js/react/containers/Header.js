@@ -2,23 +2,28 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {deleteSession, createSession, getSession} from '../actions/index'
 import {Link} from 'react-router'
+import { getCookie, expireCookie } from 'redux-cookie';
+
 
 class Header extends Component {
   static contextTypes = {
     router:PropTypes.object
   };
   onLogout(){
+    this.props.expireCookie("id")
+    this.props.expireCookie("name")
     this.props.deleteSession(this.props.session.id)
     this.context.router.push('/')
   }
   componentWillMount(){
-    this.props.getSession()
-      .then((actionObject) => {
-        const data = actionObject.payload.data;
-        if (data.hasOwnProperty("id")){
-          this.props.createSession(data)
-        }
-      });
+    if (!this.props.session.hasOwnProperty("id")){
+      const id = this.props.getCookie("id");
+      const first_name = this.props.getCookie("name");
+      if (id !== "undefined"){
+        this.props.createSession({id, first_name})
+      }
+    }
+
   }
   render(){
     const session = this.props.session
@@ -47,4 +52,4 @@ function mapStateToProps(state){
   return {session:state.session}
 }
 
-export default connect(mapStateToProps, {deleteSession, getSession, createSession})(Header);
+export default connect(mapStateToProps, {deleteSession, getSession, createSession, getCookie, expireCookie})(Header);
