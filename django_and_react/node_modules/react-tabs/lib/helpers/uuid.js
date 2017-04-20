@@ -1,7 +1,0 @@
-"use strict";
-
-// Get a universally unique identifier
-var count = 0;
-module.exports = function uuid() {
-  return "react-tabs-" + count++;
-};
