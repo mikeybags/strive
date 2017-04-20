@@ -12,7 +12,7 @@ def home(request):
     else:
         return JsonResponse({'errer': 'Wrong HTTP method'})
 
-def Task(request):
+def task(request):
     body = json.loads(request.body)
     if request.method == 'POST':
         name = body['name']
@@ -31,4 +31,21 @@ def Task(request):
     elif request.method == 'GET':
         tasks = Task.objects.filter(user__id=request.session['id'])
         return JsonResponse({"tasks": tasks})
+    elif request.method == "PATCH":
+        completed = body['completed']
+        task = Task.objects.get(id=body['task_id'])
+        updated_task  = Task.objects.update_task(name=task.name, completed=task.completed)
     return JsonResponse({'error':'Wrong HTTP method'})
+
+    def group(request):
+        body = json.loads(request.body)
+        if request.method == 'POST':
+            name = body['name']
+            wager_amount = body['wager_amount']
+            task_id = body['task_id']
+            new_group = Group.objects.create_group(name, wager_amount, task_id)
+            if new_group:
+                new_member = GroupMember.objects.create_member(new_group.group.id, request.session['id'])
+        elif request.method == 'GET':
+            groups = Group.objects.filter(task__user__id = request.session['id'])
+            return JsonRespons({'groups':groups})
