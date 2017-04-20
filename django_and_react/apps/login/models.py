@@ -41,7 +41,7 @@ class UserManager(models.Manager):
             errors.append("Passwords must match")
         return errors
 ## returns an object with either {errors: list of errors}, or {user: user object}
-    def add_user(self, first_name, last_name, email, username, tag_line, password, confirm_password):
+    def add_user(self, first_name, last_name, email, username, password, confirm_password, tag_line=""):
         errors = self.reg_validator(first_name, last_name, email, password, confirm_password)
         if errors:
             return {'errors': errors}

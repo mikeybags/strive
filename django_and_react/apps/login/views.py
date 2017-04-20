@@ -31,9 +31,11 @@ def create(request):
         first_name = body['first_name']
         last_name = body['last_name']
         email = body['email']
+        username=body['username']
+        tag_line=body['tag_line']
         password = body['password']
         confirm_password = body['confirm_password']
-        potential_user = User.objects.add_user(first_name, last_name, email, password, confirm_password)
+        potential_user = User.objects.add_user(first_name, last_name, email, username, password, confirm_password, tag_line)
         if "errors" in potential_user:
             for error in potential_user["errors"]:
                 errors.append(error)
