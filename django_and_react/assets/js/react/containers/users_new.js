@@ -72,6 +72,7 @@ class UsersNew extends Component {
       return (<li key={error}>{error}</li>)
     })
   }
+  
 
   renderField(fieldConfig, field){
     const fieldHelper = this.props.fields[field];
