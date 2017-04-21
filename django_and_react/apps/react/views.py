@@ -1,6 +1,10 @@
 from django.shortcuts import render, HttpResponse
 from .models import *
 from datetime import *
+import json
+from django.http import JsonResponse
+from django.core import serializers
+
 def index(request):
     return render(request, 'react/index.html')
 
@@ -8,9 +12,9 @@ def home(request):
     if request.method == 'GET':
         daily_tasks = Task.objects.filter(user__id = request.session['id'], start_date = datetime.date.today())
         upcoming_tasks = Task.objects.filter(user__id = request.session['id'], start_date = datetime.date.today())
-        return JsonRespons({'daily_tasks': tasks, 'upcoming_tasks': upcoming_tasks})
+        return JsonResponse({'daily_tasks': tasks, 'upcoming_tasks': upcoming_tasks})
     else:
-        return JsonResponse({'errer': 'Wrong HTTP method'})
+        return JsonResponse({'error': 'Wrong HTTP method'})
 
 def task(request):
     body = json.loads(request.body)
@@ -22,19 +26,19 @@ def task(request):
         points = body['points']
         task_type = body['task_type']
         task = Task.objects.create_task(request.session['id'], name, description, start_date, end_date, points, task_type)
-        if 'errors' in  task:
+        if 'errors' in task:
             for error in task["errors"]:
                 errors.append(error)
             return JsonResponse({'errors':errors})
         else:
-            return JsonResponse({"task":task.task})
+            print task['task'].name
+            return JsonResponse({"name":task['task'].name})
     elif request.method == 'GET':
         tasks = Task.objects.filter(user__id=request.session['id'])
         return JsonResponse({"tasks": tasks})
     elif request.method == "PATCH":
         completed = body['completed']
         task = Task.objects.get(id=body['task_id'])
-        print "hello"
         updated_task  = Task.objects.update_task(name=task.name, completed=task.completed)
     return JsonResponse({'error':'Wrong HTTP method'})
 
