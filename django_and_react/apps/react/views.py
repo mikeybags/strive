@@ -17,8 +17,8 @@ def home(request):
         return JsonResponse({'error': 'Wrong HTTP method'})
 
 def task(request):
-    body = json.loads(request.body)
     if request.method == 'POST':
+        body = json.loads(request.body)
         name = body['name']
         description = body['description']
         start_date = body['start_date']
@@ -34,9 +34,10 @@ def task(request):
             print task['task'].name
             return JsonResponse({"name":task['task'].name})
     elif request.method == 'GET':
-        tasks = Task.objects.filter(user__id=request.session['id'])
-        return JsonResponse({"tasks": tasks})
+        tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at')
+        return JsonResponse({"tasks": list(tasks)})
     elif request.method == "PATCH":
+        body = json.loads(request.body)
         completed = body['completed']
         task = Task.objects.get(id=body['task_id'])
         updated_task  = Task.objects.update_task(name=task.name, completed=task.completed)

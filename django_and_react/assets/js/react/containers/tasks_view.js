@@ -1,13 +1,40 @@
 import React, {Component} from 'react'
+import TaskTable from '../components/task_table'
+import {connect} from 'react-redux'
+import {getTasks} from '../actions/get_tasks'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
+
 
 class TasksView extends Component {
+  componentWillMount(){
+    this.props.getTasks()
+  }
   render(){
     return (
-      <div>
-        Look at all of your fun tasks
-      </div>
+      <Tabs onSelect={this.handleSelect} selectedIndex={0}>
+        <TabList>
+          <Tab>Regular</Tab>
+          <Tab>Recurring</Tab>
+          <Tab>Major</Tab>
+        </TabList>
+
+        <TabPanel>
+          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.tasks.regular} />
+        </TabPanel>
+        <TabPanel>
+          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.tasks.recurring} />
+        </TabPanel>
+        <TabPanel>
+          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.tasks.major} />
+        </TabPanel>
+      </Tabs>
     )
   }
 }
 
-export default TasksView
+function mapStateToProps(state){
+  return {tasks:state.tasks}
+}
+
+export default connect(mapStateToProps, {getTasks})(TasksView)
