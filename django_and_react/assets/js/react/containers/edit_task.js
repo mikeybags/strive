@@ -33,6 +33,7 @@ class TasksEdit extends Component {
             <Tab>Regular</Tab>
             <Tab>Recurring</Tab>
             <Tab>Major</Tab>
+            <Tab>Upcoming</Tab>
           </TabList>
 
           <TabPanel>
@@ -43,6 +44,9 @@ class TasksEdit extends Component {
           </TabPanel>
           <TabPanel>
             <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.major} edit={this.handleRowClick.bind(this)} />
+          </TabPanel>
+          <TabPanel>
+            <TaskTable show={[["name","Name"], ["points","Worth"], ["start_date", "Start Date"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.upcoming} edit={this.handleRowClick.bind(this)} />
           </TabPanel>
         </Tabs>
         <TasksEditForm task={this.state.selected_task} />

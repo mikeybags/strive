@@ -36,7 +36,7 @@ class TasksView extends Component {
       <thead>
         <tr>
           {this.renderHeaders()}
-          <td>Completed</td>
+          <th>Completed</th>
         </tr>
       </thead>
       <tbody>

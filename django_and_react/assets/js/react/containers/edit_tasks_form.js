@@ -46,7 +46,7 @@ class TasksEditForm extends Component {
         task.weight = "easy";
         break;
     }
-    this.setState({name:task.name, description:task.description, weight:task.weight, start_date:Moment(task.start_date).format('YYYY-MM-DD'), end_date:Moment(task.unformatted_end_date).format('YYYY-MM-DD'), task_type:task.task_type, public:task.public})
+    this.setState({name:task.name, description:task.description, weight:task.weight, start_date:Moment(task.unformatted_start_date).format('YYYY-MM-DD'), end_date:Moment(task.unformatted_end_date).format('YYYY-MM-DD'), task_type:task.task_type, public:task.public})
   }
   renderErrors(){
     return this.state.errors.map((error) => {

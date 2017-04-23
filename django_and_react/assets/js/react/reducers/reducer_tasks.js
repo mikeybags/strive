@@ -8,7 +8,7 @@ export default function(state = {regular:[], recurring:[], major:[], upcoming:[]
       const regular = [],
       recurring = [],
       major = [],
-      active = [];
+      upcoming = [];
       tasks.map((task) => {
         if (Moment(task.end_date).isBefore(Moment(), "day") && task.task_type != "recurring"){
           task.points = task.points * 0.6;
@@ -27,14 +27,17 @@ export default function(state = {regular:[], recurring:[], major:[], upcoming:[]
               break
           }
         } else {
+
           upcoming.push(task)
         }
+        task.unformatted_start_date = task.start_date;
+        task.start_date = Moment(task.start_date).format('MMMM DD');
         task.unformatted_end_date = task.end_date;
         task.end_date = Moment(task.end_date).format('MMMM DD');
 
 
       })
-      return {regular, recurring, major}
+      return {regular, recurring, major, upcoming}
       break;
     default:
       return state;
