@@ -1,4 +1,5 @@
 import {GET_TASKS} from '../actions/types'
+import Moment from 'moment'
 
 export default function(state = {regular:[], recurring:[], major:[]}, action){
   switch(action.type){
@@ -8,6 +9,8 @@ export default function(state = {regular:[], recurring:[], major:[]}, action){
       const recurring = []
       const major = [];
       tasks.map((task) => {
+        task.unformatted_end_date = task.end_date;
+        task.end_date = Moment(task.end_date).format('MMMM DD');
         switch(task.task_type){
           case "regular":
             regular.push(task);

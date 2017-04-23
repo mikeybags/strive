@@ -4,9 +4,13 @@ from django.db import models
 
 
 class TaskManager(models.Manager):
-    def create_task(self, user_id, name, description, start_date, end_date, points, task_type):
+    def create_task(self, user_id, name, description, start_date, end_date, points, task_type, public):
         user = User.objects.get(id=user_id)
-        task = Task(user=user, name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type)
+        if public == "true":
+            public = True
+        else:
+            public = False
+        task = Task(user=user, name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
         task.save()
         return {'task': task}
 

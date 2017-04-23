@@ -72,7 +72,7 @@ class UsersNew extends Component {
       return (<li key={error}>{error}</li>)
     })
   }
-  
+
 
   renderField(fieldConfig, field){
     const fieldHelper = this.props.fields[field];
@@ -93,7 +93,7 @@ class UsersNew extends Component {
     return(
       <div>
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <h3>Create a new post</h3>
+          <h3>Register</h3>
           <ul>
             {this.renderErrors()}
           </ul>

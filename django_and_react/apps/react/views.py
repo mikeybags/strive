@@ -25,7 +25,8 @@ def task(request):
         end_date = body['end_date']
         points = body['points']
         task_type = body['task_type']
-        task = Task.objects.create_task(request.session['id'], name, description, start_date, end_date, points, task_type)
+        public = body['public']
+        task = Task.objects.create_task(request.session['id'], name, description, start_date, end_date, points, task_type, public)
         if 'errors' in task:
             for error in task["errors"]:
                 errors.append(error)
@@ -34,7 +35,7 @@ def task(request):
             print task['task'].name
             return JsonResponse({"name":task['task'].name})
     elif request.method == 'GET':
-        tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at')
+        tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public')
         return JsonResponse({"tasks": list(tasks)})
     elif request.method == "PATCH":
         body = json.loads(request.body)
