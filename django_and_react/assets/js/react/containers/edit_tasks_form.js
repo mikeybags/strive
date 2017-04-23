@@ -30,8 +30,14 @@ class TasksEditForm extends Component {
   componentWillReceiveProps(nextProps){
     const task = nextProps.task
     switch(task.points){
+      case 6:
+        task.weight = "medium";
+        break;
       case 10:
         task.weight = "medium";
+        break;
+      case 12:
+        task.weight = "difficult";
         break;
       case 20:
         task.weight = "difficult";

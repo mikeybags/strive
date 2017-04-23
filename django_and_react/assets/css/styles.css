@@ -7,3 +7,7 @@
 #hello {
   color: red;
 }
+
+#container .expired {
+  color:red
+}

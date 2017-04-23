@@ -23,7 +23,7 @@ class TasksView extends Component {
     }
     return this.props.tasks.map((task) => {
       return(
-        <tr key={task.id} onClick={typeof this.props.edit === "function" ? () => {this.props.edit(task)} : ""}>
+        <tr key={task.id} className={task.expired ? "expired" : ""}  onClick={typeof this.props.edit === "function" ? () => {this.props.edit(task)} : ""}>
           {renderRowData(task, this.props.show)}
           <td>Y/N</td>
         </tr>
@@ -32,7 +32,7 @@ class TasksView extends Component {
   }
   render(){
     return (
-      <table className="table table-bordered table-striped">
+      <table className="table table-bordered table-striped table-hover">
       <thead>
         <tr>
           {this.renderHeaders()}
