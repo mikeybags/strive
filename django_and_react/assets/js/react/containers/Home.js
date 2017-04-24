@@ -8,11 +8,11 @@ class Home extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-5">
             <Link to="tasks/new">Add a task</Link>
             <Link to="tasks/edit">Manage tasks</Link>
           </div>
-          <div className="col-md-8">
+          <div className="col-md-7">
             <p>Points info</p>
           </div>
         </div>
