@@ -54,7 +54,7 @@ class Header extends Component {
       const navbarInstance = (
         <Navbar className="navbar navbar-inverse navbar-toggleable-md" id="navbar" fixedTop inverse collapseOnSelect>
           <Navbar.Header>
-          <a className="navbar-brand" href="#">Strive</a>
+          <a className="navbar-brand" href="#/home">Strive</a>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
@@ -66,13 +66,13 @@ class Header extends Component {
           </Navbar.Form>
             <Nav pullRight>
               <NavDropdown className="name-dropdown" noCaret eventKey={3} title={session.name} id="basic-nav-dropdown">
-                <MenuItem eventKey={3.1}>Stuff</MenuItem>
+                <MenuItem eventKey={3.1} href="#/profile">View Profile</MenuItem>
                 <MenuItem eventKey={3.2}>More Stuff</MenuItem>
-                <MenuItem eventKey={3.3}>Even More Stuff else here</MenuItem>
+                <MenuItem eventKey={3.3}>Even More Stuff</MenuItem>
                 <MenuItem divider />
                 <MenuItem eventKey={3.3}>Separated Stuff</MenuItem>
               </NavDropdown>
-              <NavItem className="nav-buttons">Store</NavItem>
+              <li className="nav-buttons" role="presentation"><a href='#/store'>Store</a></li>
               <NavItem className="nav-buttons" onClick={this.onLogout.bind(this)}>Logout</NavItem>
             </Nav>
           </Navbar.Collapse>
