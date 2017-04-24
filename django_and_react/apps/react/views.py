@@ -32,7 +32,6 @@ def task(request):
                 errors.append(error)
             return JsonResponse({'errors':errors})
         else:
-<<<<<<< HEAD
             return JsonResponse({"name":task['task'].name})
     elif request.method == 'GET':
         tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public')
