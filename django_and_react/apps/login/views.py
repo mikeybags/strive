@@ -20,7 +20,7 @@ def login(request):
         else:
             request.session["id"] = potential_user["user"].id
             request.session["first_name"] = potential_user["user"].first_name
-            return JsonResponse({"id":potential_user["user"].id, "first_name":potential_user["user"].first_name, "picture":potential_user["user"].picture})
+            return JsonResponse({"id":potential_user["user"].id, "first_name":potential_user["user"].first_name, "picture":potential_user["user"].profile_picture})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
@@ -33,7 +33,10 @@ def create(request):
         last_name = body['last_name']
         email = body['email']
         username=body['username']
-        tag_line=body['tag_line']
+        if 'tag_line' in body:
+            tag_line=body['tag_line']
+        else:
+            tag_line=""
         password = body['password']
         confirm_password = body['confirm_password']
         potential_user = User.objects.add_user(first_name, last_name, email, username, password, confirm_password, tag_line)
@@ -47,7 +50,7 @@ def create(request):
             # user = serializers.serialize('json', [potential_user["newuser"],], fields=('first_name'))
             # struct = json.loads(user)
             # user = json.dumps(struct[0])
-            return JsonResponse({"id":potential_user["newuser"].id, "first_name": potential_user["newuser"].first_name, "picture":potential_user["newuser"].picture})
+            return JsonResponse({"id":potential_user["newuser"].id, "first_name": potential_user["newuser"].first_name, "picture":potential_user["newuser"].profile_picture})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
