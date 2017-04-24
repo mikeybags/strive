@@ -4,6 +4,7 @@ from .models import User
 import json
 from django.http import JsonResponse
 from django.core import serializers
+from .forms import ImageUploadForm
 
 def login(request):
     body = json.loads(request.body)
@@ -19,7 +20,7 @@ def login(request):
         else:
             request.session["id"] = potential_user["user"].id
             request.session["first_name"] = potential_user["user"].first_name
-            return JsonResponse({"id":potential_user["user"].id, "first_name":potential_user["user"].first_name})
+            return JsonResponse({"id":potential_user["user"].id, "first_name":potential_user["user"].first_name, "picture":potential_user["user"].picture})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
@@ -46,9 +47,30 @@ def create(request):
             # user = serializers.serialize('json', [potential_user["newuser"],], fields=('first_name'))
             # struct = json.loads(user)
             # user = json.dumps(struct[0])
-            return JsonResponse({"id":potential_user["newuser"].id, "first_name":potential_user["newuser"].first_name})
+            return JsonResponse({"id":potential_user["newuser"].id, "first_name": potential_user["newuser"].first_name, "picture":potential_user["newuser"].picture})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
+
+def set_picture(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        user = User.objects.get(id=request.session["id"])
+        user.profile_picture = body["picture"]
+        user.save()
+        return JsonResponse({'picture':user.profile_picture})
+    return JsonResponse({'error':'Wrong HTTP method'})
+
+def add_picture(request, id):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = User.objects.get(id=request.session["id"])
+            user.profile_picture = form.cleaned_data['image']
+            user.save()
+            relative_path = user.primary_image.name[17:]
+            User.objects.filter(id=request.session["id"]).update(profile_picture=relative_path)
+            return JsonResponse({'success':relative_path})
+    return JsonResponse({'error':'Wrong HTTP method'})
 
 def logout(request):
     del request.session['id']

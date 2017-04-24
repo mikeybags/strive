@@ -24,13 +24,17 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
+    "awesome-react-date": "^0.3.0",
     "axios": "^0.16.1",
     "babel-preset-stage-1": "^6.1.18",
     "django-react-csrftoken": "^1.0.1",
     "js-cookie": "^2.1.4",
     "lodash": "^3.10.1",
+    "moment": "^2.18.1",
     "react": "^0.14.3",
+    "react-datepicker": "^0.46.0",
     "react-dom": "^0.14.3",
+    "react-dropzone": "^3.13.0",
     "react-emoji-picker": "^1.0.13",
     "react-emoji-react": "^0.3.0",
     "react-redux": "4.0.0",

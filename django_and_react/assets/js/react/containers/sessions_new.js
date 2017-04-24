@@ -27,6 +27,7 @@ class SessionsNew extends Component {
         else{
           this.props.setCookie("id", data.id, {expires:7})
           this.props.setCookie("name", data.first_name, {expires:7})
+          this.props.setCookie("picture", data.picture, {expires:7})
           this.props.createSession(data)
           this.context.router.push('home')
         }

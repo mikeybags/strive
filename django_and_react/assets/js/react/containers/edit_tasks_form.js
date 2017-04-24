@@ -1,13 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import _ from 'lodash'
 import {reduxForm} from 'redux-form';
-import {createTask} from '../actions/create_task'
 import {Link} from 'react-router';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import Moment from 'moment'
 
-
-class TasksNew extends Component {
+class TasksEditForm extends Component {
   constructor(props){
     super(props);
 
@@ -16,29 +14,38 @@ class TasksNew extends Component {
       name:"",
       description:"",
       weight:"easy",
-      start_date:Moment().format('YYYY-MM-DD'),
-      end_date:Moment().format('YYYY-MM-DD'),
-      task_type:"regular",
-      public:"false"
+      start_date:"",
+      end_date:"",
+      task_type:"",
+      public:false
     }
-    this.handleDateChange = this.handleDateChange.bind(this)
   }
   static contextTypes = {
     router:PropTypes.object
   };
   handleSubmit(event) {
     event.preventDefault()
-    this.props.createTask(this.state)
-      .then((actionObject) => {
-        const data = actionObject.payload.data;
-        if (data.hasOwnProperty('errors')){
-          this.setState({errors: data.errors});
-        }
-        else{
-          console.log(data);
-          this.context.router.push('profile')
-        }
-      });
+  }
+  componentWillReceiveProps(nextProps){
+    const task = nextProps.task
+    switch(task.points){
+      case 6:
+        task.weight = "medium";
+        break;
+      case 10:
+        task.weight = "medium";
+        break;
+      case 12:
+        task.weight = "difficult";
+        break;
+      case 20:
+        task.weight = "difficult";
+        break;
+      default:
+        task.weight = "easy";
+        break;
+    }
+    this.setState({name:task.name, description:task.description, weight:task.weight, start_date:Moment(task.unformatted_start_date).format('YYYY-MM-DD'), end_date:Moment(task.unformatted_end_date).format('YYYY-MM-DD'), task_type:task.task_type, public:task.public})
   }
   renderErrors(){
     return this.state.errors.map((error) => {
@@ -50,20 +57,20 @@ class TasksNew extends Component {
     stateObj[key] = event.target.value
     this.setState(stateObj)
   }
-  handleDateChange(date){
-    console.log(date);
-    this.setState({start_date:date})
-  }
   handleTaskTypeChange(event){
     this.setState({task_type:event.target.value})
   }
   handlePublicChange(event){
-    this.setState({public:event.target.value})
+    let bool = false
+    if (event.target.value === "true"){
+      bool = true
+    }
+    this.setState({public:bool})
   }
   render() {
     return (
       <div>
-        <h3>Add a Task</h3>
+        <h3>Click a Task to Edit</h3>
         <ul>
           {this.renderErrors()}
         </ul>
@@ -106,12 +113,12 @@ class TasksNew extends Component {
         <fieldset className="form-group row">
           <div className="form-check form-check-inline col-sm-6">
             <label className="form-check-label">
-              <input type="radio" className="form-check-input" name="public"  value="false"  checked={this.state.public === 'false'} onChange={this.handlePublicChange.bind(this)} /> Private Task
+              <input type="radio" className="form-check-input" name="public"  value={false}  checked={this.state.public === false} onChange={this.handlePublicChange.bind(this)} /> Private Task
             </label>
           </div>
           <div className="form-check form-check-inline col-sm-6">
             <label className="form-check-label">
-              <input type="radio" className="form-check-input" name="public" value="true"  checked={this.state.public === 'true'} onChange={this.handlePublicChange.bind(this)} /> Public Task
+              <input type="radio" className="form-check-input" name="public" value={true}  checked={this.state.public === true} onChange={this.handlePublicChange.bind(this)} /> Public Task
             </label>
           </div>
         </fieldset>
@@ -134,4 +141,4 @@ class TasksNew extends Component {
   }
 }
 
-export default connect(null, {createTask})(TasksNew)
+export default connect(null, {})(TasksEditForm)

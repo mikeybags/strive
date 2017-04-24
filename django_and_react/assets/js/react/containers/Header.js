@@ -14,6 +14,7 @@ class Header extends Component {
   onLogout(){
     this.props.expireCookie("id")
     this.props.expireCookie("name")
+    this.props.expireCookie("picture")
     this.props.deleteSession(this.props.session.id)
     this.context.router.push('/')
   }
@@ -21,8 +22,9 @@ class Header extends Component {
     if (!this.props.session.hasOwnProperty("id")){
       const id = this.props.getCookie("id");
       const first_name = this.props.getCookie("name");
+      const picture = this.props.getCookie("picture");
       if (id !== "undefined"){
-        this.props.createSession({id, first_name})
+        this.props.createSession({id, first_name, picture})
       }
     }
 

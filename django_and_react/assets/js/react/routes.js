@@ -10,6 +10,7 @@ import Profile from './containers/profile'
 import TasksNew from './containers/new_task'
 import TasksEdit from './containers/edit_task'
 import StriveStore from './containers/strive_store'
+import ProfilePicturePicker from './containers/profile_picture_picker'
 
 export default (
   <Route path='/' component={App}>
@@ -20,5 +21,6 @@ export default (
     <Route path='tasks/new' component={TasksNew} />
     <Route path='tasks/edit' component={TasksEdit} />
     <Route path='store' component={StriveStore} />
+    <Route path='pictures' component={ProfilePicturePicker} />
   </Route>
 );
