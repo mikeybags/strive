@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
     url(r'^session$', views.session),
-
+    url(r'^picture$', views.set_picture)
 ]

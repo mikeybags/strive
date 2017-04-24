@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {connect} from 'react-redux'
 import TasksView from './tasks_view'
 import StatsView from './stats_view'
 import FriendsView from './friends_view'
 import GroupsView from './groups_view'
+import {Link} from 'react-router'
 
 class Profile extends Component {
   handleSelect(index, last) {
@@ -48,35 +50,47 @@ class Profile extends Component {
 
       As with <Tab/> the content of <TabPanel/> will be shown as the content.
     */
-      <Tabs
-        onSelect={this.handleSelect}
-        selectedIndex={0}
-      >
+      <div>
+        <div className="row">
+          <div className="col-xs-4">
+            <img src={`static/images/${this.props.picture}`} className="img-responsive picture-option" />
+          </div>
+          <div className="col-xs-4">
+            <Link to="tasks/new">Add a task</Link>
+            <Link to="tasks/edit">Manage tasks</Link>
+          </div>
+          <div className="col-xs-4">
+            <p>Current Points: ---</p>
+          </div>
+        </div>
+        <Tabs onSelect={this.handleSelect} selectedIndex={0} >
+          <TabList>
+            <Tab>Tasks</Tab>
+            <Tab>Stats</Tab>
+            <Tab>Friends</Tab>
+            <Tab>Group Challenges</Tab>
+          </TabList>
 
-        <TabList>
-
-
-          <Tab>Tasks</Tab>
-          <Tab>Stats</Tab>
-          <Tab>Friends</Tab>
-          <Tab>Group Challenges</Tab>
-        </TabList>
-
-        <TabPanel>
-          <TasksView />
-        </TabPanel>
-        <TabPanel>
-          <StatsView />
-        </TabPanel>
-        <TabPanel>
-          <FriendsView />
-        </TabPanel>
-        <TabPanel>
-          <GroupsView />
-        </TabPanel>
-      </Tabs>
+          <TabPanel>
+            <TasksView />
+          </TabPanel>
+          <TabPanel>
+            <StatsView />
+          </TabPanel>
+          <TabPanel>
+            <FriendsView />
+          </TabPanel>
+          <TabPanel>
+            <GroupsView />
+          </TabPanel>
+        </Tabs>
+      </div>
     );
   }
 }
 
-export default Profile
+function mapStateToProps(state){
+  return {picture:state.session.picture}
+}
+
+export default connect(mapStateToProps)(Profile)

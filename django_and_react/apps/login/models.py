@@ -76,7 +76,7 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tag_line = models.TextField(max_length=1000)
-    profile_picture = models.ImageField(null=True, upload_to="apps/react/static/react/images/", default="images/None/no-img.jpg")
+    profile_picture = models.CharField(max_length=255, default="paper.jpeg")
     open_balance = models.IntegerField(default = 100)
     wager_balance = models.IntegerField(default = 0)
     spent = models.IntegerField(default = 0)
