@@ -119,6 +119,7 @@ class GroupMemberManager(models.Manager):
         group = Group.objects.get(id=group_id)
         member = GroupMember(group=group, user=user)
         member.save()
+        print 'hello'
         return {'member': member}
 
     def accepted(self, group_id, user_id):
