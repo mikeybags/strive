@@ -27,26 +27,42 @@ def task(request):
                 errors.append(error)
             return JsonResponse({'errors':errors})
         else:
-            return JsonResponse({"task":task.task})
+            return JsonResponse({"task":task['task'].name})
     elif request.method == 'GET':
         tasks = Task.objects.filter(user__id=request.session['id'])
-        return JsonResponse({"tasks": tasks})
+        return JsonResponse({"tasks": tasks}, safe=False)
     elif request.method == "PATCH":
-        completed = body['completed']
-        task = Task.objects.get(id=body['task_id'])
-        print "hello"
-        updated_task  = Task.objects.update_task(name=task.name, completed=task.completed)
+        if body['completed'] == True:
+            task_id = body['task_id']
+            updated_task  = Task.objects.completed_task(request.session['id'], task_id)
+        else:
+            task_id = body['task_id']
+            name = body['name']
+            description = body['description']
+            start_date = body['start_date']
+            end_date = body['end_date']
+            points = body['points']
+            task_type = body['task_type']
+            updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type)
     return JsonResponse({'error':'Wrong HTTP method'})
 
-    def group(request):
-        body = json.loads(request.body)
-        if request.method == 'POST':
-            name = body['name']
-            wager_amount = body['wager_amount']
-            task_id = body['task_id']
-            new_group = Group.objects.create_group(name, wager_amount, task_id)
-            if new_group:
-                new_member = GroupMember.objects.create_member(new_group.group.id, request.session['id'])
-        elif request.method == 'GET':
-            groups = Group.objects.filter(task__user__id = request.session['id'])
-            return JsonRespons({'groups':groups})
+def group(request):
+    body = json.loads(request.body)
+    if request.method == 'POST':
+        name = body['name']
+        wager_amount = body['wager_amount']
+        task_id = body['task_id']
+        new_group = Group.objects.create_group(name, wager_amount, task_id)
+        if new_group:
+            new_member = GroupMember.objects.create_member(new_group.group.id, request.session['id'])
+    elif request.method == 'GET':
+        groups = Group.objects.filter(task__user__id = request.session['id'])
+        return JsonResponse({'group':groups})
+
+def add_member(request):
+    body = json.loads(request.body)
+    if request.method == 'POST':
+        group_id = body['group_id']
+        new_member = GroupMember.objects.create_member(group_id, request.session['id'])
+    else:
+        return JsonResponse({'error':'Wrong HTTP method'})
