@@ -25,7 +25,6 @@ class TasksEditForm extends Component {
   };
   handleSubmit(event) {
     event.preventDefault()
-    console.log("hello");
   }
   componentWillReceiveProps(nextProps){
     const task = nextProps.task
@@ -62,7 +61,11 @@ class TasksEditForm extends Component {
     this.setState({task_type:event.target.value})
   }
   handlePublicChange(event){
-    this.setState({public:event.target.value})
+    let bool = false
+    if (event.target.value === "true"){
+      bool = true
+    }
+    this.setState({public:bool})
   }
   render() {
     return (

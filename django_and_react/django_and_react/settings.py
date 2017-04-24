@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 CSRF_COOKIE_NAME = "XCSRF-TOKEN"
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
