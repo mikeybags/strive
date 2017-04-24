@@ -57,6 +57,7 @@ class Profile extends Component {
           </div>
           <div className="col-xs-4">
             <Link to="tasks/new">Add a task</Link>
+            &nbsp;&nbsp;
             <Link to="tasks/edit">Manage tasks</Link>
           </div>
           <div className="col-xs-4">

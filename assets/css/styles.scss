@@ -8,7 +8,6 @@ body {
   font-family: $text-font;
 }
 
-
 .nav-buttons {
   a {
     color: $nav-active;
@@ -78,7 +77,6 @@ body {
   &:active, &:focus {
     background-color: $nav-active
   }
-
 }
 
 #nav-submit {
@@ -109,7 +107,7 @@ body {
       color: $nav-active;
     }
   }
-  li > a{
+  li > a {
     color: $nav-link;
   }
 }
@@ -119,7 +117,7 @@ body {
   li{
     a {
       color: $nav-link;
-      &:focus, &:hover  {
+      &:focus, &:hover {
         background-color: $primary-color;
         color: $nav-active;
         background-image: none;
@@ -164,6 +162,28 @@ body {
    ul {
      @media (max-width: 767px){
        padding-left: 15px;
+       padding-right: 15px;
      }
    }
+}
+
+#task-box {
+  height: 300px;
+  overflow: scroll
+}
+
+#hello {
+  color: red;
+}
+
+.expired {
+  color: red
+}
+
+.picture-option {
+  height: 150px;
+}
+
+.picture-option-selected {
+  border: 2px solid red;
 }

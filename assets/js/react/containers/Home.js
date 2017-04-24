@@ -10,6 +10,7 @@ class Home extends Component {
         <div className="row">
           <div className="col-md-5">
             <Link to="tasks/new">Add a task</Link>
+            &nbsp;&nbsp;
             <Link to="tasks/edit">Manage tasks</Link>
           </div>
           <div className="col-md-7">
