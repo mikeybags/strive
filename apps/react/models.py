@@ -77,7 +77,6 @@ class WagerManager(models.Manager):
         wager.accepted = True
         user.open_balance -= wager.points
         user.wager_balance += wager.points
-        print user.open_balance
         wager.save()
         user.save()
         return True
@@ -168,7 +167,6 @@ class CommentManager(models.Manager):
 class StoreImageManager(models.Manager):
     def store_validator(self, category, name, price, picture):
         errors = []
-        picture_regex = re.compile(r'^[a-zA-Z0-9.+_-]+\.(jpg|png|gif)$')
         if len(category) < 2:
             errors.append("category must be longer than 2 characters")
         if len(name) < 2:
@@ -177,8 +175,6 @@ class StoreImageManager(models.Manager):
             errors.append("price must be larger than 100 points")
         if len(picture) < 2:
             errors.append("picture must be larger than 2 characters")
-        if not picture_regex.match(picture):
-            errors.append("invalid image file")
         return errors
 
     def create_item(self, category, name, price, picture):
