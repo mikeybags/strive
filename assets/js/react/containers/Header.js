@@ -6,6 +6,7 @@ import {getSession} from '../actions/get_session'
 import {Link} from 'react-router'
 import { getCookie, expireCookie } from 'redux-cookie';
 import { Nav, Navbar, NavItem, MenuItem, NavDropdown, FormGroup, FormControl, Button, NavLink } from 'react-bootstrap'
+import {getPoints} from '../actions/get_points'
 
 
 class Header extends Component {
@@ -26,6 +27,7 @@ class Header extends Component {
       const picture = this.props.getCookie("picture");
       if (id !== "undefined"){
         this.props.createSession({id, first_name, picture})
+        this.props.getPoints()
       }
     }
 
@@ -88,4 +90,4 @@ function mapStateToProps(state){
   return {session:state.session}
 }
 
-export default connect(mapStateToProps, {deleteSession, getSession, createSession, getCookie, expireCookie})(Header);
+export default connect(mapStateToProps, {deleteSession, getSession, createSession, getCookie, expireCookie, getPoints})(Header);

@@ -3,6 +3,7 @@ import {reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import {createSession} from '../actions/create_session';
 import {login} from '../actions/login';
+import {getPoints} from '../actions/get_points';
 import {Link} from 'react-router';
 import { setCookie } from 'redux-cookie';
 
@@ -29,6 +30,7 @@ class SessionsNew extends Component {
           this.props.setCookie("name", data.first_name, {expires:7})
           this.props.setCookie("picture", data.picture, {expires:7})
           this.props.createSession(data)
+          this.props.getPoints()
           this.context.router.push('home')
         }
       });
@@ -84,4 +86,4 @@ export default reduxForm({
   form: 'SessionsNewForm',
   fields: ['email', 'password'],
   validate
-},null, {createSession, login, setCookie})(SessionsNew)
+},null, {createSession, login, setCookie, getPoints})(SessionsNew)

@@ -41,6 +41,7 @@ class ProfilePicturePicker extends Component {
             </div>
           </div>
         <button type="button" onClick={this.submitPicture.bind(this)} className="btn btn-primary" >Okay!</button>
+        <p>Underwhelmed by your options? Strive to buy a better avatar in the Strive Store</p>
       </form>
     )
   }

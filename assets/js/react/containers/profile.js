@@ -61,7 +61,9 @@ class Profile extends Component {
             <Link to="tasks/edit">Manage tasks</Link>
           </div>
           <div className="col-xs-4">
-            <p>Current Points: ---</p>
+            <p>Current Points: {this.props.points.open_balance}</p>
+            <p>Wagered Points: {this.props.points.wager_balance}</p>
+            <p>Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>
           </div>
         </div>
         <Tabs onSelect={this.handleSelect} selectedIndex={0} >
@@ -91,7 +93,7 @@ class Profile extends Component {
 }
 
 function mapStateToProps(state){
-  return {picture:state.session.picture}
+  return {picture:state.session.picture, points:state.points}
 }
 
 export default connect(mapStateToProps)(Profile)

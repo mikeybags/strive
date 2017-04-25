@@ -4,8 +4,10 @@ import {reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import {createUser} from '../actions/create_user';
 import {createSession} from '../actions/create_session';
+import {getPoints} from '../actions/get_points';
 import {Link} from 'react-router';
 import { setCookie } from 'redux-cookie';
+
 
 const FIELDS = {
   first_name: {
@@ -64,6 +66,7 @@ class UsersNew extends Component {
           this.props.setCookie("name", data.first_name, {expires:7})
           this.props.setCookie("picture", data.picture, {expires:7})
           this.props.createSession(data)
+          this.props.getPoints()
           this.context.router.push('pictures')
         }
       });
@@ -123,4 +126,4 @@ export default reduxForm({
   form: 'UsersNewForm',
   fields: _.keys(FIELDS),
   validate
-},null, {createUser, createSession, setCookie})(UsersNew)
+},null, {createUser, createSession, setCookie, getPoints})(UsersNew)
