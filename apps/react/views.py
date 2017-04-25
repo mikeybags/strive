@@ -78,7 +78,7 @@ def add_member(request):
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
-def activity(request):
+def activity_feed(request):
     if request.method == 'GET':
         pass
     else:
@@ -90,3 +90,9 @@ def points(request):
         return JsonResponse({'open_balance':user.open_balance, 'wager_balance':user.wager_balance, 'spent':user.spent})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
+
+def add_friend(request):
+    if request.method == 'GET':
+        pass
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})
