@@ -78,6 +78,12 @@ def add_member(request):
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
+def activity(request):
+    if request.method == 'GET':
+        pass
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})
+
 def points(request):
     if request.method == 'GET':
         user = User.objects.get(id=request.session['id'])
