@@ -41,11 +41,12 @@ def task(request):
         task_id = body['id']
         name = body['name']
         description = body['description']
-        start_date = body['unformatted_start_date']
-        end_date = body['unformatted_end_date']
+        start_date = body['start_date']
+        end_date = body['end_date']
         points = body['points']
         task_type = body['task_type']
-        updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type)
+        public = body['public']
+        updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type, public)
         if body['completed'] == True:
             updated_task = Task.objects.completed_task(request.session['id'], task_id)
         return JsonResponse({'Success':True})
