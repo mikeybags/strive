@@ -6,3 +6,5 @@ export const GET_TASKS = 'GET_TASKS';
 export const LOGIN = 'LOGIN';
 export const CREATE_TASK = 'CREATE_TASK';
 export const ADD_PICTURE = 'ADD_PICTURE';
+export const COMPLETE_TASK = 'COMPLETE_TASK';
+export const GET_POINTS = 'GET_POINTS';

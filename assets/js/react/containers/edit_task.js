@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import TaskTable from '../components/task_table'
+import TaskTable from './task_table'
 import TasksEditForm from '../containers/edit_tasks_form'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import {connect} from 'react-redux'
@@ -34,6 +34,7 @@ class TasksEdit extends Component {
             <Tab>Recurring</Tab>
             <Tab>Major</Tab>
             <Tab>Upcoming</Tab>
+            <Tab>Completed (FOR TESTING PURPOSES)</Tab>
           </TabList>
 
           <TabPanel>
@@ -47,6 +48,9 @@ class TasksEdit extends Component {
           </TabPanel>
           <TabPanel>
             <TaskTable show={[["name","Name"], ["points","Worth"], ["start_date", "Start Date"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.upcoming} edit={this.handleRowClick.bind(this)} />
+          </TabPanel>
+          <TabPanel>
+            <TaskTable show={[["name","Name"], ["points","Worth"], ["start_date", "Start Date"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.completed} edit={this.handleRowClick.bind(this)} />
           </TabPanel>
         </Tabs>
         <TasksEditForm task={this.state.selected_task} />

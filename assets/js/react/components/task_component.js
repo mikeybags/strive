@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import TaskTable from './task_table'
+import TaskTable from '../containers/task_table'
 
 class DashboardTasks extends Component {
   render(){

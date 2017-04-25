@@ -34,22 +34,21 @@ def task(request):
         else:
             return JsonResponse({"name":task['task'].name})
     elif request.method == 'GET':
-        tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public')
+        tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public', 'completed', 'updated_at')
         return JsonResponse({"tasks": list(tasks)})
     elif request.method == "PATCH":
+        body = json.loads(request.body)
+        task_id = body['id']
+        name = body['name']
+        description = body['description']
+        start_date = body['unformatted_start_date']
+        end_date = body['unformatted_end_date']
+        points = body['points']
+        task_type = body['task_type']
+        updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type)
         if body['completed'] == True:
-            task_id = body['task_id']
-            updated_task  = Task.objects.completed_task(request.session['id'], task_id)
-        else:
-            task_id = body['task_id']
-            name = body['name']
-            description = body['description']
-            start_date = body['start_date']
-            end_date = body['end_date']
-            points = body['points']
-            task_type = body['task_type']
-            updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type)
-            return JsonResponse({'Success':True})
+            updated_task = Task.objects.completed_task(request.session['id'], task_id)
+        return JsonResponse({'Success':True})
     return JsonResponse({'error':'Wrong HTTP method'})
 
 def group(request):
@@ -70,5 +69,12 @@ def add_member(request):
     if request.method == 'POST':
         group_id = body['group_id']
         new_member = GroupMember.objects.create_member(group_id, request.session['id'])
+    else:
+        return JsonResponse({'error':'Wrong HTTP method'})
+
+def points(request):
+    if request.method == 'GET':
+        user = User.objects.get(id=request.session['id'])
+        return JsonResponse({'open_balance':user.open_balance, 'wager_balance':user.wager_balance, 'spent':user.spent})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import TaskTable from '../components/task_table'
+import TaskTable from './task_table'
 import {connect} from 'react-redux'
 import {getTasks} from '../actions/get_tasks'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';

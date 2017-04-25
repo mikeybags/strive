@@ -33,12 +33,12 @@ class TaskManager(models.Manager):
                     Wager.objects.lose(wager.wagerer.id, user_id)
         tomorrow = datetime.date.today() + datetime.timedelta(days=1)
         if task.task_type == "recurring":
-            Task.objects.create_task(user.id, task.name, task.description, tomorrow, tomorrow, task.points, task.task_type)
-        return {'task': task}
+            Task.objects.create_task(user.id, task.name, task.description, tomorrow, tomorrow, task.points, task.task_type, task.public)
+        return task
 
     def update_task(self, task_id, name, description, start_date, end_date, points, task_type):
         task = Task.objects.filter(id=task_id).update(name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type)
-        return {'task': task}
+        return task
 
     def public_task(self, task_id):
         task = Task.objects.filter(id=task_id).update(public=True)
