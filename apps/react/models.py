@@ -125,6 +125,10 @@ class FriendManager(models.Manager):
 
     def accepted(self, user_id, friend_id):
         Friend.objects.filter(user=friend_id, friending_user=user_id).update(accepted=True)
+        user = User.objects.get(id=user_id)
+        user2 = User.objects.get(id=friend_id)
+        friend = Friend(user=user, friending_user=user2, accepted=True)
+        friend.save()
         return True
 
 class GroupManager(models.Manager):

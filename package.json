@@ -43,6 +43,7 @@
     "react-router": "^2.0.0-rc5",
     "react-tabs": "^0.8.3",
     "react-transition-group": "^1.1.2",
+    "recharts": "^0.22.3",
     "redux": "^3.0.4",
     "redux-cookie": "^0.5.9",
     "redux-form": "^4.1.3",
