@@ -54,7 +54,14 @@ def task(request):
         updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type, public)
         if body['completed'] == True:
             updated_task = Task.objects.completed_task(request.session['id'], task_id)
-        return JsonResponse({'Success':True})
+        print updated_task
+        if 'errors' in updated_task:
+            errors = []
+            for error in updated_task["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':True})
     return JsonResponse({'error':'Wrong HTTP method'})
 
 def group(request):

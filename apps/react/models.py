@@ -9,13 +9,13 @@ class TaskManager(models.Manager):
     def task_validator(self, name, start_date, end_date):
         errors = []
         if len(name) < 2:
-            errors.append("task name needs to be longer than 2 characters")
+            errors.append("Task name needs to be longer than 2 characters")
         if str(datetime.date.today()) > start_date:
-            errors.append("task start date cannot be early")
+            errors.append("Task start date cannot be early")
         if str(datetime.date.today()) > end_date:
-            errors.append("task end date cannot be early")
+            errors.append("Task end date cannot be early")
         if start_date > end_date:
-            errors.append("start date cannot be later than end date")
+            errors.append("Start date cannot be later than end date")
         return errors
 
     def create_task(self, user_id, name, description, start_date, end_date, points, task_type, public):
@@ -52,8 +52,12 @@ class TaskManager(models.Manager):
         return task
 
     def update_task(self, task_id, name, description, start_date, end_date, points, task_type, public):
-        task = Task.objects.filter(id=task_id).update(name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
-        return task
+        errors = Task.objects.task_validator(name, start_date, end_date)
+        if len(errors) > 0:
+            return {'errors': errors}
+        else:
+            task = Task.objects.filter(id=task_id).update(name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
+            return {'task':task}
 
     def public_task(self, task_id):
         task = Task.objects.filter(id=task_id).update(public=True)
@@ -168,7 +172,6 @@ class CommentManager(models.Manager):
 class StoreImageManager(models.Manager):
     def store_validator(self, category, name, price, picture):
         errors = []
-        picture_regex = re.compile(r'^[a-zA-Z0-9.+_-]+\.(jpg|png|gif)$')
         if len(category) < 2:
             errors.append("category must be longer than 2 characters")
         if len(name) < 2:
@@ -177,8 +180,6 @@ class StoreImageManager(models.Manager):
             errors.append("price must be larger than 100 points")
         if len(picture) < 2:
             errors.append("picture must be larger than 2 characters")
-        if not picture_regex.match(picture):
-            errors.append("invalid image file")
         return errors
 
     def create_item(self, category, name, price, picture):
