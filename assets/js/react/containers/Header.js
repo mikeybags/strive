@@ -54,7 +54,7 @@ class Header extends Component {
       const navbarInstance = (
         <Navbar className="navbar navbar-inverse navbar-toggleable-md" id="navbar" fixedTop inverse collapseOnSelect>
           <Navbar.Header>
-          <a className="navbar-brand" href="#/home">Strive</a>
+          <a id="brand" className="navbar-brand" href="#/home">Strive</a>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>

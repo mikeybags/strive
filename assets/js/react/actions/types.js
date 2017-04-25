@@ -6,3 +6,4 @@ export const GET_TASKS = 'GET_TASKS';
 export const LOGIN = 'LOGIN';
 export const CREATE_TASK = 'CREATE_TASK';
 export const ADD_PICTURE = 'ADD_PICTURE';
+export const GET_FEED = 'GET_FEED';

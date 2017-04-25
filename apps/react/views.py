@@ -72,3 +72,9 @@ def add_member(request):
         new_member = GroupMember.objects.create_member(group_id, request.session['id'])
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
+
+def activity(request):
+    if request.method == 'GET':
+        pass
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})
