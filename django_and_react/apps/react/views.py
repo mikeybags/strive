@@ -20,14 +20,19 @@ def task(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         name = body['name']
-        description = body['description']
+        if 'description' in body:
+            description = body['description']
+        else:
+            description = ""
         start_date = body['start_date']
         end_date = body['end_date']
         points = body['points']
         task_type = body['task_type']
         public = body['public']
         task = Task.objects.create_task(request.session['id'], name, description, start_date, end_date, points, task_type, public)
+        print task
         if 'errors' in task:
+            errors = []
             for error in task["errors"]:
                 errors.append(error)
             return JsonResponse({'errors':errors})
@@ -72,3 +77,9 @@ def add_member(request):
         new_member = GroupMember.objects.create_member(group_id, request.session['id'])
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
+
+
+def user_list(request):
+    users = User.objects.filter(id=1).values('id','first_name')
+    print users
+    return JsonResponse({'users': list(users)})

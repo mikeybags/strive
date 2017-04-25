@@ -3,19 +3,34 @@ from ..login.models import User
 from django.db import models
 import datetime
 from django.utils import timezone
-
-
+import re
 
 class TaskManager(models.Manager):
+    def task_validator(self, name, start_date, end_date):
+        errors = []
+        if len(name) < 2:
+            errors.append("task name needs to be longer than 2 characters")
+        if str(datetime.date.today()) > start_date:
+            errors.append("task start date cannot be early")
+        if str(datetime.date.today()) > end_date:
+            errors.append("task end date cannot be early")
+        if start_date > end_date:
+            errors.append("start date cannot be later than end date")
+        return errors
+
     def create_task(self, user_id, name, description, start_date, end_date, points, task_type, public):
-        user = User.objects.get(id=user_id)
-        if public == "true":
-            public = True
+        errors = Task.objects.task_validator(name, start_date, end_date)
+        if len(errors) > 0:
+            return {'errors': errors}
         else:
-            public = False
-        task = Task(user=user, name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
-        task.save()
-        return {'task': task}
+            user = User.objects.get(id=user_id)
+            if public == "true":
+                public = True
+            else:
+                public = False
+            task = Task(user=user, name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
+            task.save()
+            return {'task': task}
 
     def completed_task(self, user_id, task_id):
         task = Task.objects.get(id=task_id)
@@ -65,6 +80,7 @@ class WagerManager(models.Manager):
         print user.open_balance
         wager.save()
         user.save()
+        return True
 
     def denied(self, wager_id):
         wager = Wager.objects.get(id=wager_id)
@@ -72,6 +88,7 @@ class WagerManager(models.Manager):
         user.open_balance += wager.points
         user.wager_balance -= wager.points
         user.save()
+        return True
 
     def win(self, wager_id, user_id):
         wager = Wager.objects.get(id=wager_id)
@@ -84,6 +101,7 @@ class WagerManager(models.Manager):
         user.wager_balance -= wager.points
         wagerer_user.wager_balance -= wager.points
         user.save()
+        return True
 
     def lose(self, wager_id, user_id):
         wager = Wager.objects.get(id=wager_id)
@@ -96,6 +114,7 @@ class WagerManager(models.Manager):
         wagerer_user.wager_balance -= wager.points
         user.wager_balance -= wager.points
         user.save()
+        return True
 
 class FriendManager(models.Manager):
     def create_friend(self, user_id, friending_user_id):
@@ -104,6 +123,10 @@ class FriendManager(models.Manager):
         friend = Friend(user=user, friend=friending_user)
         friend.save()
         return {'friend': friend}
+
+    def accepted(self, user_id, friend_id):
+        Friend.objects.filter(user=friend_id, friending_user=user_id).update(accepted=True)
+        return True
 
 class GroupManager(models.Manager):
     def create_group(self, name, wager_points, task_id, end_date):
@@ -119,14 +142,20 @@ class GroupMemberManager(models.Manager):
         group = Group.objects.get(id=group_id)
         member = GroupMember(group=group, user=user)
         member.save()
-        print 'hello'
         return {'member': member}
 
     def accepted(self, group_id, user_id):
-        member = GroupMember.objects.get(group=group_id, user=user_id)
-        member.accepted=True
-        member.completed=False
-        member.save()
+        group = Group.objects.get(id=group_id)
+        if timezone.now() > group.end_date:
+            member = GroupMember.objects.get(group=group_id, user=user_id)
+            member.accepted=True
+            member.completed=False
+            member.save()
+            return True
+        else:
+            errors = ["Past end date, cannot sign up"]
+            return ({"errors": errors})
+
 
 class CommentManager(models.Manager):
     def create_comment(self, task_id, user_id, comment):
@@ -134,7 +163,47 @@ class CommentManager(models.Manager):
         task = Task.objects.get(id=task_id)
         comment = Comment(user=user, task=task, comment=comment)
         comment.save()
+        return True
 
+class StoreImageManager(models.Manager):
+    def store_validator(self, category, name, price, picture):
+        errors = []
+        picture_regex = re.compile(r'^[a-zA-Z0-9.+_-]+\.(jpg|png|gif)$')
+        if len(category) < 2:
+            errors.append("category must be longer than 2 characters")
+        if len(name) < 2:
+            errors.append("name must be longer than 2 characters")
+        if price < 100:
+            errors.append("price must be larger than 100 points")
+        if len(picture) < 2:
+            errors.append("picture must be larger than 2 characters")
+        if not picture_regex.match(picture):
+            errors.append("invalid image file")
+        return errors
+
+    def create_item(self, category, name, price, picture):
+        errors = StoreImage.objects.store_validator(category, name, price, picture)
+        if len(errors) > 0:
+            return ({"errors": errors})
+        else:
+            picture = StoreImage(category=category, name=name, price=price, picture=picture)
+            picture.save()
+            return True
+
+class UserImageManager(models.Manager):
+    def create_user_purchase(self, user_id, image_id):
+        user = User.objects.get(id=user_id)
+        image = StoreImage.objects.get(id=image_id)
+        if user.open_balance < image.price:
+            errors = []
+            return ({'errors': errors.append("Do not have enough points")})
+        else:
+            user_purchase = UserImage(user=user, image=image)
+            user_purchase.save()
+            user.open_balance -= image.price
+            user.spent += image.price
+            user.save()
+            return True
 
 class Task(models.Model):
     user = models.ForeignKey(User, related_name="user_task")
@@ -167,6 +236,7 @@ class Wager(models.Model):
 class Friend(models.Model):
     user = models.ForeignKey(User, related_name="user_friend")
     friend = models.ForeignKey(User, related_name="friended_users")
+    accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -200,6 +270,24 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = CommentManager()
+
+class StoreImage(models.Model):
+    category = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    price = models.IntegerField()
+    picture = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = StoreImageManager()
+
+class UserImage(models.Model):
+    user = models.ForeignKey(User, related_name="user_images")
+    image = models.ForeignKey(StoreImage, related_name="images_purchased")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = UserImageManager()
 
 
 # Create your models here.
