@@ -1,0 +1,189 @@
+@import 'variables';
+
+h1, h2, h3, h4, .navbar{
+  font-family: $headline-font;
+}
+
+body {
+  font-family: $text-font;
+}
+
+.nav-buttons {
+  a {
+    color: $nav-active;
+  }
+  @media (min-width: 768px) {
+    margin-left: 10px;
+  }
+}
+
+#navbar {
+  background-color: $primary-color;
+  background-image: none;
+  padding: 0px;
+  height: $nav-height;
+  min-height: $nav-height;
+  box-shadow: 0px 3px 5px #AAA;
+
+  .container {
+    margin: 0 auto;
+    height: $nav-height;
+  }
+}
+
+.container {
+   margin-top: 61px;
+ }
+
+.navbar-header {
+  height: $nav-height;
+}
+
+.navbar-inverse .navbar-toggle {
+  &:focus, &:hover {
+    background-color: $secondary-color;
+  }
+}
+
+.navbar-toggle {
+  margin: 3px 5px 2px 0px;
+}
+
+.navbar-nav >li > a {
+  padding: 10px;
+}
+
+.navbar-inverse .navbar-brand {
+  color: $nav-link;
+  height: $nav-height;
+  padding: 9px 15px;
+
+  :focus, :hover {
+    color: $nav-active
+  }
+}
+
+#nav-search {
+  width: 100%;
+  border-radius: 10px;
+  border: 0px;
+  background-color: $nav-link;
+  background-image: url(/static/images/search.png);
+  background-size: 20px;
+  background-position: 1% 49%;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+  height: $nav-form-height;
+  &:active, &:focus {
+    background-color: $nav-active
+  }
+}
+
+#nav-submit {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 10px;
+  opacity: 0;
+  left: 1px;
+  top: 0px;
+  position: absolute;
+  height: $nav-form-height;
+}
+
+#nav-form {
+  width: 100%;
+  height: 100%;
+  margin-left: -7px;
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+}
+
+.navbar-inverse .navbar-nav {
+  .open {
+    a, a:focus, a:hover {
+      background-image: none;
+      background-color: $secondary-color;
+      color: $nav-active;
+    }
+  }
+  li > a {
+    color: $nav-link;
+  }
+}
+
+.navbar-inverse .navbar-nav .open .dropdown-menu {
+  background-color: $secondary-color;
+  li{
+    a {
+      color: $nav-link;
+      &:focus, &:hover {
+        background-color: $primary-color;
+        color: $nav-active;
+        background-image: none;
+      }
+    }
+  }
+}
+
+.dropdown-menu {
+  border: 0px;
+  border-radius: 5px;
+}
+
+.navbar-form {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -1px;
+  @media (min-width: 768px) {
+    margin-top: 6px;
+    margin-bottom: 0px;
+    height: $nav-form-height;
+    width: 55%
+  }
+  @media (min-width: 992px) {
+    width: 66%;
+  }
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.navbar-collapse.collapse {
+  @media (min-width: 768px) {
+    height: $nav-height - 1px !important;
+  }
+}
+
+.navbar-collapse {
+   background-color: $primary-color;
+   border-top: 0px;
+   margin: 0;
+   ul {
+     @media (max-width: 767px){
+       padding-left: 15px;
+       padding-right: 15px;
+     }
+   }
+}
+
+#task-box {
+  height: 300px;
+  overflow: scroll
+}
+
+#hello {
+  color: red;
+}
+
+.expired {
+  color: red
+}
+
+.picture-option {
+  height: 150px;
+}
+
+.picture-option-selected {
+  border: 2px solid red;
+}
