@@ -182,8 +182,33 @@ body {
 
 .picture-option {
   height: 150px;
+  display: inline-block;
 }
 
 .picture-option-selected {
-  border: 2px solid red;
+  border: 2px solid $orange-color;
+}
+
+.store-option {
+  height: 220px;
+  display: inline-block;
+}
+
+.store-picture-option {
+  height: 150px;
+  display: block;
+}
+
+.friend-list {
+  overflow: scroll;
+  height:400px;
+  border: 2px solid black;
+}
+.friend-display {
+  overflow: scroll;
+  height:400px;
+  border: 2px solid black;
+}
+.tiny-avatar {
+  height:50px;
 }

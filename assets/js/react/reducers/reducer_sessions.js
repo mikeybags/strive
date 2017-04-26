@@ -1,4 +1,4 @@
-import {CREATE_SESSION, DELETE_SESSION, ADD_PICTURE} from '../actions/types'
+import {CREATE_SESSION, DELETE_SESSION, ADD_PICTURE, CREATE_PURCHASE} from '../actions/types'
 
 export default function(state = {}, action){
   switch(action.type){
@@ -18,6 +18,12 @@ export default function(state = {}, action){
         id:state.id,
         name:state.name,
         picture:action.payload.data.picture
+      }
+    case CREATE_PURCHASE:
+      return {
+        id:state.id,
+        name:state.name,
+        picture:action.payload.data.Success
       }
     default:
       return state;

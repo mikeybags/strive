@@ -8,6 +8,12 @@ urlpatterns = [
     url(r'^group$', views.group),
     url(r'^add_member$', views.add_member),
     url(r'^points$', views.points),
+    url(r'^store/new$', views.create_store_item),
+    url(r'^store$', views.store),
+    url(r'^purchases$', views.purchases),
+    url(r'^friends$', views.friends),
+    url(r'^friends/tasks/(?P<id>\d+)$', views.friend_tasks),
     url(r'^add_friend$', views.add_friend),
     url(r'^activity_feed$', views.activity_feed)
+
 ]

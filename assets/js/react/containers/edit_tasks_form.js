@@ -25,11 +25,28 @@ class TasksEditForm extends Component {
   }
   static contextTypes = {
     router:PropTypes.object
-  };
+  }
   handleSubmit(event) {
     event.preventDefault()
-    this.props.editTask(this.state).then((data) => {
-      this.props.getTasks()
+    this.props.editTask(this.state).then((actionObject) => {
+      const data = actionObject.payload.data;
+      if (data.hasOwnProperty('errors')){
+        this.setState({errors: data.errors});
+      }
+      else {
+        this.props.getTasks();
+        this.setState({
+          errors:[],
+          id:"",
+          name:"",
+          description:"",
+          weight:"easy",
+          start_date:"",
+          end_date:"",
+          task_type:"",
+          public:false
+        })
+      }
     })
   }
   componentWillReceiveProps(nextProps){
