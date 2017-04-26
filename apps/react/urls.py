@@ -10,5 +10,7 @@ urlpatterns = [
     url(r'^points$', views.points),
     url(r'^store/new$', views.create_store_item),
     url(r'^store$', views.store),
-    url(r'^purchases$', views.purchases)
+    url(r'^purchases$', views.purchases),
+    url(r'^friends$', views.friends),
+    url(r'^friends/tasks/(?P<id>\d+)$', views.friend_tasks)
 ]

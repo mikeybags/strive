@@ -6,6 +6,8 @@ import PointsReducer from './reducer_points'
 import StoreItemsReducer from './reducer_store_items'
 import CategoryReducer from './reducer_categories'
 import PurchaseReducer from './reducer_purchases'
+import FriendsReducer from './reducer_friends'
+import FriendTaskReducer from './reducer_friends'
 
 
 const rootReducer = combineReducers({
@@ -15,7 +17,9 @@ const rootReducer = combineReducers({
   points:PointsReducer,
   store_items:StoreItemsReducer,
   categories:CategoryReducer,
-  purchases:PurchaseReducer
+  purchases:PurchaseReducer,
+  friends:FriendsReducer,
+  friend_tasks:FriendTaskReducer
 });
 
 export default rootReducer;

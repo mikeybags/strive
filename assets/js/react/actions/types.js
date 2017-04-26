@@ -13,3 +13,5 @@ export const GET_ITEMS = 'GET_ITEMS';
 export const CREATE_STORE_ITEM = 'CREATE_STORE_ITEM';
 export const CREATE_PURCHASE = 'CREATE_PURCHASE';
 export const GET_PURCHASES = 'GET_PURCHASES';
+export const GET_FRIENDS = 'GET_FRIENDS';
+export const GET_FRIEND_TASKS = 'GET_FRIEND_TASKS';

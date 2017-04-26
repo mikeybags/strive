@@ -43,7 +43,6 @@ class StoreIndex extends Component {
     this.setState({filter_category:event.target.value, selected:{}})
   }
   onBuyClick(){
-    console.log(this.state.selected);
     if (this.state.selected.price > this.props.points.open_balance) {
       this.setState({notification:"You are too poor. Strive Harder"})
     }

@@ -198,3 +198,17 @@ body {
   height: 150px;
   display: block;
 }
+
+.friend-list {
+  overflow: scroll;
+  height:400px;
+  border: 2px solid black;
+}
+.friend-display {
+  overflow: scroll;
+  height:400px;
+  border: 2px solid black;
+}
+.tiny-avatar {
+  height:50px;
+}
