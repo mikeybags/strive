@@ -168,13 +168,17 @@ def friends(request):
         if request.method == 'GET':
             friendships = Friend.objects.all().values("user", "friend")
             friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
+            print friends
             return JsonResponse({"friends": list(friends)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
 
 def friend_tasks(request, id):
         if request.method == 'GET':
+            rolling_day = datetime.date.today() - datetime.timedelta(days=5)
+            print rolling_day
             friend_tasks = Task.objects.filter(user__id=id, public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
+            friends_5day_points = Task.objects.filter(user__id=id)
             return JsonResponse({"friend_tasks": list(friend_tasks)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
