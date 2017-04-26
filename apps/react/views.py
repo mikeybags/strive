@@ -54,7 +54,14 @@ def task(request):
         updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type, public)
         if body['completed'] == True:
             updated_task = Task.objects.completed_task(request.session['id'], task_id)
-        return JsonResponse({'Success':True})
+        print updated_task
+        if 'errors' in updated_task:
+            errors = []
+            for error in updated_task["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':True})
     return JsonResponse({'error':'Wrong HTTP method'})
 
 def group(request):
@@ -111,3 +118,73 @@ def request_friend(request):
         pass
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
+
+def create_store_item(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        print body
+        name = body['name']
+        price = body['price']
+        picture = body['picture']
+        category = body['category']
+        item = StoreImage.objects.create_item(category, name, price, picture)
+        if 'errors' in item:
+            errors = []
+            for error in item["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':True})
+    else:
+        return JsonResponse({'error':'Wrong HTTP method'})
+
+def store(request):
+    if request.method == 'GET':
+        items = StoreImage.objects.all().exclude(images_purchased__user__id=request.session['id']).values('id', 'name', 'picture', 'price', 'category')
+        return JsonResponse({"items": list(items)})
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        print body
+        item_id = body['item_id']
+        purchase = UserImage.objects.create_user_purchase(request.session['id'], item_id)
+        if 'errors' in purchase:
+            errors = []
+            for error in purchase["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':purchase['image']})
+    else:
+        return JsonResponse({'error':'Wrong HTTP method'})
+
+def purchases(request):
+        if request.method == 'GET':
+            purchases = StoreImage.objects.filter(images_purchased__user__id=request.session['id']).values("id","name", "picture", "category")
+            return JsonResponse({"purchases": list(purchases)})
+        else:
+            return JsonResponse({'error':'Wrong HTTP method'})
+
+def friends(request):
+        if request.method == 'GET':
+            friendships = Friend.objects.all().values("user", "friend")
+            friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
+            return JsonResponse({"friends": list(friends)})
+        else:
+            return JsonResponse({'error':'Wrong HTTP method'})
+
+def friend_tasks(request, id):
+        if request.method == 'GET':
+            friend_tasks = Task.objects.filter(user__id=id).filter(public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public', 'completed', 'updated_at')
+            return JsonResponse({"friend_tasks": list(friend_tasks)})
+        else:
+            return JsonResponse({'error':'Wrong HTTP method'})
+
+def add_friend(request):
+    if request.method == 'GET':
+        pass
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})
+
+def graph(request, id):
+    if request.method == 'GET':
+        pass

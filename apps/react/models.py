@@ -9,13 +9,13 @@ class TaskManager(models.Manager):
     def task_validator(self, name, start_date, end_date):
         errors = []
         if len(name) < 2:
-            errors.append("task name needs to be longer than 2 characters")
+            errors.append("Task name needs to be longer than 2 characters")
         if str(datetime.date.today()) > start_date:
-            errors.append("task start date cannot be early")
+            errors.append("Task start date cannot be early")
         if str(datetime.date.today()) > end_date:
-            errors.append("task end date cannot be early")
+            errors.append("Task end date cannot be early")
         if start_date > end_date:
-            errors.append("start date cannot be later than end date")
+            errors.append("Start date cannot be later than end date")
         return errors
 
     def create_task(self, user_id, name, description, start_date, end_date, points, task_type, public):
@@ -52,8 +52,12 @@ class TaskManager(models.Manager):
         return task
 
     def update_task(self, task_id, name, description, start_date, end_date, points, task_type, public):
-        task = Task.objects.filter(id=task_id).update(name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
-        return task
+        errors = Task.objects.task_validator(name, start_date, end_date)
+        if len(errors) > 0:
+            return {'errors': errors}
+        else:
+            task = Task.objects.filter(id=task_id).update(name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
+            return {'task':task}
 
     def public_task(self, task_id):
         task = Task.objects.filter(id=task_id).update(public=True)
@@ -188,22 +192,25 @@ class StoreImageManager(models.Manager):
         else:
             picture = StoreImage(category=category, name=name, price=price, picture=picture)
             picture.save()
-            return True
+            return {'picture':True}
 
 class UserImageManager(models.Manager):
     def create_user_purchase(self, user_id, image_id):
         user = User.objects.get(id=user_id)
         image = StoreImage.objects.get(id=image_id)
+        errors = []
         if user.open_balance < image.price:
-            errors = []
-            return ({'errors': errors.append("Do not have enough points")})
+            errors.append("Do not have enough points")
+        if len(errors) > 0:
+                return ({'errors':errors})
         else:
             user_purchase = UserImage(user=user, image=image)
             user_purchase.save()
             user.open_balance -= image.price
             user.spent += image.price
+            user.profile_picture = image.picture
             user.save()
-            return True
+            return {'image':image.picture}
 
 class Task(models.Model):
     user = models.ForeignKey(User, related_name="user_task")

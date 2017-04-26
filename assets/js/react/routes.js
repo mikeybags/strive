@@ -12,16 +12,21 @@ import TasksEdit from './containers/edit_task'
 import StriveStore from './containers/strive_store'
 import ProfilePicturePicker from './containers/profile_picture_picker'
 import SearchResults from './containers/search_results'
+import StoreNew from './containers/store_new'
+import StoreIndex from './containers/store_index'
 
 export default (
   <Route path='/' component={App}>
     <IndexRoute component={UsersNew} />
     <Route path='login' component={SessionsNew} />
     <Route path='home' component={Home} />
-    <Route path='profile' component={Profile} />
+    <Route path='profile/:id' component={Profile} />
     <Route path='tasks/new' component={TasksNew} />
     <Route path='tasks/edit' component={TasksEdit} />
-    <Route path='store' component={StriveStore} />
+    <Route path='store' component={StriveStore} >
+      <IndexRoute component={StoreIndex} />
+      <Route path='new' component={StoreNew} />
+    </Route>
     <Route path='pictures' component={ProfilePicturePicker} />
     <Route path='search_results' component={SearchResults} />
   </Route>

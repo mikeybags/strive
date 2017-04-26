@@ -84,7 +84,7 @@ class UsersNew extends Component {
     return (
       <div key={fieldConfig.label} className={`form-group ${fieldHelper.touched && fieldHelper.invalid ? 'has-danger' : ''}`}>
         <label>{fieldConfig.label}</label>
-        <fieldConfig.type type="text" className="form-control" {...fieldHelper} />
+        <fieldConfig.type type={fieldConfig.label === "Password" || fieldConfig.label === "Confirm Password" ? "password" : "text"} className="form-control" {...fieldHelper} />
         <div className="text-help">
           {fieldHelper.touched ? fieldHelper.error : ""}
         </div>

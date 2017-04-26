@@ -66,7 +66,7 @@ class Header extends Component {
           </Navbar.Form>
             <Nav pullRight>
               <NavDropdown className="name-dropdown" noCaret eventKey={3} title={session.name} id="basic-nav-dropdown">
-                <MenuItem eventKey={3.1} href="#/profile">View Profile</MenuItem>
+                <MenuItem eventKey={3.1} href="#/profile/0">View Profile</MenuItem>
                 <MenuItem eventKey={3.2}>More Stuff</MenuItem>
                 <MenuItem eventKey={3.3}>Even More Stuff</MenuItem>
                 <MenuItem divider />
