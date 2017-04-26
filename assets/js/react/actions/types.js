@@ -10,6 +10,7 @@ export const ADD_PICTURE = 'ADD_PICTURE';
 export const GET_FEED = 'GET_FEED';
 export const COMPLETE_TASK = 'COMPLETE_TASK';
 export const GET_POINTS = 'GET_POINTS';
+export const FRIEND_SEARCH = 'FRIEND_SEARCH';
 export const GET_ITEMS = 'GET_ITEMS';
 export const CREATE_STORE_ITEM = 'CREATE_STORE_ITEM';
 export const CREATE_PURCHASE = 'CREATE_PURCHASE';

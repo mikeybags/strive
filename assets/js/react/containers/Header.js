@@ -1,12 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {deleteSession} from '../actions/delete_session'
-import {createSession} from '../actions/create_session'
-import {getSession} from '../actions/get_session'
-import {Link} from 'react-router'
+import {deleteSession} from '../actions/delete_session';
+import {createSession} from '../actions/create_session';
+import {getSession} from '../actions/get_session';
+import {Link} from 'react-router';
 import { getCookie, expireCookie } from 'redux-cookie';
-import { Nav, Navbar, NavItem, MenuItem, NavDropdown, FormGroup, FormControl, Button, NavLink } from 'react-bootstrap'
-import {getPoints} from '../actions/get_points'
+import { Nav, Navbar, NavItem, MenuItem, NavDropdown, FormGroup, FormControl, Button, NavLink } from 'react-bootstrap';
+import {getPoints} from '../actions/get_points';
+import SearchBar from '../components/search_bar';
 
 
 class Header extends Component {
@@ -61,10 +62,7 @@ class Header extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
           <Navbar.Form pullLeft>
-            <FormGroup id="nav-form" className="form-inline">
-              <FormControl id="nav-search" className="form-control mr-sm-2" type="text" placeholder="Search for Friends" />
-              <Button id="nav-submit" className="form-control mr-sm-2" type="submit">Submit</Button>
-            </FormGroup>
+            <SearchBar />
           </Navbar.Form>
             <Nav pullRight>
               <NavDropdown className="name-dropdown" noCaret eventKey={3} title={session.name} id="basic-nav-dropdown">
