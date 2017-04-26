@@ -166,4 +166,5 @@ def add_friend(request):
 
 def graph(request, id):
     if request.method == 'GET':
-        pass
+        tasks = Task.objects.filter(user__id=id)
+        return JsonResponse({'tasks': tasks})

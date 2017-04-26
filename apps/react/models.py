@@ -10,9 +10,9 @@ class TaskManager(models.Manager):
         errors = []
         if len(name) < 2:
             errors.append("Task name needs to be longer than 2 characters")
-        if str(datetime.date.today()) > start_date:
+        if str(datetime.date.today()) > str(start_date):
             errors.append("Task start date cannot be early")
-        if str(datetime.date.today()) > end_date:
+        if str(datetime.date.today()) > str(end_date):
             errors.append("Task end date cannot be early")
         if start_date > end_date:
             errors.append("Start date cannot be later than end date")
@@ -56,6 +56,10 @@ class TaskManager(models.Manager):
         if len(errors) > 0:
             return {'errors': errors}
         else:
+            if public == "true":
+                public = True
+            else:
+                public = False
             task = Task.objects.filter(id=task_id).update(name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
             return {'task':task}
 
@@ -120,7 +124,7 @@ class WagerManager(models.Manager):
         return True
 
 class FriendManager(models.Manager):
-    def create_friend(self, user_id, friending_user_id):
+    def create_friend(self, user_id, friending_user_id, accepted=False):
         user = User.objects.get(id=user_id)
         friending_user = User.objects.get(id=friending_user_id)
         friend = Friend(user=user, friend=friending_user)
@@ -128,10 +132,10 @@ class FriendManager(models.Manager):
         return {'friend': friend}
 
     def accepted(self, user_id, friend_id):
-        Friend.objects.filter(user=friend_id, friending_user=user_id).update(accepted=True)
+        Friend.objects.filter(user=friend_id, friend=user_id).update(accepted=True)
         user = User.objects.get(id=user_id)
         user2 = User.objects.get(id=friend_id)
-        friend = Friend(user=user, friending_user=user2, accepted=True)
+        friend = Friend(user=user, friend=user2, accepted=True)
         friend.save()
         return True
 
@@ -153,7 +157,7 @@ class GroupMemberManager(models.Manager):
 
     def accepted(self, group_id, user_id):
         group = Group.objects.get(id=group_id)
-        if timezone.now() > group.end_date:
+        if timezone.now() < group.end_date:
             member = GroupMember.objects.get(group=group_id, user=user_id)
             member.accepted=True
             member.completed=False
