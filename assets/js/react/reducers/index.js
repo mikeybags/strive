@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   session:SessionsReducer,
   tasks:TasksReducer,
   points:PointsReducer,
-  search: SearchReducer
+  search: SearchReducer,
   store_items:StoreItemsReducer,
   categories:CategoryReducer,
   purchases:PurchaseReducer,
