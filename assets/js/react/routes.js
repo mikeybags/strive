@@ -11,6 +11,7 @@ import TasksNew from './containers/new_task'
 import TasksEdit from './containers/edit_task'
 import StriveStore from './containers/strive_store'
 import ProfilePicturePicker from './containers/profile_picture_picker'
+import SearchResults from './containers/search_results'
 import StoreNew from './containers/store_new'
 import StoreIndex from './containers/store_index'
 
@@ -27,5 +28,6 @@ export default (
       <Route path='new' component={StoreNew} />
     </Route>
     <Route path='pictures' component={ProfilePicturePicker} />
+    <Route path='search_results' component={SearchResults} />
   </Route>
 );

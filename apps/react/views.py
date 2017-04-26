@@ -98,6 +98,27 @@ def points(request):
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
+def friend_search(request):
+    if request.method == 'GET':
+        term = request.GET['props']
+        users = User.objects.filter(username__contains=term).values('first_name', 'last_name', 'tag_line', 'username', 'profile_picture', 'id')
+        friends = Friend.objects.filter(user__id=request.session['id'])
+        if 'errors' in users:
+            errors = []
+            for error in task["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({"users": list(users)})
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})
+
+def request_friend(request):
+    if request.method == 'GET':
+        pass
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})
+
 def create_store_item(request):
     if request.method == 'POST':
         body = json.loads(request.body)
@@ -166,4 +187,5 @@ def add_friend(request):
 
 def graph(request, id):
     if request.method == 'GET':
-        pass
+        tasks = Task.objects.filter(user__id=id)
+        return JsonResponse({'tasks': tasks})
