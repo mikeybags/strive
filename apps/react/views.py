@@ -96,3 +96,7 @@ def add_friend(request):
         pass
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
+
+def graph(request, id):
+    if request.method == 'GET':
+        
