@@ -36,7 +36,7 @@ class TasksNew extends Component {
         }
         else{
           console.log(data);
-          this.context.router.push('profile')
+          this.context.router.push('profile/0')
         }
       });
   }

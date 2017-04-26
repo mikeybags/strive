@@ -189,22 +189,25 @@ class StoreImageManager(models.Manager):
         else:
             picture = StoreImage(category=category, name=name, price=price, picture=picture)
             picture.save()
-            return True
+            return {'picture':True}
 
 class UserImageManager(models.Manager):
     def create_user_purchase(self, user_id, image_id):
         user = User.objects.get(id=user_id)
         image = StoreImage.objects.get(id=image_id)
+        errors = []
         if user.open_balance < image.price:
-            errors = []
-            return ({'errors': errors.append("Do not have enough points")})
+            errors.append("Do not have enough points")
+        if len(errors) > 0:
+                return ({'errors':errors})
         else:
             user_purchase = UserImage(user=user, image=image)
             user_purchase.save()
             user.open_balance -= image.price
             user.spent += image.price
+            user.profile_picture = image.picture
             user.save()
-            return True
+            return {'image':image.picture}
 
 class Task(models.Model):
     user = models.ForeignKey(User, related_name="user_task")

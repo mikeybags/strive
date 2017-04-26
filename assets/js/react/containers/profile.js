@@ -5,11 +5,19 @@ import TasksView from './tasks_view'
 import StatsView from './stats_view'
 import FriendsView from './friends_view'
 import GroupsView from './groups_view'
+import PurchasesView from './purchases_view'
 import {Link} from 'react-router'
 
 class Profile extends Component {
-  handleSelect(index, last) {
+  constructor(props){
+    super(props);
 
+    this.state = {
+      selected:Number(this.props.params.id)
+    }
+  }
+  handleSelect(index, last) {
+    this.setState({selected:index})
   }
 
   render() {
@@ -66,12 +74,13 @@ class Profile extends Component {
             <p>Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>
           </div>
         </div>
-        <Tabs onSelect={this.handleSelect} selectedIndex={0} >
+        <Tabs onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >
           <TabList>
             <Tab>Tasks</Tab>
             <Tab>Stats</Tab>
             <Tab>Friends</Tab>
             <Tab>Group Challenges</Tab>
+            <Tab>My Swag</Tab>
           </TabList>
 
           <TabPanel>
@@ -85,6 +94,9 @@ class Profile extends Component {
           </TabPanel>
           <TabPanel>
             <GroupsView />
+          </TabPanel>
+          <TabPanel>
+            <PurchasesView />
           </TabPanel>
         </Tabs>
       </div>

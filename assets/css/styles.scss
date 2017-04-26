@@ -182,8 +182,19 @@ body {
 
 .picture-option {
   height: 150px;
+  display: inline-block;
 }
 
 .picture-option-selected {
-  border: 2px solid red;
+  border: 2px solid $orange-color;
+}
+
+.store-option {
+  height: 220px;
+  display: inline-block;
+}
+
+.store-picture-option {
+  height: 150px;
+  display: block;
 }

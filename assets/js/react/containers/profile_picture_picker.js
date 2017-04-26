@@ -19,7 +19,7 @@ class ProfilePicturePicker extends Component {
   submitPicture(){
     this.props.addPicture(this.state.picture).then((data) => {
       this.props.setCookie("picture", data.payload.data.picture, {expires:7});
-      this.context.router.push('profile')
+      this.context.router.push('profile/0')
     })
   }
   changePicture(newPic){
