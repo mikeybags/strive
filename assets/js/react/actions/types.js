@@ -10,3 +10,4 @@ export const ADD_PICTURE = 'ADD_PICTURE';
 export const GET_FEED = 'GET_FEED';
 export const COMPLETE_TASK = 'COMPLETE_TASK';
 export const GET_POINTS = 'GET_POINTS';
+export const FRIEND_SEARCH = 'FRIEND_SEARCH';

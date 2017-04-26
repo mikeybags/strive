@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^group$', views.group),
     url(r'^add_member$', views.add_member),
     url(r'^points$', views.points),
-    url(r'^add_friend$', views.add_friend),
-    url(r'^activity_feed$', views.activity_feed)
+    url(r'^request_friend$', views.request_friend),
+    url(r'^activity_feed$', views.activity_feed),
+    url(r'^friend_search$', views.friend_search)
 ]
