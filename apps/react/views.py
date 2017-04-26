@@ -153,7 +153,7 @@ def friends(request):
 
 def friend_tasks(request, id):
         if request.method == 'GET':
-            friend_tasks = Task.objects.filter(user__id=id).filter(public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public', 'completed', 'updated_at')
+            friend_tasks = Task.objects.filter(user__id=id, public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
             return JsonResponse({"friend_tasks": list(friend_tasks)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
@@ -166,4 +166,4 @@ def add_friend(request):
 
 def graph(request, id):
     if request.method == 'GET':
-        
+        pass

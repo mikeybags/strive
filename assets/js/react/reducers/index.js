@@ -7,7 +7,7 @@ import StoreItemsReducer from './reducer_store_items'
 import CategoryReducer from './reducer_categories'
 import PurchaseReducer from './reducer_purchases'
 import FriendsReducer from './reducer_friends'
-import FriendTaskReducer from './reducer_friends'
+import FriendTaskReducer from './reducer_friend_tasks'
 
 
 const rootReducer = combineReducers({

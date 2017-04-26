@@ -20,13 +20,13 @@ class TasksView extends Component {
         </TabList>
 
         <TabPanel>
-          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.tasks.regular} />
+          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.tasks.regular} completeBox={true} />
         </TabPanel>
         <TabPanel>
-          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"]]} tasks={this.props.tasks.recurring} />
+          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"]]} tasks={this.props.tasks.recurring} completeBox={true} />
         </TabPanel>
         <TabPanel>
-          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.tasks.major} />
+          <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.tasks.major} completeBox={true} />
         </TabPanel>
       </Tabs>
     )

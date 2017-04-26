@@ -5,7 +5,6 @@ import {connect} from 'react-redux'
 class FriendList extends Component {
   componentWillMount(){
     this.props.getFriends().then((data) => {
-      console.log(data.payload.data);
     })
   }
   renderFriends(){
