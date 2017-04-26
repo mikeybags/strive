@@ -7,6 +7,7 @@ export const LOGIN = 'LOGIN';
 export const CREATE_TASK = 'CREATE_TASK';
 export const EDIT_TASK = 'EDIT_TASK';
 export const ADD_PICTURE = 'ADD_PICTURE';
+export const GET_FEED = 'GET_FEED';
 export const COMPLETE_TASK = 'COMPLETE_TASK';
 export const GET_POINTS = 'GET_POINTS';
 export const GET_ITEMS = 'GET_ITEMS';

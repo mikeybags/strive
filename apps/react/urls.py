@@ -12,5 +12,8 @@ urlpatterns = [
     url(r'^store$', views.store),
     url(r'^purchases$', views.purchases),
     url(r'^friends$', views.friends),
-    url(r'^friends/tasks/(?P<id>\d+)$', views.friend_tasks)
+    url(r'^friends/tasks/(?P<id>\d+)$', views.friend_tasks),
+    url(r'^add_friend$', views.add_friend),
+    url(r'^activity_feed$', views.activity_feed)
+
 ]
