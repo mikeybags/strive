@@ -6,7 +6,7 @@ class DashboardTasks extends Component {
     return (
       <li className="list-group-item" id="task-box">
         <h5 >{this.props.title}</h5>
-        <TaskTable show={[["name","Name"]]} tasks={this.props.tasks} />
+        <TaskTable show={[["name","Name"]]} tasks={this.props.tasks} completeBox={true} />
       </li>
     )
   }
