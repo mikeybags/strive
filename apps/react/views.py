@@ -4,6 +4,7 @@ from datetime import *
 import json
 from django.http import JsonResponse
 from django.core import serializers
+import datetime
 
 def index(request):
     return render(request, 'react/index.html')
@@ -197,3 +198,16 @@ def graph(request, id):
     if request.method == 'GET':
         tasks = Task.objects.filter(user__id=id)
         return JsonResponse({'tasks': tasks})
+
+def get_requests(request):
+    if request.method == 'GET':
+        group_requests = GroupMember.objects.filter(user__id = request.session['id'], accepted = False).values('group__task__user__username', 'group__name' )
+        wager_requests = Wager.objects.filter(task__user__id = request.session['id'], accepted = False, task__end_date__gte=datetime.date.today()).values('points', 'wagerer', 'task__name')
+        friend_requests = Friend.objects.filter(friend__id = request.session['id'], accepted = False).values('user__username', 'user__first_name', 'user__last_name')
+        return JsonResponse ({
+            'friend_requests': list(friend_requests),
+            'wager_requests': list(wager_requests),
+            'group_requests': list(group_requests),
+            })
+    else:
+        return JsonResponse({ 'error': 'Wrong HTTP method'})
