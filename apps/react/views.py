@@ -5,6 +5,7 @@ import json
 from django.http import JsonResponse
 from django.core import serializers
 import datetime
+from django.db.models import Q
 
 def index(request):
     return render(request, 'react/index.html')
@@ -211,3 +212,32 @@ def get_requests(request):
             })
     else:
         return JsonResponse({ 'error': 'Wrong HTTP method'})
+
+def wagers(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        task_id = body['task']
+        wager_amount = int(body['wager'])
+        wager = Wager.objects.create_wager(request.session['id'], task_id, wager_amount)
+        if 'errors' in wager:
+            errors = []
+            for error in wager["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':'true'})
+    elif request.method == 'GET':
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
+        wagers = list(wagers)
+        for wager in wagers:
+            wager['current_user'] = request.session['id']
+        return JsonResponse({"wagers": wagers})
+    elif request.method == 'PUT':
+        body = json.loads(request.body)
+        if body['status'] == 'accept':
+            wager = Wager.objects.accepted(request.session['id'], body['wager'])
+        else:
+            wager = Wager.objects.denied(body['wager'])
+        return JsonResponse({'Success':'Wager changed'})
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})

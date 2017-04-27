@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {createWager} from '../actions/create_wager'
+import {getPoints} from '../actions/get_points'
 
 class WagerForm extends Component {
   constructor(props){
@@ -25,7 +26,11 @@ class WagerForm extends Component {
       this.setState({notification:`You are too poor`});
     }
     else {
-      this.props.createWager({friend, wager})
+      this.props.createWager({task:this.props.task.id, wager}).then((data) => {
+        this.setState({notification:`Wager Request Sent`});
+        this.props.getPoints()
+        this.setState({wager:0});
+      })
     }
   }
   render(){
@@ -44,4 +49,4 @@ class WagerForm extends Component {
 
 
 
-export default connect(null, {createWager})(WagerForm)
+export default connect(null, {createWager, getPoints})(WagerForm)

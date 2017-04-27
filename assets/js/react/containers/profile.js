@@ -7,6 +7,7 @@ import FriendsView from './friends_view'
 import GroupsView from './groups_view'
 import PurchasesView from './purchases_view'
 import RequestsView from './requests_view'
+import WagersView from './wagers_view'
 import {Link} from 'react-router'
 
 class Profile extends Component {
@@ -81,6 +82,7 @@ class Profile extends Component {
             <Tab>Stats</Tab>
             <Tab>Friends</Tab>
             <Tab>Group Challenges</Tab>
+            <Tab>Current Wagers</Tab>
             <Tab>Requests</Tab>
             <Tab>My Swag</Tab>
           </TabList>
@@ -96,6 +98,9 @@ class Profile extends Component {
           </TabPanel>
           <TabPanel>
             <GroupsView />
+          </TabPanel>
+          <TabPanel>
+            <WagersView />
           </TabPanel>
           <TabPanel>
             <RequestsView />

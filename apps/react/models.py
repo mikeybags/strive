@@ -42,7 +42,7 @@ class TaskManager(models.Manager):
         wagers = Wager.objects.filter(task__id = task.id, accepted=True)
         if len(wagers) > 0:
             for wager in wagers:
-                if timezone.now() > wager.timecap:
+                if timezone.now() > task.end_date:
                     Wager.objects.win(wager.wagerer.id, user_id)
                 else:
                     Wager.objects.lose(wager.wagerer.id, user_id)
@@ -70,7 +70,7 @@ class TaskManager(models.Manager):
 
 
 class WagerManager(models.Manager):
-    def wager_validations(self, user_id, user_points, task_user_id, task_user_points, wager_points):
+    def wager_validations(self, user_points, task_user_points, wager_points):
         errors = []
         if user_points < wager_points:
             errors.append("You do not have enough points")
@@ -78,18 +78,19 @@ class WagerManager(models.Manager):
             errors.append("User does not have enough points")
         return errors
 
-    def create_wager(self, user_id, task_id, points, timecap):
+    def create_wager(self, user_id, task_id, points):
         user = User.objects.get(id=user_id)
         task = Task.objects.get(id=task_id)
         task_user = User.objects.get(id=task.user.id)
-        errors = Wager.objects.wager_validations(user.id, user.open_balance, task_user.id, task_user.open_balance, points)
+        errors = Wager.objects.wager_validations(user.open_balance, task_user.open_balance, points)
         if len(errors) > 0:
             return {"errors": errors}
         else:
-            wager = Wager(wagerer=user, task=task, points=points, timecap=timecap)
+            wager = Wager(wagerer=user, task=task, points=points)
             wager.save()
             user.open_balance -= wager.points
             user.wager_balance += wager.points
+            user.save()
             return {'wager': wager}
 
     def accepted(self, user_id, wager_id):
@@ -104,6 +105,7 @@ class WagerManager(models.Manager):
 
     def denied(self, wager_id):
         wager = Wager.objects.get(id=wager_id)
+        wager.delete()
         user = User.objects.get(id = wager.wagerer.id)
         user.open_balance += wager.points
         user.wager_balance -= wager.points
@@ -247,7 +249,6 @@ class Task(models.Model):
 class Wager(models.Model):
     points = models.IntegerField()
     accepted = models.BooleanField(default=False)
-    timecap = models.DateTimeField()
     task = models.ForeignKey(Task, related_name="task_wager")
     wagerer = models.ForeignKey(User, related_name="user_wagerer")
     winner = models.ForeignKey(User, related_name="user_winner", default=None, null=True, blank=True)
