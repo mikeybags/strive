@@ -43,7 +43,7 @@ class FriendsView extends Component {
                     <p>Points in Limbo: {this.state.selected_friend.wager_balance}</p>
                   </div>
                   <div className="col-xs-6">
-                    <SparklineChart data={[0,5,2,7,8]} color="purple" units="K" />
+                    <SparklineChart className="sparkline" data={[0,5,2,7,8]} color="purple" units="K" />
                   </div>
                 </div>
                 <Tabs onSelect={this.handleSelect} selectedIndex={0}>

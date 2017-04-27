@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from .models import *
 from datetime import *
+import datetime
 import json
 from django.http import JsonResponse
 from django.core import serializers
@@ -175,11 +176,22 @@ def friends(request):
 
 def friend_tasks(request, id):
         if request.method == 'GET':
+            trailing_points = [0,0,0,0,0]
             rolling_day = datetime.date.today() - datetime.timedelta(days=5)
-            print rolling_day
             friend_tasks = Task.objects.filter(user__id=id, public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
-            friends_5day_points = Task.objects.filter(user__id=id)
-            return JsonResponse({"friend_tasks": list(friend_tasks)})
+            friends_5day_points = Task.objects.filter(user__id=id, end_date__lt = datetime.date.today(), end_date__gte = rolling_day, completed=True)
+            for i in friends_5day_points:
+                if i.end_date == (datetime.date.today() - datetime.timedelta(days=5)):
+                    trailing_points[0] += i.points
+                elif i.end_date == (datetime.date.today() - datetime.timedelta(days=4)):
+                    trailing_points[1] += i.points
+                elif i.end_date == (datetime.date.today() - datetime.timedelta(days=3)):
+                    trailing_points[2] += i.points
+                elif i.end_date == (datetime.date.today() - datetime.timedelta(days=2)):
+                    trailing_points[3] += i.points
+                else:
+                    trailing_points[4] += i.points
+            return JsonResponse({"friend_tasks": list(friend_tasks), "recent_points": list(trailing_points)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
 
@@ -191,5 +203,22 @@ def add_friend(request):
 
 def graph(request, id):
     if request.method == 'GET':
-        tasks = Task.objects.filter(user__id=id)
-        return JsonResponse({'tasks': tasks})
+        wagers = []
+        year_ago = datetime.date.today() - datetime.timedelta(days=20)
+        for i in range(0,19):
+            wagers.append(0)
+        user = User.objects.get(id=id)
+        wagers_won = Wager.objects.filter(winner=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = year_ago, accepted=True)
+        wagers_loss = Wager.objects.filter(loser=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = year_ago, accepted=True)
+        today_day = datetime.date.today()
+        for wager in wagers_won:
+            wager_day = wager.end_date
+            delta = today_day - wager_day
+            wagers[delta] += wager.points
+        for wager in wagers_loss:
+            wager_day = wager.end_date
+            delta = today_day - wager_day
+            wagers[delta] -= wager.points
+        print wagers
+
+        return JsonResponse({'data': "data"})
