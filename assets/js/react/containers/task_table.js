@@ -41,7 +41,9 @@ class TasksView extends Component {
           className={task.expired ? "expired" : ""}
           onClick={typeof this.props.edit === "function" ? () => {this.props.edit(task)} : ""}>
             {renderRowData(task, this.props.show)}
-            <td><input type="checkbox" onClick={this.finishTask.bind(this, task)} /></td>
+            {this.props.completeBox &&
+              <td><input type="checkbox" onClick={this.finishTask.bind(this, task)} /></td>
+            }
         </tr>
       )
     })
@@ -52,7 +54,9 @@ class TasksView extends Component {
       <thead>
         <tr>
           {this.renderHeaders()}
-          <th>Complete</th>
+          {this.props.completeBox &&
+            <th>Complete</th>
+          }
         </tr>
       </thead>
       <tbody>

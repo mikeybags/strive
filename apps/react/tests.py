@@ -50,12 +50,40 @@ class TestWager(TestCase):
         user = User.objects.get(id=1)
         user2 = User.objects.get(id=2)
         new_task = Task.objects.create_task(user.id,"task1", "description of task", start_date="2017-05-30", end_date="2017-05-30", points=15, task_type="medium", public="true")
+        task = Task.objects.get(name="task1")
+        new_wager = Wager.objects.create_wager(user_id=user2.id, task_id=task.id, points=10, timecap= '2017-04-27 16:48:00.000')
+        wager = Wager.objects.get(id=1)
+        self.assertEqual(wager.points, 10)
+
+    def test_model_validations(self):
+        new_user = User.objects.add_user(first_name="Curtis", last_name="Wulfsohn", email="cwulfsohn@email.com", username="CDUB", tag_line="Look who's laughin now", password="password", confirm_password="password")
+        new_user2 = User.objects.add_user(first_name="Curtis", last_name="Wulfsohn", email="cwulfsohn26@email.com", username="CDUB2", tag_line="Look who's laughin now", password="password", confirm_password="password")
+        user = User.objects.get(id=1)
+        user.open_balance += 500
+        user.save()
+        user2 = User.objects.get(id=2)
+        new_task = Task.objects.create_task(user.id,"task1", "description of task", start_date="2017-05-30", end_date="2017-05-30", points=15, task_type="medium", public="true")
         print new_task['task'].points
         task = Task.objects.get(name="task1")
         print task.id
         new_wager = Wager.objects.create_wager(user_id=user2.id, task_id=task.id, points=500, timecap= '2017-04-27 16:48:00.000')
-        wager = Wager.objects.get(id=1)
-        self.assertEqual(wager.points, 500)
+        print new_wager['errors']
+        self.assertEqual(new_wager['errors'][0], "You do not have enough points")
+
+    def test_model_validations2(self):
+        new_user = User.objects.add_user(first_name="Curtis", last_name="Wulfsohn", email="cwulfsohn@email.com", username="CDUB", tag_line="Look who's laughin now", password="password", confirm_password="password")
+        new_user2 = User.objects.add_user(first_name="Curtis", last_name="Wulfsohn", email="cwulfsohn26@email.com", username="CDUB2", tag_line="Look who's laughin now", password="password", confirm_password="password")
+        user = User.objects.get(id=1)
+        user2 = User.objects.get(id=2)
+        user2.open_balance += 500
+        user2.save()
+        new_task = Task.objects.create_task(user.id,"task1", "description of task", start_date="2017-05-30", end_date="2017-05-30", points=15, task_type="medium", public="true")
+        print new_task['task'].points
+        task = Task.objects.get(name="task1")
+        print task.id
+        new_wager = Wager.objects.create_wager(user_id=user2.id, task_id=task.id, points=500, timecap= '2017-04-27 16:48:00.000')
+        print new_wager['errors']
+        self.assertEqual(new_wager['errors'][0], "User does not have enough points")
 
 class TestFriend(TestCase):
     def test_model(self):

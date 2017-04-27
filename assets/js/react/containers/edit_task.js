@@ -38,13 +38,13 @@ class TasksEdit extends Component {
           </TabList>
 
           <TabPanel>
-            <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.regular} edit={this.handleRowClick.bind(this)} />
+            <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.regular} edit={this.handleRowClick.bind(this)} completeBox={true} />
           </TabPanel>
           <TabPanel>
-            <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["public", "Public?"]]} tasks={this.props.tasks.recurring} edit={this.handleRowClick.bind(this)} />
+            <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["public", "Public?"]]} tasks={this.props.tasks.recurring} edit={this.handleRowClick.bind(this)} completeBox={true} />
           </TabPanel>
           <TabPanel>
-            <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.major} edit={this.handleRowClick.bind(this)} />
+            <TaskTable show={[["name","Name"], ["description","Description"], ["points","Worth"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.major} edit={this.handleRowClick.bind(this)} completeBox={true} />
           </TabPanel>
           <TabPanel>
             <TaskTable show={[["name","Name"], ["points","Worth"], ["start_date", "Start Date"], ["end_date","Due Date"], ["public", "Public?"]]} tasks={this.props.tasks.upcoming} edit={this.handleRowClick.bind(this)} />

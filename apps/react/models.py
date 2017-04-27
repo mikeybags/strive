@@ -70,14 +70,27 @@ class TaskManager(models.Manager):
 
 
 class WagerManager(models.Manager):
+    def wager_validations(self, user_id, user_points, task_user_id, task_user_points, wager_points):
+        errors = []
+        if user_points < wager_points:
+            errors.append("You do not have enough points")
+        if task_user_points < wager_points:
+            errors.append("User does not have enough points")
+        return errors
+
     def create_wager(self, user_id, task_id, points, timecap):
         user = User.objects.get(id=user_id)
         task = Task.objects.get(id=task_id)
-        wager = Wager(wagerer=user, task=task, points=points, timecap=timecap)
-        wager.save()
-        user.open_balance -= wager.points
-        user.wager_balance += wager.points
-        return {'wager': wager}
+        task_user = User.objects.get(id=task.user.id)
+        errors = Wager.objects.wager_validations(user.id, user.open_balance, task_user.id, task_user.open_balance, points)
+        if len(errors) > 0:
+            return {"errors": errors}
+        else:
+            wager = Wager(wagerer=user, task=task, points=points, timecap=timecap)
+            wager.save()
+            user.open_balance -= wager.points
+            user.wager_balance += wager.points
+            return {'wager': wager}
 
     def accepted(self, user_id, wager_id):
         user = User.objects.get(id = user_id)
