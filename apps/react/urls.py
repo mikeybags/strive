@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'^friends/tasks/(?P<id>\d+)$', views.friend_tasks),
     url(r'^add_friend$', views.add_friend),
     url(r'^activity_feed$', views.activity_feed),
-    url(r'^wagers$', views.wagers)
+    url(r'^wagers$', views.wagers),
+    url(r'^request_friend$', views.request_friend)
 ]

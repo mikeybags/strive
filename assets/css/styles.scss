@@ -214,6 +214,33 @@ body {
 .tiny-avatar {
   height:50px;
 }
-svg {
+
+.card {
+  text-align: center;
+  height: 500px;
+  img {
+    height: 225px;
+    max-width: 225px;
+    border: 1px #e5e5e5 inset;
+    margin: 5%;
+  }
+  .user-img {
+    display: inline-block;
+  }
+  .card-block {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    vertical-align: middle;
+    p {
+      height: 75px;
+    }
+  }
+}
+.user-detail {
+  display: inline-block;
+}
+
+.sparklines {
   height: 75px;
 }
