@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { friendSearch } from '../actions/friend_search'
 import { FormGroup, FormControl, Button } from 'react-bootstrap'
-import { Link } from 'react-router';
 
 
 
