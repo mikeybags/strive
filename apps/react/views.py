@@ -4,6 +4,7 @@ from datetime import *
 import json
 from django.http import JsonResponse
 from django.core import serializers
+from django.db.models import Q
 
 def index(request):
     return render(request, 'react/index.html')
@@ -189,3 +190,22 @@ def graph(request, id):
     if request.method == 'GET':
         tasks = Task.objects.filter(user__id=id)
         return JsonResponse({'tasks': tasks})
+
+def wagers(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        task_id = body['task']
+        wager_amount = int(body['wager'])
+        wager = Wager.objects.create_wager(request.session['id'], task_id, wager_amount)
+        if 'errors' in wager:
+            errors = []
+            for error in wager["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':'true'})
+    if request.method == 'GET':
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
+        return JsonResponse({"wagers": list(wagers)})
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})

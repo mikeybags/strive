@@ -1,8 +1,15 @@
 import React, {Component} from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NotificationList from './notification_list';
+import {connect} from 'react-redux'
+import {getWagers} from '../actions/get_wagers'
 
 class RequestsView extends Component {
+  componentWillMount(){
+    this.props.getWagers().then((data) => {
+      console.log(data);
+    })
+  }
   acceptClick(notification, type){
     if (type === "friend"){
 
@@ -50,4 +57,4 @@ class RequestsView extends Component {
   }
 }
 
-export default RequestsView
+export default connect(null, {getWagers})(RequestsView)

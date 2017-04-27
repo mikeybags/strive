@@ -18,3 +18,4 @@ export const GET_PURCHASES = 'GET_PURCHASES';
 export const GET_FRIENDS = 'GET_FRIENDS';
 export const GET_FRIEND_TASKS = 'GET_FRIEND_TASKS';
 export const CREATE_WAGER = 'CREATE_WAGER';
+export const GET_WAGERS = 'GET_WAGERS';
