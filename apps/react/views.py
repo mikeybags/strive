@@ -212,8 +212,18 @@ def wagers(request):
             return JsonResponse({'errors':errors})
         else:
             return JsonResponse({'Success':'true'})
-    if request.method == 'GET':
-        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
-        return JsonResponse({"wagers": list(wagers)})
+    elif request.method == 'GET':
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
+        wagers = list(wagers)
+        for wager in wagers:
+            wager['current_user'] = request.session['id']
+        return JsonResponse({"wagers": wagers})
+    elif request.method == 'PUT':
+        body = json.loads(request.body)
+        if body['status'] == 'accept':
+            wager = Wager.objects.accepted(request.session['id'], body['wager'])
+        else:
+            wager = Wager.objects.denied(body['wager'])
+        return JsonResponse({'Success':'Wager changed'})
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
