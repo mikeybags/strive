@@ -1,10 +1,10 @@
 import {GET_FRIEND_TASKS} from '../actions/types'
 import Moment from 'moment'
 
-export default function(state = {regular:[], recurring: [], major:[]}, action){
+export default function(state = {regular:[], recurring: [], major:[], spark_data:[]}, action){
   switch(action.type){
     case GET_FRIEND_TASKS:
-      console.log(action.payload);
+      const spark_data = action.payload.data.recent_points
       const tasks = action.payload.data.friend_tasks
       const regular = [],
       recurring = [],
@@ -32,7 +32,7 @@ export default function(state = {regular:[], recurring: [], major:[]}, action){
           }
         }
       })
-      return {regular, recurring, major};
+      return {regular, recurring, major, spark_data};
       break;
     default:
       return state;

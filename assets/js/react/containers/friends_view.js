@@ -47,7 +47,7 @@ class FriendsView extends Component {
                     <p>Points in Limbo: {this.state.selected_friend.wager_balance}</p>
                   </div>
                   <div className="col-xs-6">
-                    <SparklineChart className="sparkline" data={[0,5,2,7,8]} color="purple" units="K" />
+                    <SparklineChart className="sparkline" data={this.props.friend_tasks.spark_data} color="purple" units="K" />
                   </div>
                 </div>
                 <h5 className="text-center">Tasks - Click to Wager</h5>
