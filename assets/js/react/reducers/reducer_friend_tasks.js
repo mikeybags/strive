@@ -4,6 +4,7 @@ import Moment from 'moment'
 export default function(state = {regular:[], recurring: [], major:[]}, action){
   switch(action.type){
     case GET_FRIEND_TASKS:
+      console.log(action.payload);
       const tasks = action.payload.data.friend_tasks
       const regular = [],
       recurring = [],

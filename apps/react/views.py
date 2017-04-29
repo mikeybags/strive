@@ -57,7 +57,6 @@ def task(request):
         updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type, public)
         if body['completed'] == True:
             updated_task = Task.objects.completed_task(request.session['id'], task_id)
-        print updated_task
         if 'errors' in updated_task:
             errors = []
             for error in updated_task["errors"]:
@@ -188,7 +187,7 @@ def friend_tasks(request, id):
         if request.method == 'GET':
             trailing_points = [0,0,0,0,0]
             rolling_day = datetime.date.today() - datetime.timedelta(days=5)
-            friend_tasks = Task.objects.filter(user__id=id, public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
+            friend_tasks = Task.objects.filter(user__id=id, public=True, completed=False).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
             friends_5day_points = Task.objects.filter(user__id=id, end_date__lt = datetime.date.today(), end_date__gte = rolling_day, completed=True)
             for i in friends_5day_points:
                 if i.end_date == (datetime.date.today() - datetime.timedelta(days=5)):

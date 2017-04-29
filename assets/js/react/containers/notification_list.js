@@ -34,9 +34,5 @@ class NotificationList extends Component {
   }
 }
 
-function mapStateToProps(state){
-  return {notifications: state.requests}
-}
 
-
-export default connect(mapStateToProps, {getRequests})(NotificationList)
+export default connect(null, {getRequests})(NotificationList)
