@@ -19,4 +19,6 @@ export const GET_FRIENDS = 'GET_FRIENDS';
 export const GET_FRIEND_TASKS = 'GET_FRIEND_TASKS';
 export const REQUEST_FRIEND = 'REQUEST_FRIEND'
 export const CREATE_WAGER = 'CREATE_WAGER';
+export const GET_REQUESTS = 'GET_REQUESTS';
 export const GET_WAGERS = 'GET_WAGERS';
+export const UPDATE_WAGER = 'UPDATE_WAGER';

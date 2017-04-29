@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^user_competition_graph/(?P<id>\d+)$', views.user_competition_graph),
     url(r'^add_friend$', views.add_friend),
     url(r'^activity_feed$', views.activity_feed),
+    url(r'^requests$', views.get_requests),
     url(r'^wagers$', views.wagers),
     url(r'^request_friend$', views.request_friend)
 ]

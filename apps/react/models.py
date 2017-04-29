@@ -105,6 +105,7 @@ class WagerManager(models.Manager):
 
     def denied(self, wager_id):
         wager = Wager.objects.get(id=wager_id)
+        wager.delete()
         user = User.objects.get(id = wager.wagerer.id)
         user.open_balance += wager.points
         user.wager_balance -= wager.points

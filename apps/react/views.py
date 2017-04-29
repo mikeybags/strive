@@ -5,6 +5,7 @@ import datetime
 import json
 from django.http import JsonResponse
 from django.core import serializers
+import datetime
 from django.db.models import Q
 
 def index(request):
@@ -262,6 +263,19 @@ def user_competition_graph(request, id):
     pass
 
 
+def get_requests(request):
+    if request.method == 'GET':
+        group_requests = GroupMember.objects.filter(user__id = request.session['id'], accepted = False).values('group__task__user__username', 'group__name' )
+        wager_requests = Wager.objects.filter(task__user__id = request.session['id'], accepted = False, task__end_date__gte=datetime.date.today()).values('points', 'wagerer', 'task__name')
+        friend_requests = Friend.objects.filter(friend__id = request.session['id'], accepted = False).values('user__username', 'user__first_name', 'user__last_name')
+        return JsonResponse ({
+            'friend_requests': list(friend_requests),
+            'wager_requests': list(wager_requests),
+            'group_requests': list(group_requests),
+            })
+    else:
+        return JsonResponse({ 'error': 'Wrong HTTP method'})
+
 def wagers(request):
     if request.method == 'POST':
         body = json.loads(request.body)
@@ -275,8 +289,18 @@ def wagers(request):
             return JsonResponse({'errors':errors})
         else:
             return JsonResponse({'Success':'true'})
-    if request.method == 'GET':
-        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
-        return JsonResponse({"wagers": list(wagers)})
+    elif request.method == 'GET':
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
+        wagers = list(wagers)
+        for wager in wagers:
+            wager['current_user'] = request.session['id']
+        return JsonResponse({"wagers": wagers})
+    elif request.method == 'PUT':
+        body = json.loads(request.body)
+        if body['status'] == 'accept':
+            wager = Wager.objects.accepted(request.session['id'], body['wager'])
+        else:
+            wager = Wager.objects.denied(body['wager'])
+        return JsonResponse({'Success':'Wager changed'})
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
