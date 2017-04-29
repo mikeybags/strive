@@ -1,7 +1,13 @@
 import React, {Component} from 'react'
+import { getRequests } from '../actions/get_requests'
+import { connect } from 'react-redux'
 
 
 class NotificationList extends Component {
+  componentWillMount() {
+    this.props.getRequests();
+  }
+
   renderNotifications(){
     if (this.props.notifications) {
       return this.props.notifications.map((notification) => {
@@ -28,4 +34,9 @@ class NotificationList extends Component {
   }
 }
 
-export default NotificationList
+function mapStateToProps(state){
+  return {notifications: state.requests}
+}
+
+
+export default connect(mapStateToProps, {getRequests})(NotificationList)

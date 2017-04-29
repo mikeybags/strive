@@ -69,7 +69,7 @@ class StatsView extends Component {
         </LineChart>
       )
     }
-    else if(1==3){
+    else if(1==1){
       //area type is the loop
       return(
       <AreaChart width={600} height={400} data={data} margin={{top: 10, right: 30, left: 0, bottom: 0}}>
@@ -86,7 +86,7 @@ class StatsView extends Component {
     else{
       //bar is the loop
       return(
-        <BarChart width={600} height={300} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+        <BarChart width={1000} height={1000} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
          <XAxis dataKey="name"/>
          <YAxis/>
          <CartesianGrid strokeDasharray="3 3"/>

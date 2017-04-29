@@ -9,7 +9,9 @@ import CategoryReducer from './reducer_categories'
 import PurchaseReducer from './reducer_purchases'
 import FriendsReducer from './reducer_friends'
 import FriendTaskReducer from './reducer_friend_tasks'
+import RequestReducer from './reducer_requests'
 import WagerReducer from './reducer_wagers'
+
 
 
 const rootReducer = combineReducers({
@@ -23,6 +25,7 @@ const rootReducer = combineReducers({
   purchases:PurchaseReducer,
   friends:FriendsReducer,
   friend_tasks:FriendTaskReducer,
+  requests: RequestReducer,
   wagers:WagerReducer
 });
 

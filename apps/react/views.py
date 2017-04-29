@@ -1,9 +1,11 @@
 from django.shortcuts import render, HttpResponse
 from .models import *
 from datetime import *
+import datetime
 import json
 from django.http import JsonResponse
 from django.core import serializers
+import datetime
 from django.db.models import Q
 
 def index(request):
@@ -177,14 +179,29 @@ def friends(request):
         if request.method == 'GET':
             friendships = Friend.objects.all().values("user", "friend")
             friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
+            print friends
             return JsonResponse({"friends": list(friends)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
 
 def friend_tasks(request, id):
         if request.method == 'GET':
+            trailing_points = [0,0,0,0,0]
+            rolling_day = datetime.date.today() - datetime.timedelta(days=5)
             friend_tasks = Task.objects.filter(user__id=id, public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
-            return JsonResponse({"friend_tasks": list(friend_tasks)})
+            friends_5day_points = Task.objects.filter(user__id=id, end_date__lt = datetime.date.today(), end_date__gte = rolling_day, completed=True)
+            for i in friends_5day_points:
+                if i.end_date == (datetime.date.today() - datetime.timedelta(days=5)):
+                    trailing_points[0] += i.points
+                elif i.end_date == (datetime.date.today() - datetime.timedelta(days=4)):
+                    trailing_points[1] += i.points
+                elif i.end_date == (datetime.date.today() - datetime.timedelta(days=3)):
+                    trailing_points[2] += i.points
+                elif i.end_date == (datetime.date.today() - datetime.timedelta(days=2)):
+                    trailing_points[3] += i.points
+                else:
+                    trailing_points[4] += i.points
+            return JsonResponse({"friend_tasks": list(friend_tasks), "recent_points": list(trailing_points)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
 
@@ -194,10 +211,70 @@ def add_friend(request):
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
 
-def graph(request, id):
+def wager_graph(request, id):
     if request.method == 'GET':
-        tasks = Task.objects.filter(user__id=id)
-        return JsonResponse({'tasks': tasks})
+        wagers = []
+        prev_20 = datetime.date.today() - datetime.timedelta(days=20)
+        for i in range(0,19):
+            wagers.append(0)
+        user = User.objects.get(id=id)
+        wagers_won = Wager.objects.filter(winner=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
+        wagers_loss = Wager.objects.filter(loser=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
+        today_day = datetime.date.today()
+        for wager in wagers_won:
+            wager_day = wager.task.end_date
+            delta_day = today_day.day - wager_day.day
+            wagers[delta_day] += wager.points
+        for wager in wagers_loss:
+            wager_day = wager.task.end_date
+            delta_day = today_day.day - wager_day.day
+            wagers[delta_day] -= wager.points
+        return JsonResponse({'data': wagers})
+
+def task_graph(request, id):
+    if request.method =='GET':
+        completion_percentage = []
+        all_tasks_by_day = []
+        completed_tasks_by_day = []
+        prev_10 = datetime.date.today() - datetime.timedelta(days=10)
+        for i in range(0,9):
+            all_tasks_by_day.append(0)
+            completed_tasks_by_day.append(0)
+        all_tasks = Task.objects.filter(user__id=id, end_date__lt = datetime.date.today(), end_date__gte = prev_10)
+        completed_tasks = Task.objects.filter(user__id=id, completed=True, end_date__lt = datetime.date.today(), end_date__gte=prev_10)
+        today_day = datetime.date.today()
+        for task in all_tasks:
+            task_day = task.end_date
+            delta_day = today_day.day - task_day.day
+            all_tasks_by_day[delta_day] += 1
+        for completed_task in completed_tasks:
+            task_day = task.end_date
+            delta_day = today_day.day - task_day.day
+            completed_tasks_by_day[delta_day] += 1
+        for i in range(0,9):
+            if all_tasks_by_day[i] == 0:
+                completion_percentage.append(0)
+            else:
+                completion_percentage.append(completed_tasks_by_day[i] / all_tasks_by_day[i])
+        return JsonResponse({'completion_percentage': list(completion_percentage)})
+
+def user_competition_graph(request, id):
+    user = User.objects.get(id=id)
+    pass
+
+
+def get_requests(request):
+    if request.method == 'GET':
+        group_requests = GroupMember.objects.filter(user__id = request.session['id'], accepted = False).values('group__task__user__username', 'group__name' )
+        wager_requests = Wager.objects.filter(task__user__id = request.session['id'], accepted = False, task__end_date__gte=datetime.date.today()).values('points', 'wagerer', 'task__name')
+        friend_requests = Friend.objects.filter(friend__id = request.session['id'], accepted = False).values('user__username', 'user__first_name', 'user__last_name')
+        return JsonResponse ({
+            'friend_requests': list(friend_requests),
+            'wager_requests': list(wager_requests),
+            'group_requests': list(group_requests),
+            })
+    else:
+        return JsonResponse({ 'error': 'Wrong HTTP method'})
 
 def wagers(request):
     if request.method == 'POST':
