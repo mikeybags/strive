@@ -5,6 +5,7 @@ import datetime
 import json
 from django.http import JsonResponse
 from django.core import serializers
+from django.db.models import Q
 
 def index(request):
     return render(request, 'react/index.html')
@@ -102,21 +103,29 @@ def points(request):
 def friend_search(request):
     if request.method == 'GET':
         term = request.GET['props']
-        users = User.objects.filter(username__contains=term).values('first_name', 'last_name', 'tag_line', 'username', 'profile_picture', 'id')
-        friends = Friend.objects.filter(user__id=request.session['id'])
+        friends = Friend.objects.filter(user=request.session['id']).values_list('friend', flat=True)
+        users = User.objects.filter(username__contains=term).exclude(id__in=friends).exclude(id=request.session['id']).values('first_name', 'last_name', 'tag_line', 'username', 'profile_picture', 'id')
         if 'errors' in users:
             errors = []
             for error in task["errors"]:
                 errors.append(error)
             return JsonResponse({'errors':errors})
         else:
-            return JsonResponse({"users": list(users)})
+            return JsonResponse({"users": list(users), "term": term})
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
 
 def request_friend(request):
     if request.method == 'GET':
-        pass
+        id = request.GET['props']
+        friend = Friend.objects.create_friend(request.session['id'],id)
+        if 'errors' in friend:
+            errors = []
+            for error in friend["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':True})
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
 
@@ -201,24 +210,73 @@ def add_friend(request):
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
 
-def graph(request, id):
+def wager_graph(request, id):
     if request.method == 'GET':
         wagers = []
-        year_ago = datetime.date.today() - datetime.timedelta(days=20)
+        prev_20 = datetime.date.today() - datetime.timedelta(days=20)
         for i in range(0,19):
             wagers.append(0)
         user = User.objects.get(id=id)
-        wagers_won = Wager.objects.filter(winner=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = year_ago, accepted=True)
-        wagers_loss = Wager.objects.filter(loser=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = year_ago, accepted=True)
+        wagers_won = Wager.objects.filter(winner=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
+        wagers_loss = Wager.objects.filter(loser=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
         today_day = datetime.date.today()
         for wager in wagers_won:
-            wager_day = wager.end_date
-            delta = today_day - wager_day
-            wagers[delta] += wager.points
+            wager_day = wager.task.end_date
+            delta_day = today_day.day - wager_day.day
+            wagers[delta_day] += wager.points
         for wager in wagers_loss:
-            wager_day = wager.end_date
-            delta = today_day - wager_day
-            wagers[delta] -= wager.points
-        print wagers
+            wager_day = wager.task.end_date
+            delta_day = today_day.day - wager_day.day
+            wagers[delta_day] -= wager.points
+        return JsonResponse({'data': wagers})
 
-        return JsonResponse({'data': "data"})
+def task_graph(request, id):
+    if request.method =='GET':
+        completion_percentage = []
+        all_tasks_by_day = []
+        completed_tasks_by_day = []
+        prev_10 = datetime.date.today() - datetime.timedelta(days=10)
+        for i in range(0,9):
+            all_tasks_by_day.append(0)
+            completed_tasks_by_day.append(0)
+        all_tasks = Task.objects.filter(user__id=id, end_date__lt = datetime.date.today(), end_date__gte = prev_10)
+        completed_tasks = Task.objects.filter(user__id=id, completed=True, end_date__lt = datetime.date.today(), end_date__gte=prev_10)
+        today_day = datetime.date.today()
+        for task in all_tasks:
+            task_day = task.end_date
+            delta_day = today_day.day - task_day.day
+            all_tasks_by_day[delta_day] += 1
+        for completed_task in completed_tasks:
+            task_day = task.end_date
+            delta_day = today_day.day - task_day.day
+            completed_tasks_by_day[delta_day] += 1
+        for i in range(0,9):
+            if all_tasks_by_day[i] == 0:
+                completion_percentage.append(0)
+            else:
+                completion_percentage.append(completed_tasks_by_day[i] / all_tasks_by_day[i])
+        return JsonResponse({'completion_percentage': list(completion_percentage)})
+
+def user_competition_graph(request, id):
+    user = User.objects.get(id=id)
+    pass
+
+
+def wagers(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        task_id = body['task']
+        wager_amount = int(body['wager'])
+        wager = Wager.objects.create_wager(request.session['id'], task_id, wager_amount)
+        if 'errors' in wager:
+            errors = []
+            for error in wager["errors"]:
+                errors.append(error)
+            return JsonResponse({'errors':errors})
+        else:
+            return JsonResponse({'Success':'true'})
+    if request.method == 'GET':
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
+        return JsonResponse({"wagers": list(wagers)})
+    else:
+        return JsonResponse({'error': 'Wrong HTTP method'})

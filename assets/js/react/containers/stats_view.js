@@ -69,7 +69,7 @@ class StatsView extends Component {
         </LineChart>
       )
     }
-    else if(1==2){
+    else if(1==1){
       //area type is the loop
       return(
       <AreaChart width={600} height={400} data={data} margin={{top: 10, right: 30, left: 0, bottom: 0}}>

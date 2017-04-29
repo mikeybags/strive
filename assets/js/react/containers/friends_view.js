@@ -5,6 +5,7 @@ import {getFriendTasks} from '../actions/get_friend_tasks'
 import TaskTable from './task_table'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import SparklineChart from '../components/sparkline_chart'
+import WagerForm from './wager_form'
 
 
 class FriendsView extends Component {
@@ -12,13 +13,17 @@ class FriendsView extends Component {
     super(props);
 
     this.state = {
-      selected_friend: {}
+      selected_friend: {},
+      selected_task: {}
     }
   }
   selectFriend(selected_friend){
     this.setState({selected_friend})
     this.props.getFriendTasks(selected_friend.id).then((data) => {
     })
+  }
+  selectTask(selected_task){
+    this.setState({selected_task})
   }
   render(){
     return (
@@ -33,8 +38,7 @@ class FriendsView extends Component {
                 <h5>Select a friend to view their info</h5>
               </div>
             }
-            {this.state.selected_friend != {} &&
-
+            {Object.keys(this.state.selected_friend).length > 0 &&
               <div>
                 <h5 className="text-center">{this.state.selected_friend.username}</h5>
                 <div className="row">
@@ -46,6 +50,10 @@ class FriendsView extends Component {
                     <SparklineChart className="sparkline" data={[0,5,2,7,8]} color="purple" units="K" />
                   </div>
                 </div>
+                <h5 className="text-center">Tasks - Click to Wager</h5>
+                {Object.keys(this.state.selected_task).length > 0 &&
+                  <WagerForm friend={this.state.selected_friend} task={this.state.selected_task} balance={this.props.points.open_balance} />
+                }
                 <Tabs onSelect={this.handleSelect} selectedIndex={0}>
                   <TabList>
                     <Tab>Regular</Tab>
@@ -54,13 +62,13 @@ class FriendsView extends Component {
                   </TabList>
 
                   <TabPanel>
-                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.regular} />
+                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.regular} edit={this.selectTask.bind(this)} />
                   </TabPanel>
                   <TabPanel>
-                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.recurring} />
+                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.recurring} edit={this.selectTask.bind(this)} />
                   </TabPanel>
                   <TabPanel>
-                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.major} />
+                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.major} edit={this.selectTask.bind(this)} />
                   </TabPanel>
                 </Tabs>
               </div>
@@ -73,7 +81,7 @@ class FriendsView extends Component {
 }
 
 function mapStateToProps(state){
-  return {friend_tasks:state.friend_tasks}
+  return {friend_tasks:state.friend_tasks, points:state.points}
 }
 
 export default connect(mapStateToProps, {getFriendTasks})(FriendsView)
