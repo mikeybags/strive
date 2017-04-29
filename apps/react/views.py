@@ -213,7 +213,7 @@ def wagers(request):
         else:
             return JsonResponse({'Success':'true'})
     elif request.method == 'GET':
-        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "loser", "task", "task__name", "task__end_date", "task__user", "task__user__username")
         wagers = list(wagers)
         for wager in wagers:
             wager['current_user'] = request.session['id']
