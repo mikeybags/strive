@@ -236,6 +236,7 @@ def task_graph(request, id):
         all_tasks_by_day = []
         completed_tasks_by_day = []
         prev_10 = datetime.date.today() - datetime.timedelta(days=10)
+        user = User.objects.get(id=id)
         for i in range(0,9):
             all_tasks_by_day.append(0)
             completed_tasks_by_day.append(0)
@@ -255,7 +256,7 @@ def task_graph(request, id):
                 completion_percentage.append(0)
             else:
                 completion_percentage.append(completed_tasks_by_day[i] / all_tasks_by_day[i])
-        return JsonResponse({'completion_percentage': list(completion_percentage)})
+        return JsonResponse({'completion_percentage': list(completion_percentage), 'user':user.username})
 
 def user_competition_graph(request, id):
     user = User.objects.get(id=id)

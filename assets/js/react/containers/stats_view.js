@@ -1,5 +1,11 @@
 import React, {Component} from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, AreaChart, Area, BarChart, Legend, Brush, ReferenceLine, Bar} from 'recharts';
+import {connect} from 'react-redux'
+import {getTaskStats} from '../actions/get_task_stats'
+import _ from 'lodash'
+import FriendList from './friend_list'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
 
 let data = [
     {name: 'Page A', user1: 4000, user2: 2400, user3: 2400},
@@ -54,52 +60,117 @@ let bardata = [
     ];
 
 class StatsView extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      completionData: [{name: '9 Days Ago'},{name: '8 Days Ago'},{name: '7 Days Ago'},{name: '6 Days Ago'},{name: '5 Days Ago'},{name: '4 Days Ago'},{name: '3 Days Ago'},{name: '2 Days Ago'},{name: 'Yesterday'}],
+      selected: 0
+    }
+  }
+  componentWillMount(){
+    this.props.getTaskStats(this.props.session.id).then((res) => {
+      this.addToCompletionData(res.payload.data)
+    })
+  }
+  handleSelect(index, last) {
+    if (index === 1){
+      console.log("hey");
+    } else if (index === 2){
+      console.log("yo");
+    }
+    this.setState({selected:index})
+  }
+  addToCompletionData(completion_data){
+    const newCompletion = this.state.completionData
+    for (var i = 0; i < completion_data.completion_percentage.length; i++) {
+      newCompletion[i][completion_data.user] = completion_data.completion_percentage[i]
+    }
+    this.setState({completionData:newCompletion})
+  }
+  renderLines(){
+    let users = _.keys(this.state.completionData[0])
+    users = _.drop(users)
+    return users.map((user) => {
+      if (user != 'name'){
+        return <Line key={user} type="monotone" dataKey={user} stroke={`rgb(${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)})`} />
+      }
+    })
+  }
+  selectFriend(selected_friend){
+    const completionData = this.state.completionData
+    if (completionData[0].hasOwnProperty(selected_friend.username)){
+      let newCompletion = completionData;
+      for (var i = 0; i < newCompletion.length; i++) {
+        delete newCompletion[i][selected_friend.username];
+      }
+      this.setState({completionData:newCompletion})
+    }
+    else {
+      this.props.getTaskStats(selected_friend.id).then((res) => {
+        this.addToCompletionData(res.payload.data)
+      })
+    }
+  }
   render () {
-    if(1==2){
-      //line type is the loop
-    	return (
-        <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-          <Line type="monotone" dataKey="user1" stroke="#430fe0" />
-          <Line type="monotone" dataKey="user2" stroke="#8884d8" />
-          <Line type="monotone" dataKey="user3" stroke="#8884d8" />
-          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-        </LineChart>
-      )
-    }
-    else if(1==1){
-      //area type is the loop
-      return(
-      <AreaChart width={600} height={400} data={data} margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-        <XAxis dataKey="name"/>
-        <YAxis/>
-        <CartesianGrid strokeDasharray="3 3"/>
-        <Tooltip/>
-        <Area type='monotone' dataKey='user1' stackId="1" stroke='#8884d8' fill='#8884d8' />
-        <Area type='monotone' dataKey='user2' stackId="1" stroke='#82ca9d' fill='#82ca9d' />
-        <Area type='monotone' dataKey='user3' stackId="1" stroke='#ffc658' fill='#ffc658' />
-      </AreaChart>
-      );
-    }
-    else{
-      //bar is the loop
-      return(
-        <BarChart width={1000} height={1000} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-         <XAxis dataKey="name"/>
-         <YAxis/>
-         <CartesianGrid strokeDasharray="3 3"/>
-         <Tooltip/>
-         <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
-         <ReferenceLine y={0} stroke='#000'/>
-         <Brush dataKey='name' height={30} stroke="#8884d8"/>
-         <Bar dataKey="pv" fill="#8884d8" />
-         <Bar dataKey="uv" fill="#82ca9d" />
-        </BarChart>
-      )
-    }
+    return (
+      <div className="row">
+        <div className="col-sm-4">
+          <FriendList selectFriend={this.selectFriend.bind(this)} />
+        </div>
+        <div className="col-sm-8">
+          <p>Click friend to add to chart, click again to remove</p>
+          <Tabs onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >
+            <TabList>
+              <Tab>Completion</Tab>
+              <Tab>Wagers</Tab>
+              <Tab>Groups</Tab>
+            </TabList>
+
+            <TabPanel>
+              <LineChart width={550} height={350} data={this.state.completionData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                {this.renderLines()}
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+              </LineChart>
+            </TabPanel>
+
+            <TabPanel>
+              <AreaChart width={600} height={400} data={data} margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                <XAxis dataKey="name"/>
+                <YAxis/>
+                <CartesianGrid strokeDasharray="3 3"/>
+                <Tooltip/>
+                <Area type='monotone' dataKey='user1' stackId="1" stroke='#8884d8' fill='#8884d8' />
+                <Area type='monotone' dataKey='user2' stackId="1" stroke='#82ca9d' fill='#82ca9d' />
+                <Area type='monotone' dataKey='user3' stackId="1" stroke='#ffc658' fill='#ffc658' />
+              </AreaChart>
+            </TabPanel>
+
+            <TabPanel>
+              <BarChart width={1000} height={1000} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+               <XAxis dataKey="name"/>
+               <YAxis/>
+               <CartesianGrid strokeDasharray="3 3"/>
+               <Tooltip/>
+               <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
+               <ReferenceLine y={0} stroke='#000'/>
+               <Brush dataKey='name' height={30} stroke="#8884d8"/>
+               <Bar dataKey="pv" fill="#8884d8" />
+               <Bar dataKey="uv" fill="#82ca9d" />
+              </BarChart>
+            </TabPanel>
+          </Tabs>
+        </div>
+      </div>
+    )
   }
 }
 
-export default StatsView
+function mapStateToProps(state){
+  return {session:state.session}
+}
+
+export default connect(mapStateToProps, {getTaskStats})(StatsView)
