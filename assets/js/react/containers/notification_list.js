@@ -46,4 +46,5 @@ class NotificationList extends Component {
   }
 }
 
+
 export default NotificationList

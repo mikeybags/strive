@@ -42,24 +42,21 @@ class TaskManager(models.Manager):
         wagers = Wager.objects.filter(task__id = task.id, accepted=True)
         if len(wagers) > 0:
             for wager in wagers:
-                if timezone.now() > task.end_date:
-                    Wager.objects.win(wager.wagerer.id, user_id)
+                if timezone.now().date() >= task.end_date:
+                    Wager.objects.win(wager.id, user_id)
                 else:
-                    Wager.objects.lose(wager.wagerer.id, user_id)
+                    Wager.objects.lose(wager.id, user_id)
         tomorrow = datetime.date.today() + datetime.timedelta(days=1)
         if task.task_type == "recurring":
             Task.objects.create_task(user.id, task.name, task.description, tomorrow, tomorrow, task.points, task.task_type, task.public)
-        return task
+        return {'task':task}
 
     def update_task(self, task_id, name, description, start_date, end_date, points, task_type, public):
         errors = Task.objects.task_validator(name, start_date, end_date)
         if len(errors) > 0:
             return {'errors': errors}
         else:
-            if public == "true":
-                public = True
-            else:
-                public = False
+            public = public
             task = Task.objects.filter(id=task_id).update(name=name, description=description, start_date=start_date, end_date=end_date, points=points, task_type=task_type, public=public)
             return {'task':task}
 

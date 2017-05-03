@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {getWagers} from '../actions/get_wagers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import WagerList from '../components/wager_list'
 
 
 
@@ -18,10 +19,10 @@ class WagersView extends Component {
         </TabList>
 
         <TabPanel>
-          <div>Good Times</div>
+          <WagerList wagers={this.props.wagers.sent_active} />
         </TabPanel>
         <TabPanel>
-          <div>Good Times</div>
+          <WagerList wagers={this.props.wagers.received_active} />
         </TabPanel>
       </Tabs>
     )

@@ -24,3 +24,4 @@ export const GET_WAGERS = 'GET_WAGERS';
 export const UPDATE_WAGER = 'UPDATE_WAGER';
 export const UPDATE_FRIEND = 'UPDATE_FRIEND';
 export const UPDATE_GROUP = 'UPDATE_GROUP';
+export const GET_TASK_STATS = 'GET_TASK_STATS';
