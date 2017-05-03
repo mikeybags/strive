@@ -84,6 +84,14 @@ def add_member(request):
     if request.method == 'POST':
         group_id = body['group_id']
         new_member = GroupMember.objects.create_member(group_id, request.session['id'])
+    if request.method == 'PUT':
+        if body['status'] == 'accept':
+            group_id = body['group_id']
+            group = GroupMember.objects.accepted(group_id, request.session['id'])
+        else:
+            group_member_id = body['group_member']
+            group = GroupMember.objects.denied(group_member_id)
+        return JsonResponse({'Success': 'Group member changed'})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
@@ -100,7 +108,7 @@ def points(request):
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
-def friend_search(request):
+def user_search(request):
     if request.method == 'GET':
         term = request.GET['props']
         friends = Friend.objects.filter(user=request.session['id']).values_list('friend', flat=True)
@@ -126,6 +134,14 @@ def request_friend(request):
             return JsonResponse({'errors':errors})
         else:
             return JsonResponse({'Success':True})
+    elif request.method == 'PUT':
+        body = json.loads(request.body)
+        if body['status'] == 'accept':
+            friend = Friend.objects.accepted(request.session['id'], body['friend'])
+        else:
+            friend = Friend.objects.denied(body['friendship_id'])
+        return JsonResponse({'Success':'Friend changed'})
+
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
 
@@ -176,7 +192,6 @@ def purchases(request):
 
 def friends(request):
         if request.method == 'GET':
-            friendships = Friend.objects.all().values("user", "friend")
             friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
             return JsonResponse({"friends": list(friends)})
         else:
@@ -189,12 +204,6 @@ def friend_tasks(request, id):
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
 
-def add_friend(request):
-    if request.method == 'GET':
-        pass
-    else:
-        return JsonResponse({'error': 'Wrong HTTP method'})
-
 def graph(request, id):
     if request.method == 'GET':
         tasks = Task.objects.filter(user__id=id)
@@ -202,16 +211,16 @@ def graph(request, id):
 
 def get_requests(request):
     if request.method == 'GET':
-        group_requests = GroupMember.objects.filter(user__id = request.session['id'], accepted = False).values('group__task__user__username', 'group__name' )
-        wager_requests = Wager.objects.filter(task__user__id = request.session['id'], accepted = False, task__end_date__gte=datetime.date.today()).values('points', 'wagerer', 'task__name')
-        friend_requests = Friend.objects.filter(friend__id = request.session['id'], accepted = False).values('user__username', 'user__first_name', 'user__last_name')
+        group_requests = GroupMember.objects.filter(user__id = request.session['id'], accepted = False).values('group__task__user__username', 'group__name', 'user_id', 'id', 'group_id' )
+        # wager_requests = Wager.objects.filter(task__user__id = request.session['id'], accepted = False, task__end_date__gte=datetime.date.today()).values('points', 'wagerer', 'task__name', 'id')
+        friend_requests = Friend.objects.filter(friend__id = request.session['id'], accepted = False).values('user__username', 'user__first_name', 'user__last_name', 'user_id', 'id')
         return JsonResponse ({
             'friend_requests': list(friend_requests),
-            'wager_requests': list(wager_requests),
             'group_requests': list(group_requests),
             })
     else:
         return JsonResponse({ 'error': 'Wrong HTTP method'})
+
 
 def wagers(request):
     if request.method == 'POST':

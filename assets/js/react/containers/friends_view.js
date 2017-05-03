@@ -35,7 +35,7 @@ class FriendsView extends Component {
           <div className="friend-display col-sm-8">
             {Object.keys(this.state.selected_friend).length === 0 &&
               <div>
-                <h5>Select a friend to view their info</h5>
+                <h5 className="friend-placeholder">Select a friend to view their info...</h5>
               </div>
             }
             {Object.keys(this.state.selected_friend).length > 0 &&

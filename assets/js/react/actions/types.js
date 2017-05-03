@@ -22,3 +22,5 @@ export const CREATE_WAGER = 'CREATE_WAGER';
 export const GET_REQUESTS = 'GET_REQUESTS';
 export const GET_WAGERS = 'GET_WAGERS';
 export const UPDATE_WAGER = 'UPDATE_WAGER';
+export const UPDATE_FRIEND = 'UPDATE_FRIEND';
+export const UPDATE_GROUP = 'UPDATE_GROUP';

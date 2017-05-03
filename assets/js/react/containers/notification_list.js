@@ -1,42 +1,49 @@
 import React, {Component} from 'react'
-import { getRequests } from '../actions/get_requests'
 import { connect } from 'react-redux'
 
 
 class NotificationList extends Component {
-  componentWillMount() {
-    this.props.getRequests();
+
+
+  renderMessages(){
+    return(
+      <div>
+      { this.props.notifications.messages &&
+        <div className="row">
+          <p className="col-sm-12 col-lg-8 request-message">{this.props.notifications.messages}</p>
+        </div>
+      }
+      </div>
+    )
   }
 
   renderNotifications(){
     if (this.props.notifications) {
       return this.props.notifications.map((notification) => {
-        return ( <li className="list-group-item" key={notification.message + Math.random()}>
-          <p className="text-center">{notification.message}</p>
-          <div className="row">
-            <div className="col-xs-6">
-              <button onClick={() => {this.props.acceptClick(notification, this.props.type)}} type="button" className="btn btn-primary">Accept</button>
+        return (
+          <li className="request-list list-group-item" key={notification.message + Math.random()}>
+            <div className="row">
+              <p className="col-sm-12 col-lg-8 request-message">{notification.message}</p>
+              <div className="col-lg-2 col-xs-6 text-center">
+                <button onClick={() => {this.props.acceptClick(notification, this.props.type)}} type="button" className="btn btn-primary request-btn">Accept</button>
+              </div>
+              <div className="col-lg-2 col-xs-6 text-center">
+                <button onClick={() => {this.props.denyClick(notification, this.props.type)}} type="button" className="btn btn-danger request-btn">Deny</button>
+              </div>
             </div>
-            <div className="col-xs-6">
-              <button onClick={() => {this.props.denyClick(notification, this.props.type)}} type="button" className="btn btn-default">Deny</button>
-            </div>
-          </div>
-        </li> )
-      })
-    }
+          </li>
+        );
+      });
+    };
   }
   render(){
     return (
       <ul className="list-group">
+        {this.renderMessages()}
         {this.renderNotifications()}
       </ul>
     )
   }
 }
 
-function mapStateToProps(state){
-  return {notifications: state.requests}
-}
-
-
-export default connect(mapStateToProps, {getRequests})(NotificationList)
+export default NotificationList

@@ -154,6 +154,11 @@ class FriendManager(models.Manager):
         friend.save()
         return True
 
+    def denied(self, friendship_id):
+        friend = Friend.objects.get(id=friendship_id)
+        friend.delete()
+        return True
+
 class GroupManager(models.Manager):
     def create_group(self, name, wager_points, task_id, end_date):
         task = Task.objects.get(id=task_id)
@@ -181,6 +186,11 @@ class GroupMemberManager(models.Manager):
         else:
             errors = ["Past end date, cannot sign up"]
             return ({"errors": errors})
+
+    def denied(self, groupMember_id):
+        groupMember = GroupMember.objects.get(id=groupMember_id)
+        groupMember.delete()
+        return True
 
 
 class CommentManager(models.Manager):

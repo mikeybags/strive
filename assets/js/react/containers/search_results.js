@@ -5,26 +5,38 @@ import { requestFriend } from '../actions/request_friend'
 class SearchResults extends Component {
   constructor(props){
     super(props);
-    this.state = {}
+    this.state = {
+      term: ''
+    }
   }
   renderUsers(){
     const users = this.props.data.users;
     const term = this.props.data.term;
-    return users.map((user) => {
-      return (
-        <div key={user.id} className="user-detail col-lg-4 col-sm-6 col-xs-12">
-          <div  className="card">
-            <img src={`static/images/${user.profile_picture}`} alt="Profile Picture" />
-            <div className="card-block">
-              <h4 className="card-title">{user.username}</h4>
-              <h5 className="card-text">{user.first_name} {user.last_name}</h5>
-              <p className="card-text">{user.tag_line}</p>
-              <button onClick={() => this.handleSentRequest(user.id)} className="btn btn-primary">Request Friendship</button>
+    if (users) {
+      return users.map((user) => {
+        return (
+          <div key={user.id} className="user-detail">
+            <div className="card search-result col-xs-12">
+              <div className="search-img col-xs-12 col-sm-6 col-md-4">
+                <img src={`static/images/${user.profile_picture}`} alt="Profile Picture" />
+              </div>
+              <div className="card-block col-xs-12 col-sm-6 col-md-4">
+                <h4 className="card-title">{user.username}</h4>
+                <h5 className="card-text">{user.first_name} {user.last_name}</h5>
+                <p className="card-text">{user.tag_line}</p>
+              </div>
+              <div className="btn-area col-xs-12 col-sm-12 col-md-4">
+                <button onClick={() => this.handleSentRequest(user.id)} className="btn btn-primary">Request Friendship</button>
+              </div>
             </div>
           </div>
-        </div>
+        )
+      });
+    } else {
+      return (
+        <div>Enter a search term to search for a friend.</div>
       )
-    });
+    }
   }
 
   handleSentRequest(id) {
