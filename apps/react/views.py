@@ -218,17 +218,18 @@ def wager_graph(request, id):
         for i in range(0,19):
             wagers.append(0)
         user = User.objects.get(id=id)
+        print user
         wagers_won = Wager.objects.filter(winner=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
         wagers_loss = Wager.objects.filter(loser=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
         today_day = datetime.date.today()
         for wager in wagers_won:
             wager_day = wager.task.end_date
-            delta_day = today_day.day - wager_day.day
-            wagers[delta_day] += wager.points
+            delta_day = today_day - wager_day
+            wagers[delta_day.days] += wager.points
         for wager in wagers_loss:
             wager_day = wager.task.end_date
-            delta_day = today_day.day - wager_day.day
-            wagers[delta_day] -= wager.points
+            delta_day = today_day - wager_day
+            wagers[delta_day.days] -= wager.points
         return JsonResponse({'data': wagers})
 
 def task_graph(request, id):
@@ -245,12 +246,12 @@ def task_graph(request, id):
         today_day = datetime.date.today()
         for task in all_tasks:
             task_day = task.end_date
-            delta_day = today_day.day - task_day.day
-            all_tasks_by_day[delta_day] += 1
+            delta_day = today_day - task_day
+            all_tasks_by_day[delta_day.days] += 1
         for completed_task in completed_tasks:
             task_day = task.end_date
-            delta_day = today_day.day - task_day.day
-            completed_tasks_by_day[delta_day] += 1
+            delta_day = today_day - task_day
+            completed_tasks_by_day[delta_day.days] += 1
         for i in range(0,9):
             if all_tasks_by_day[i] == 0:
                 completion_percentage.append(0)
@@ -260,8 +261,21 @@ def task_graph(request, id):
 
 def user_competition_graph(request, id):
     user = User.objects.get(id=id)
-    pass
-
+    friends = Friend.objects.filter(user=user.id)
+    friends_list = []
+    friends_list_ratio = []
+    for friend in friends:
+        winner_count = 0
+        wins = Wager.objects.filter(loser = friend.friend.id, winner=user.id)
+        losses = Wager.objects.filter(winner = friend.friend.id, loser=user.id)
+        for win in wins:
+            winner_count += 1
+        total_count = winner_count
+        for loss in losses:
+            total_count += 1
+        friends_list.append(friend.friend.username)
+        friends_list_ratio.append(float(winner_count) / float(total_count))
+    return JsonResponse({'friends': list(friends_list), 'ratio': list(friends_list_ratio)})
 
 def get_requests(request):
     if request.method == 'GET':
