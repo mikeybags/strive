@@ -35,7 +35,7 @@ class FriendsView extends Component {
           <div className="friend-display col-sm-8">
             {Object.keys(this.state.selected_friend).length === 0 &&
               <div>
-                <h5>Select a friend to view their info</h5>
+                <h5 className="friend-placeholder">Select a friend to view their info...</h5>
               </div>
             }
             {Object.keys(this.state.selected_friend).length > 0 &&
@@ -47,7 +47,7 @@ class FriendsView extends Component {
                     <p>Points in Limbo: {this.state.selected_friend.wager_balance}</p>
                   </div>
                   <div className="col-xs-6">
-                    <SparklineChart className="sparkline" data={[0,5,2,7,8]} color="purple" units="K" />
+                    <SparklineChart className="sparkline" data={this.props.friend_tasks.spark_data} color="purple" units="K" />
                   </div>
                 </div>
                 <h5 className="text-center">Tasks - Click to Wager</h5>

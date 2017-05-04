@@ -61,7 +61,7 @@ class Profile extends Component {
       As with <Tab/> the content of <TabPanel/> will be shown as the content.
     */
       <div>
-        <div className="row">
+        <div className="row profile-header">
           <div className="col-xs-4">
             <img src={`static/images/${this.props.picture}`} className="img-responsive picture-option" />
           </div>

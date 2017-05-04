@@ -10,7 +10,7 @@ class FriendList extends Component {
   renderFriends(){
     return this.props.friends.map((friend) => {
       return (
-        <li key={friend.username} className="list-group-item row" onClick={() => {this.props.selectFriend(friend)}}>
+        <li key={friend.username} className="list-group-item row friend-list-item" onClick={() => {this.props.selectFriend(friend)}}>
           <div className="col-xs-5">
             <img src={`/static/images/${friend.profile_picture}`} className="img-responsive tiny-avatar" />
           </div>

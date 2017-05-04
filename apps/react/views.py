@@ -57,7 +57,6 @@ def task(request):
         updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type, public)
         if body['completed'] == True:
             updated_task = Task.objects.completed_task(request.session['id'], task_id)
-        print updated_task
         if 'errors' in updated_task:
             errors = []
             for error in updated_task["errors"]:
@@ -85,6 +84,14 @@ def add_member(request):
     if request.method == 'POST':
         group_id = body['group_id']
         new_member = GroupMember.objects.create_member(group_id, request.session['id'])
+    if request.method == 'PUT':
+        if body['status'] == 'accept':
+            group_id = body['group_id']
+            group = GroupMember.objects.accepted(group_id, request.session['id'])
+        else:
+            group_member_id = body['group_member']
+            group = GroupMember.objects.denied(group_member_id)
+        return JsonResponse({'Success': 'Group member changed'})
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
@@ -101,7 +108,7 @@ def points(request):
     else:
         return JsonResponse({'error':'Wrong HTTP method'})
 
-def friend_search(request):
+def user_search(request):
     if request.method == 'GET':
         term = request.GET['props']
         friends = Friend.objects.filter(user=request.session['id']).values_list('friend', flat=True)
@@ -127,6 +134,14 @@ def request_friend(request):
             return JsonResponse({'errors':errors})
         else:
             return JsonResponse({'Success':True})
+    elif request.method == 'PUT':
+        body = json.loads(request.body)
+        if body['status'] == 'accept':
+            friend = Friend.objects.accepted(request.session['id'], body['friend'])
+        else:
+            friend = Friend.objects.denied(body['friendship_id'])
+        return JsonResponse({'Success':'Friend changed'})
+
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
 
@@ -177,7 +192,6 @@ def purchases(request):
 
 def friends(request):
         if request.method == 'GET':
-            friendships = Friend.objects.all().values("user", "friend")
             friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
             print friends
             return JsonResponse({"friends": list(friends)})
@@ -188,8 +202,8 @@ def friend_tasks(request, id):
         if request.method == 'GET':
             trailing_points = [0,0,0,0,0]
             rolling_day = datetime.date.today() - datetime.timedelta(days=5)
-            friend_tasks = Task.objects.filter(user__id=id, public=True).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
-            friends_5day_points = Task.objects.filter(user__id=id, end_date__lt = datetime.date.today(), end_date__gte = rolling_day, completed=True)
+            friend_tasks = Task.objects.filter(user__id=id, public=True, completed=False).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
+            friends_5day_points = Task.objects.filter(user__id=id, end_date__lte = datetime.date.today(), end_date__gte = rolling_day, completed=True)
             for i in friends_5day_points:
                 if i.end_date == (datetime.date.today() - datetime.timedelta(days=5)):
                     trailing_points[0] += i.points
@@ -204,12 +218,6 @@ def friend_tasks(request, id):
             return JsonResponse({"friend_tasks": list(friend_tasks), "recent_points": list(trailing_points)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
-
-def add_friend(request):
-    if request.method == 'GET':
-        pass
-    else:
-        return JsonResponse({'error': 'Wrong HTTP method'})
 
 def wager_graph(request, id):
     if request.method == 'GET':
@@ -238,6 +246,7 @@ def task_graph(request, id):
         all_tasks_by_day = []
         completed_tasks_by_day = []
         prev_10 = datetime.date.today() - datetime.timedelta(days=10)
+        user = User.objects.get(id=id)
         for i in range(0,9):
             all_tasks_by_day.append(0)
             completed_tasks_by_day.append(0)
@@ -257,7 +266,7 @@ def task_graph(request, id):
                 completion_percentage.append(0)
             else:
                 completion_percentage.append(completed_tasks_by_day[i] / all_tasks_by_day[i])
-        return JsonResponse({'completion_percentage': list(completion_percentage)})
+        return JsonResponse({'completion_percentage': list(completion_percentage), 'user':user.username})
 
 def user_competition_graph(request, id):
     user = User.objects.get(id=id)
@@ -279,16 +288,16 @@ def user_competition_graph(request, id):
 
 def get_requests(request):
     if request.method == 'GET':
-        group_requests = GroupMember.objects.filter(user__id = request.session['id'], accepted = False).values('group__task__user__username', 'group__name' )
-        wager_requests = Wager.objects.filter(task__user__id = request.session['id'], accepted = False, task__end_date__gte=datetime.date.today()).values('points', 'wagerer', 'task__name')
-        friend_requests = Friend.objects.filter(friend__id = request.session['id'], accepted = False).values('user__username', 'user__first_name', 'user__last_name')
+        group_requests = GroupMember.objects.filter(user__id = request.session['id'], accepted = False).values('group__task__user__username', 'group__name', 'user_id', 'id', 'group_id' )
+        # wager_requests = Wager.objects.filter(task__user__id = request.session['id'], accepted = False, task__end_date__gte=datetime.date.today()).values('points', 'wagerer', 'task__name', 'id')
+        friend_requests = Friend.objects.filter(friend__id = request.session['id'], accepted = False).values('user__username', 'user__first_name', 'user__last_name', 'user_id', 'id')
         return JsonResponse ({
             'friend_requests': list(friend_requests),
-            'wager_requests': list(wager_requests),
             'group_requests': list(group_requests),
             })
     else:
         return JsonResponse({ 'error': 'Wrong HTTP method'})
+
 
 def wagers(request):
     if request.method == 'POST':
@@ -304,7 +313,7 @@ def wagers(request):
         else:
             return JsonResponse({'Success':'true'})
     elif request.method == 'GET':
-        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "task", "task__name", "task__end_date", "task__user")
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "loser", "task", "task__name", "task__end_date", "task__user", "task__user__username")
         wagers = list(wagers)
         for wager in wagers:
             wager['current_user'] = request.session['id']
