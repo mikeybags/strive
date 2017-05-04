@@ -5,7 +5,7 @@ import {createSession} from '../actions/create_session';
 import {login} from '../actions/login';
 import {getPoints} from '../actions/get_points';
 import {Link} from 'react-router';
-import { setCookie } from 'redux-cookie';
+import { setCookie, getCookie } from 'redux-cookie';
 
 class SessionsNew extends Component {
   constructor(props){
@@ -13,6 +13,11 @@ class SessionsNew extends Component {
 
     this.state = {
       errors:[]
+    }
+  }
+  componentWillMount() {
+    if (this.props.getCookie("id") !== 'undefined'){
+      this.context.router.push('home')
     }
   }
   static contextTypes = {
@@ -86,4 +91,4 @@ export default reduxForm({
   form: 'SessionsNewForm',
   fields: ['email', 'password'],
   validate
-},null, {createSession, login, setCookie, getPoints})(SessionsNew)
+},null, {createSession, login, setCookie, getPoints, getCookie})(SessionsNew)

@@ -138,6 +138,20 @@ class StatsView extends Component {
             </TabPanel>
 
             <TabPanel>
+              <BarChart width={550} height={300} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                 <XAxis dataKey="name"/>
+                 <YAxis/>
+                 <CartesianGrid strokeDasharray="3 3"/>
+                 <Tooltip/>
+                 <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
+                 <ReferenceLine y={0} stroke='#000'/>
+                 <Brush dataKey='name' height={30} stroke="#8884d8"/>
+                 <Bar dataKey="pv" fill="#8884d8" />
+                 <Bar dataKey="uv" fill="#82ca9d" />
+              </BarChart>
+            </TabPanel>
+
+            <TabPanel>
               <AreaChart width={600} height={400} data={data} margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                 <XAxis dataKey="name"/>
                 <YAxis/>
@@ -147,20 +161,6 @@ class StatsView extends Component {
                 <Area type='monotone' dataKey='user2' stackId="1" stroke='#82ca9d' fill='#82ca9d' />
                 <Area type='monotone' dataKey='user3' stackId="1" stroke='#ffc658' fill='#ffc658' />
               </AreaChart>
-            </TabPanel>
-
-            <TabPanel>
-              <BarChart width={1000} height={1000} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-               <XAxis dataKey="name"/>
-               <YAxis/>
-               <CartesianGrid strokeDasharray="3 3"/>
-               <Tooltip/>
-               <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
-               <ReferenceLine y={0} stroke='#000'/>
-               <Brush dataKey='name' height={30} stroke="#8884d8"/>
-               <Bar dataKey="pv" fill="#8884d8" />
-               <Bar dataKey="uv" fill="#82ca9d" />
-              </BarChart>
             </TabPanel>
           </Tabs>
         </div>

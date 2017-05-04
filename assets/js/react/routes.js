@@ -17,8 +17,8 @@ import StoreIndex from './containers/store_index'
 
 export default (
   <Route path='/' component={App}>
-    <IndexRoute component={UsersNew} />
-    <Route path='login' component={SessionsNew} />
+    <IndexRoute component={SessionsNew} />
+    <Route path='register' component={UsersNew} />
     <Route path='home' component={Home} />
     <Route path='profile/:id' component={Profile} />
     <Route path='tasks/new' component={TasksNew} />

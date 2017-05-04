@@ -44,8 +44,8 @@ class Header extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <li className="nav-buttons" role="presentation"><a href='#/'>Register</a></li>
-              <li className="nav-buttons" role="presentation"><a href='#/login'>Log In</a></li>
+              <li className="nav-buttons" role="presentation"><a href='#/register'>Register</a></li>
+              <li className="nav-buttons" role="presentation"><a href='#/'>Log In</a></li>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

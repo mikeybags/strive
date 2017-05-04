@@ -1,7 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Header from '../containers/header';
+import { connect } from 'react-redux';
+import { getCookie } from 'redux-cookie';
 
-export default class App extends Component {
+class App extends Component {
+  static contextTypes = {
+    router:PropTypes.object
+  };
+  componentWillUpdate() {
+    if (!this.props.session.hasOwnProperty("id") && this.props.getCookie("id") === 'undefined'){
+      const address = location.hash.substr(0, location.hash.indexOf('?'));
+     if (address !== '#/' && address !== '#/register') {
+      console.log("hello!!");
+      this.context.router.push('/')
+      }
+    }
+  }
   render() {
     return (
       <div>
@@ -13,3 +27,9 @@ export default class App extends Component {
     );
   }
 }
+
+function mapStateToProps(state){
+  return {session:state.session}
+}
+
+export default connect(mapStateToProps, { getCookie })(App);

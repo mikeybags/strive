@@ -42,7 +42,9 @@ class TaskManager(models.Manager):
         wagers = Wager.objects.filter(task__id = task.id, accepted=True)
         if len(wagers) > 0:
             for wager in wagers:
-                if timezone.now().date() >= task.end_date:
+                print timezone.now().date()
+                print task.end_date
+                if timezone.now().date() <= task.end_date:
                     Wager.objects.win(wager.id, user_id)
                 else:
                     Wager.objects.lose(wager.id, user_id)
@@ -107,6 +109,7 @@ class WagerManager(models.Manager):
         user.open_balance += wager.points
         user.wager_balance -= wager.points
         user.save()
+        wagerer_user.save()
         return True
 
     def win(self, wager_id, user_id):
@@ -120,6 +123,7 @@ class WagerManager(models.Manager):
         user.wager_balance -= wager.points
         wagerer_user.wager_balance -= wager.points
         user.save()
+        wagerer_user.save()
         return True
 
     def lose(self, wager_id, user_id):

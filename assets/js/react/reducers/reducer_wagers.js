@@ -5,6 +5,7 @@ export default function(state = {sent_requests : [], received_requests : [], rec
   switch(action.type) {
     case GET_WAGERS:
       const wagers = action.payload.data.wagers;
+      console.log(wagers);
       const sent_requests = [],
       received_requests = [],
       received_active = [],

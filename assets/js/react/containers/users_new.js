@@ -6,7 +6,7 @@ import {createUser} from '../actions/create_user';
 import {createSession} from '../actions/create_session';
 import {getPoints} from '../actions/get_points';
 import {Link} from 'react-router';
-import { setCookie } from 'redux-cookie';
+import { setCookie, getCookie } from 'redux-cookie';
 
 
 const FIELDS = {
@@ -53,6 +53,11 @@ class UsersNew extends Component {
   static contextTypes = {
     router:PropTypes.object
   };
+  componentWillMount() {
+    if (this.props.getCookie("id") !== 'undefined') {
+      this.context.router.push('home')
+    }
+  }
 
   onSubmit(props) {
     this.props.createUser(props)
@@ -126,4 +131,4 @@ export default reduxForm({
   form: 'UsersNewForm',
   fields: _.keys(FIELDS),
   validate
-},null, {createUser, createSession, setCookie, getPoints})(UsersNew)
+},null, {createUser, createSession, setCookie, getPoints, getCookie })(UsersNew)
