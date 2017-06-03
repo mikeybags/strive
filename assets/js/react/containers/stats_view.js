@@ -115,7 +115,7 @@ class StatsView extends Component {
   render () {
     return (
       <div className="row">
-        <div className="col-sm-4">
+        <div className="col-sm-4" id="stats-list">
           <FriendList selectFriend={this.selectFriend.bind(this)} />
         </div>
         <div className="col-sm-8">

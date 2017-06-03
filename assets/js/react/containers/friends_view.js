@@ -32,14 +32,14 @@ class FriendsView extends Component {
           <div className="col-sm-4">
             <FriendList selectFriend={this.selectFriend.bind(this)} />
           </div>
-          <div className="friend-display col-sm-8">
+          <div className="col-sm-8">
             {Object.keys(this.state.selected_friend).length === 0 &&
-              <div>
+              <div className="friend-display">
                 <h5 className="friend-placeholder">Select a friend to view their info...</h5>
               </div>
             }
             {Object.keys(this.state.selected_friend).length > 0 &&
-              <div>
+              <div className="friend-display">
                 <h5 className="text-center">{this.state.selected_friend.username}</h5>
                 <div className="row">
                   <div className="col-xs-6">

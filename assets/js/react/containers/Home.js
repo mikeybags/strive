@@ -9,16 +9,16 @@ class Home extends Component {
   render(){
     return (
       <div>
-        <div className="row">
-          <div className="col-md-5">
-            <Link to="tasks/new">Add a task</Link>
-            &nbsp;&nbsp;
-            <Link to="tasks/edit">Manage tasks</Link>
+        <div className="row home-header">
+          <div className="col-md-4 home-btns">
+            <Link to="tasks/new" className="btn btn-primary btn-block">Add a task</Link>
+            <Link to="tasks/edit" className="btn btn-info btn-block">Manage tasks</Link>
           </div>
-          <div className="col-md-7">
-            <p>Current Points: {this.props.points.open_balance}</p>
-            <p>Wagered Points: {this.props.points.wager_balance}</p>
-            <p>Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>
+          <div className="points-box col-md-8">
+              <h4 className="text-center">Strive Points</h4>
+              <p className="col-md-4 text-center">Current Points: {this.props.points.open_balance}</p>
+              <p className="col-md-4 text-center">Wagered Points: {this.props.points.wager_balance}</p>
+              <p className="col-md-4 text-center">Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>
           </div>
         </div>
         <div className="row">

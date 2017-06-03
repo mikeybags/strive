@@ -118,6 +118,14 @@ body {
   }
 }
 
+.dropdown-menu {
+  li {
+    a:focus, a:hover {
+      background-image: none;
+    }
+  }
+}
+
 .navbar-inverse .navbar-nav .open .dropdown-menu {
   background-color: $secondary-color;
   li{
@@ -139,11 +147,31 @@ body {
   border-radius: 5px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
   li {
+      background-color: $secondary-color;
     a {
+       background-color: $secondary-color;
        padding: 3px 20px;
        height: 26px;
     }
   }
+}
+
+.dropdown .dropdown-menu {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+
+    max-height: 0;
+    display: block;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.dropdown.open .dropdown-menu {
+    max-height: 300px;
+    opacity: 1;
 }
 
 .dropdown-menu > li > a, .navbar-nav .open .dropdown-menu .dropdown-header, .navbar-nav .open .dropdown-menu>li>a, .navbar-nav .dropdown-menu>li>a {
@@ -227,11 +255,11 @@ body {
 }
 
 .friend-display {
-  overflow: scroll;
-  height:400px;
-  padding: 15px 0;
+  padding: 15px;
   background-color: #F2F2F2;
   border-radius: 5px;
+  overflow: scroll;
+  height:400px;
 }
 
 .tiny-avatar {
@@ -307,8 +335,20 @@ body {
   margin-bottom: 5px;
 }
 
-.profile-header {
+.home-header, .profile-header {
   margin-bottom: 15px;
+}
+
+.profile-header {
+  min-height: 166px;
+  @media(max-width: 767px) {
+    min-height: 320px;
+  }
+}
+
+.profile-picture {
+  height: 166px;
+  border: 3px ridge $nav-link;
 }
 
 .react-tabs [role=tab] {
@@ -330,4 +370,42 @@ body {
 
 .friend-list-item{
   box-shadow: 2px 2px 2px #AAA;
+}
+
+.selected {
+  background-color: $tertiary-color;
+  color: #FFF;
+}
+
+.tab-hover {
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #AAA;
+}
+
+.points-box {
+  border: 1px solid $nav-link;
+  border-radius: .25rem;
+  min-height: 71px;
+  padding-top: 10px;
+  @media(max-width: 767px) {
+    padding-left: 0;
+    margin: 15px .9375rem;
+  }
+}
+
+.profile-points-box {
+  border: 1px solid $nav-link;
+  border-radius: .25rem;
+  min-height: 140px;
+  padding-top: 10px;
+  @media(max-width: 767px) {
+    margin-top: 15px;
+  }
+}
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+  padding-right: 0;
+  padding-left: 0;
 }

@@ -242,6 +242,10 @@ class UserImageManager(models.Manager):
             user.save()
             return {'image':image.picture}
 
+class ActivityManager(models.Manager):
+    def create_activity(self, user_id, verb, type):
+        pass
+
 class Task(models.Model):
     user = models.ForeignKey(User, related_name="user_task")
     name = models.CharField(max_length=255)

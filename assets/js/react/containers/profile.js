@@ -25,16 +25,16 @@ class Profile extends Component {
   render() {
     return (
       <div>
-        <div className="row profile-header">
-          <div className="col-xs-4">
-            <img src={`static/images/${this.props.picture}`} className="img-responsive picture-option" />
+        <div className="profile-header">
+          <div className="no-gutters col-md-3 col-xs-6">
+            <img src={`static/images/${this.props.picture}`} className="img-responsive profile-picture" />
           </div>
-          <div className="col-xs-4">
-            <Link to="tasks/new">Add a task</Link>
-            &nbsp;&nbsp;
-            <Link to="tasks/edit">Manage tasks</Link>
+          <div className="col-md-3 col-xs-6">
+            <Link to="tasks/new" className="btn btn-primary btn-block">Add a task</Link>
+            <Link to="tasks/edit" className="btn btn-info btn-block">Manage tasks</Link>
           </div>
-          <div className="col-xs-4">
+          <div className="col-md-6 col-xs-12 profile-points-box text-center">
+            <h4>Strive Points</h4>
             <p>Current Points: {this.props.points.open_balance}</p>
             <p>Wagered Points: {this.props.points.wager_balance}</p>
             <p>Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>

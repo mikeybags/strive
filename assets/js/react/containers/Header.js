@@ -66,11 +66,11 @@ class Header extends Component {
           </Navbar.Form>
             <Nav pullRight>
               <NavDropdown className="name-dropdown" noCaret eventKey={3} title={session.name} id="basic-nav-dropdown">
-                <MenuItem eventKey={3.1} href="#/profile/0">View Profile</MenuItem>
-                <MenuItem eventKey={3.2}>More Stuff</MenuItem>
-                <MenuItem eventKey={3.3}>Even More Stuff</MenuItem>
+                <MenuItem eventKey={3.1} href="#/profile/0" className="nav-dropdown-links">View Profile</MenuItem>
+                <MenuItem eventKey={3.2} className="nav-dropdown-links">More Stuff</MenuItem>
+                <MenuItem eventKey={3.3} className="nav-dropdown-links">Even More Stuff</MenuItem>
                 <MenuItem divider />
-                <MenuItem eventKey={3.3}>Separated Stuff</MenuItem>
+                <MenuItem eventKey={3.3} className="nav-dropdown-links">Separated Stuff</MenuItem>
               </NavDropdown>
               <li className="nav-buttons" role="presentation"><a href='#/store'>Store</a></li>
               <NavItem className="nav-buttons" onClick={this.onLogout.bind(this)}>Logout</NavItem>
