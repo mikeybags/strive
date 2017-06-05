@@ -266,6 +266,7 @@ def task_graph(request, id):
                 completion_percentage.append(0)
             else:
                 completion_percentage.append(completed_tasks_by_day[i] / all_tasks_by_day[i])
+        completion_percentage = list(reversed(completion_percentage))
         return JsonResponse({'completion_percentage': list(completion_percentage), 'user':user.username})
 
 def user_competition_graph(request, id):
