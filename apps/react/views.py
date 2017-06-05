@@ -42,6 +42,13 @@ def task(request):
         else:
             return JsonResponse({"name":task['task'].name})
     elif request.method == 'GET':
+        past_due_tasks = Task.objects.filter(user_id = request.session['id'], completed = False, end_date__lte = datetime.date.today())
+        for task in past_due_tasks:
+            wagers = Wager.objects.filter(task__id = task.id)
+            print wagers
+            for wager in wagers:
+                if not wager.loser_id:
+                    Wager.objects.lose(wager.id, request.session['id'])
         tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public', 'completed', 'updated_at')
         return JsonResponse({"tasks": list(tasks)})
     elif request.method == "PATCH":

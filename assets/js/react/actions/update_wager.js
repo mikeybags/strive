@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { UPDATE_WAGER } from './types';
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
-import { UPDATE_WAGER } from './types'
 
 export function updateWager(props) {
   const request = axios.put('/wagers', props);

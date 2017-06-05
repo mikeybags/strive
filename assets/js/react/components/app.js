@@ -7,15 +7,16 @@ class App extends Component {
   static contextTypes = {
     router:PropTypes.object
   };
+  
   componentWillUpdate() {
     if (!this.props.session.hasOwnProperty("id") && this.props.getCookie("id") === 'undefined'){
       const address = location.hash.substr(0, location.hash.indexOf('?'));
      if (address !== '#/' && address !== '#/register') {
-      console.log("hello!!");
       this.context.router.push('/')
       }
     }
   }
+
   render() {
     return (
       <div>

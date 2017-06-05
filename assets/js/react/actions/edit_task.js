@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
+import Moment from 'moment';
+import {EDIT_TASK} from './types'
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
-import Moment from 'moment'
-
-import {EDIT_TASK} from './types'
 
 export function editTask(props){
   props.completed = false
@@ -33,5 +33,5 @@ export function editTask(props){
   return {
     type:EDIT_TASK,
     payload:request
-  }
+  };
 }

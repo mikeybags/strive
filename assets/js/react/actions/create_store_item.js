@@ -1,7 +1,8 @@
-import axios from 'axios'
+import axios from 'axios';
+import {CREATE_STORE_ITEM} from './types';
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
-import {CREATE_STORE_ITEM} from './types'
 
 export function createStoreItem(props){
 
@@ -9,5 +10,5 @@ export function createStoreItem(props){
   return {
     type:CREATE_STORE_ITEM,
     payload:request
-  }
+  };
 }

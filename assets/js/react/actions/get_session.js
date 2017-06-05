@@ -1,14 +1,13 @@
-import axios from 'axios'
+import axios from 'axios';
+import {GET_SESSION} from './types';
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
-
-import {GET_SESSION} from './types'
-
 
 export function getSession(props){
   const request = axios.get('users/session')
   return {
     type:GET_SESSION,
     payload:request
-  }
+  };
 }

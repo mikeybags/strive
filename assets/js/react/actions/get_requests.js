@@ -1,5 +1,5 @@
-import axios from 'axios'
-import { GET_REQUESTS } from './types'
+import axios from 'axios';
+import { GET_REQUESTS } from './types';
 
 axios.defaults.xsrfHeadername = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";

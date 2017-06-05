@@ -1,7 +1,8 @@
-import axios from 'axios'
+import axios from 'axios';
+import {COMPLETE_TASK} from './types';
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
-import {COMPLETE_TASK} from './types'
 
 export function completeTask(props){
   props.end_date = props.unformatted_end_date;
@@ -10,5 +11,5 @@ export function completeTask(props){
   return {
     type:COMPLETE_TASK,
     payload:request
-  }
+  };
 }

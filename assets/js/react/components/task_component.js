@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import TaskTable from '../containers/task_table'
 
 class DashboardTasks extends Component {

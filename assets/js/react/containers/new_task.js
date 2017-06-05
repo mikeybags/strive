@@ -35,7 +35,6 @@ class TasksNew extends Component {
           this.setState({errors: data.errors});
         }
         else{
-          console.log(data);
           this.context.router.push('profile/0')
         }
       });
@@ -51,7 +50,6 @@ class TasksNew extends Component {
     this.setState(stateObj)
   }
   handleDateChange(date){
-    console.log(date);
     this.setState({start_date:date})
   }
   handleTaskTypeChange(event){

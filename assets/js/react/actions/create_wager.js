@@ -1,7 +1,8 @@
-import axios from 'axios'
+import axios from 'axios';
+import {CREATE_WAGER} from './types';
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
-import {CREATE_WAGER} from './types'
 
 export function createWager(props){
   const request = axios.post('/wagers', props)
@@ -9,4 +10,4 @@ export function createWager(props){
     type:CREATE_WAGER,
     payload:request
   }
-}
+};

@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
+import Moment from 'moment';
+import {CREATE_TASK} from './types';
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
-import Moment from 'moment'
-
-import {CREATE_TASK} from './types'
 
 export function createTask(props){
   if (props.task_type != "major"){
@@ -32,5 +32,5 @@ export function createTask(props){
   return {
     type:CREATE_TASK,
     payload:request
-  }
+  };
 }

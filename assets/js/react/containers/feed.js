@@ -6,7 +6,7 @@ class Feed extends Component {
   render(){
     return (
       <div>
-        <p>Your friend got a bunch of strive points</p>
+        <p>Activity Feed Coming Soon...</p>
 
       </div>
     )
