@@ -46,7 +46,7 @@ class Profile extends Component {
             <Tab>Stats</Tab>
             <Tab>Friends</Tab>
             <Tab>Group Challenges</Tab>
-            <Tab>Current Wagers</Tab>
+            <Tab>Active Wagers</Tab>
             <Tab>Requests</Tab>
             <Tab>My Swag</Tab>
           </TabList>

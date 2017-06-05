@@ -11,10 +11,14 @@ export default function(state = {sent_requests : [], received_requests : [], rec
       received_active = [],
       sent_active = []
       wagers.map((wager) => {
+        console.log(wager.task__end_date);
         wager.end_date = Moment(wager.task__end_date).format('MMMM DD');
+        console.log("End Date:" + wager.end_date);
+        console.log(Moment());
+        console.log(Date());
         wager.message = `${wager.wagerer__username} bet ${wager.points} points you won't finish "${wager.task__name} before ${wager.end_date}.`
-          if (wager.current_user == wager.wagerer){
-            if (wager.accepted == false){
+          if (wager.current_user === wager.wagerer) {
+            if (wager.accepted === false) {
               sent_requests.push(wager)
             }
             else {

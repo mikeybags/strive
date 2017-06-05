@@ -258,7 +258,7 @@ def task_graph(request, id):
             delta_day = today_day - task_day
             all_tasks_by_day[delta_day.days] += 1
         for completed_task in completed_tasks:
-            task_day = task.end_date
+            task_day = completed_task.end_date
             delta_day = today_day - task_day
             completed_tasks_by_day[delta_day.days] += 1
         for i in range(0,9):
@@ -313,7 +313,7 @@ def wagers(request):
         else:
             return JsonResponse({'Success':'true'})
     elif request.method == 'GET':
-        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id'])).values("id", "points", "accepted", "wagerer", "wagerer__username", "loser", "task", "task__name", "task__end_date", "task__user", "task__user__username")
+        wagers = Wager.objects.filter(Q(wagerer=request.session['id']) | Q(task__user=request.session['id']), task__end_date__gte=datetime.date.today(),).values("id", "points", "accepted", "wagerer", "wagerer__username", "loser", "task", "task__name", "task__end_date", "task__user", "task__user__username")
         wagers = list(wagers)
         for wager in wagers:
             wager['current_user'] = request.session['id']
