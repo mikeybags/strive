@@ -70,7 +70,7 @@ class SessionsNew extends Component {
         </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
-        <Link to='/'>Not Registered? Register</Link>
+          <Link to='/register'>Not Registered? Register</Link>
       </div>
     )
   }

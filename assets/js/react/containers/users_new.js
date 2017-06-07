@@ -110,7 +110,7 @@ class UsersNew extends Component {
 
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
-        <Link to='/login'>Already Registered? Login</Link>
+        <Link to='/'>Already Registered? Login</Link>
       </div>
     )
   }
