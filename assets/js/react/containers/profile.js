@@ -40,7 +40,7 @@ class Profile extends Component {
             <p>Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>
           </div>
         </div>
-        <Tabs onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >
+        <Tabs className="home-tabs" onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >
           <TabList>
             <Tab>Tasks</Tab>
             <Tab>Stats</Tab>

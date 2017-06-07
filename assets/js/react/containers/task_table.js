@@ -50,7 +50,7 @@ class TasksView extends Component {
   }
   render(){
     return (
-      <table className="table table-bordered table-striped table-hover">
+      <table className="table table-bordered table-striped table-hover table-condensed">
       <thead>
         <tr>
           {this.renderHeaders()}
