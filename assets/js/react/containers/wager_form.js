@@ -25,6 +25,9 @@ class WagerForm extends Component {
     else if (wager > this.props.balance) {
       this.setState({notification:`You are too poor`});
     }
+    else if (wager <= 0) {
+      this.setState({notification:'You must wager at least 1 Strive point.'})
+    }
     else {
       this.props.createWager({task:this.props.task.id, wager}).then((data) => {
         this.setState({notification:`Wager Request Sent`});

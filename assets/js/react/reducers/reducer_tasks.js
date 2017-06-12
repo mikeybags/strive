@@ -15,7 +15,7 @@ export default function(state = {regular:[], recurring:[], major:[], upcoming:[]
           completed.push(task)
         } else {
           if (Moment(task.end_date).isBefore(Moment(), "day") && task.task_type != "recurring"){
-            task.points = task.points * 0.6;
+            task.points = (task.points * 0.6).toPrecision(2);
             task.expired = true;
           }
           if (Moment(task.start_date).isSameOrBefore(Moment(), "day")){
