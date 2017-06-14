@@ -118,8 +118,13 @@ def points(request):
 def user_search(request):
     if request.method == 'GET':
         term = request.GET['props']
-        friends = Friend.objects.filter(user=request.session['id']).values_list('friend', flat=True)
+        users = User.objects.filter(username__contains=term).exclude(user_friend__friend_id = request.session['id']).exclude(id=request.session['id']).values('first_name', 'last_name', 'tag_line', 'username', 'profile_picture', 'id') & User.objects.filter(username__contains=term).exclude(friended_users__user_id = request.session['id']).exclude(id=request.session['id']).values('first_name', 'last_name', 'tag_line', 'username', 'profile_picture', 'id')
+        '''
+        The following commented out queries were the original queries (replaced by the one above) which made use of the poor friend relationship setup.
+        The models have been adjusted to be a self join with only one entry per friendship.
         users = User.objects.filter(username__contains=term).exclude(id__in=friends).exclude(id=request.session['id']).values('first_name', 'last_name', 'tag_line', 'username', 'profile_picture', 'id')
+        friends = Friend.objects.filter(user=request.session['id']).values_list('friend', flat=True)
+        '''
         if 'errors' in users:
             errors = []
             for error in task["errors"]:
@@ -199,7 +204,12 @@ def purchases(request):
 
 def friends(request):
         if request.method == 'GET':
-            friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
+            friends = User.objects.filter(user_friend__friend_id = request.session['id'], user_friend__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at") | User.objects.filter(friended_users__user_id = request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
+            '''
+            The following commented out query was the original query (replaced by the one above) which made use of the poor friend relationship setup.
+            The models have been adjusted to be a self join with only one entry per friendship.
+            '''
+            # friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
             print friends
             return JsonResponse({"friends": list(friends)})
         else:

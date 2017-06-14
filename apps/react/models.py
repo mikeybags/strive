@@ -149,10 +149,6 @@ class FriendManager(models.Manager):
 
     def accepted(self, user_id, friend_id):
         Friend.objects.filter(user=friend_id, friend=user_id).update(accepted=True)
-        user = User.objects.get(id=user_id)
-        user2 = User.objects.get(id=friend_id)
-        friend = Friend(user=user, friend=user2, accepted=True)
-        friend.save()
         return True
 
     def denied(self, friendship_id):
