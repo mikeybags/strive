@@ -23,6 +23,7 @@ class Profile extends Component {
   }
 
   render() {
+    console.log(this.props.points);
     return (
       <div>
         <div className="profile-header">
@@ -37,7 +38,7 @@ class Profile extends Component {
             <h4>Strive Points</h4>
             <p>Current Points: {this.props.points.open_balance}</p>
             <p>Wagered Points: {this.props.points.wager_balance}</p>
-            <p>Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>
+            <p>Daily Potential: {this.props.points.daily_potential[0]}/{this.props.points.daily_potential[1]}</p>
           </div>
         </div>
         <Tabs className="home-tabs" onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >

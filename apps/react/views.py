@@ -33,7 +33,6 @@ def task(request):
         task_type = body['task_type']
         public = body['public']
         task = Task.objects.create_task(request.session['id'], name, description, start_date, end_date, points, task_type, public)
-        print task
         if 'errors' in task:
             errors = []
             for error in task["errors"]:
@@ -45,7 +44,6 @@ def task(request):
         past_due_tasks = Task.objects.filter(user_id = request.session['id'], completed = False, end_date__lte = datetime.date.today())
         for task in past_due_tasks:
             wagers = Wager.objects.filter(task__id = task.id)
-            print wagers
             for wager in wagers:
                 if not wager.loser_id:
                     Wager.objects.lose(wager.id, request.session['id'])
@@ -160,7 +158,6 @@ def request_friend(request):
 def create_store_item(request):
     if request.method == 'POST':
         body = json.loads(request.body)
-        print body
         name = body['name']
         price = body['price']
         picture = body['picture']
@@ -182,7 +179,6 @@ def store(request):
         return JsonResponse({"items": list(items)})
     if request.method == 'POST':
         body = json.loads(request.body)
-        print body
         item_id = body['item_id']
         purchase = UserImage.objects.create_user_purchase(request.session['id'], item_id)
         if 'errors' in purchase:
@@ -210,7 +206,6 @@ def friends(request):
             The models have been adjusted to be a self join with only one entry per friendship.
             '''
             # friends = User.objects.filter(friended_users__user=request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
-            print friends
             return JsonResponse({"friends": list(friends)})
         else:
             return JsonResponse({'error':'Wrong HTTP method'})
@@ -243,7 +238,6 @@ def wager_graph(request, id):
         for i in range(0,19):
             wagers.append(0)
         user = User.objects.get(id=id)
-        print user
         wagers_won = Wager.objects.filter(winner=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
         wagers_loss = Wager.objects.filter(loser=user.id, task__end_date__lt = datetime.date.today(), task__end_date__gte = prev_20, accepted=True)
         today_day = datetime.date.today()

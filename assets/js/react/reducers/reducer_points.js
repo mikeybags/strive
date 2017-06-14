@@ -19,11 +19,11 @@ export default function(state = {open_balance:0, wager_balance:0, spent:0, daily
       tasks.map((task) => {
         if (task.task_type != 'major'){
           if (Moment(task.unformatted_start_date).isSameOrBefore(Moment(), "day") && task.completed === false){
-            potential += task.points;
+            potential += Number(task.points);
           }
           if (Moment(task.unformatted_start_date).isSameOrBefore(Moment(), "day") && task.completed === true && Moment(task.updated_at).isSame(Moment(), "day")){
             finished += task.points;
-            potential += task.points;
+            potential += Number(task.points);
           }
         }
       })

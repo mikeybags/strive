@@ -18,7 +18,7 @@ class Home extends Component {
               <h4 className="text-center">Strive Points</h4>
               <p className="col-md-4 text-center">Current Points: {this.props.points.open_balance}</p>
               <p className="col-md-4 text-center">Wagered Points: {this.props.points.wager_balance}</p>
-              <p className="col-md-4 text-center">Daily Potential: {this.props.points.daily_potential[0]}/ {this.props.points.daily_potential[1]}</p>
+              <p className="col-md-4 text-center">Daily Potential: {this.props.points.daily_potential[0]}/{this.props.points.daily_potential[1]}</p>
           </div>
         </div>
         <div className="row">
