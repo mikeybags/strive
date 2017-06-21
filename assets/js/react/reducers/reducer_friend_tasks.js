@@ -6,6 +6,8 @@ export default function(state = {regular:[], recurring: [], major:[], spark_data
     case GET_FRIEND_TASKS:
       const spark_data = action.payload.data.recent_points
       const tasks = action.payload.data.friend_tasks
+      console.log("The Friend Tasks follow");
+      console.log(tasks);
       const regular = [],
       recurring = [],
       major = []

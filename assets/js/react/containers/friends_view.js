@@ -42,11 +42,11 @@ class FriendsView extends Component {
               <div className="friend-display">
                 <h5 className="text-center">{this.state.selected_friend.username}</h5>
                 <div className="row">
-                  <div className="col-xs-6">
+                  <div className="col-xs-12 col-sm-6">
                     <p>Points Available: {this.state.selected_friend.open_balance}</p>
                     <p>Points in Limbo: {this.state.selected_friend.wager_balance}</p>
                   </div>
-                  <div className="col-xs-6">
+                  <div className="col-xs-12 col-sm-6">
                     <SparklineChart className="sparkline" data={this.props.friend_tasks.spark_data} color="purple" units="K" />
                   </div>
                 </div>

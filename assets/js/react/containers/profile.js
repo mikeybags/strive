@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import {connect} from 'react-redux'
 import TasksView from './tasks_view'
 import StatsView from './stats_view'
@@ -11,26 +11,25 @@ import WagersView from './wagers_view'
 import {Link} from 'react-router'
 
 class Profile extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
-      selected:Number(this.props.params.id)
+      selected: Number(this.props.params.id)
     }
   }
   handleSelect(index, last) {
-    this.setState({selected:index})
+    this.setState({selected: index})
   }
 
   render() {
-    console.log(this.props.points);
     return (
       <div>
         <div className="profile-header">
-          <div className="no-gutters col-md-3 col-xs-6">
-            <img src={`static/images/${this.props.picture}`} className="img-responsive profile-picture" />
+          <div className="picture-box no-gutters col-lg-2 col-md-3 col-xs-12">
+            <img src={`static/images/${this.props.picture}`} className="img-responsive profile-picture"/>
           </div>
-          <div className="col-md-3 col-xs-6">
+          <div className="profile-buttons col-lg-4 col-md-3 col-xs-12">
             <Link to="tasks/new" className="btn btn-primary btn-block">Add a task</Link>
             <Link to="tasks/edit" className="btn btn-info btn-block">Manage tasks</Link>
           </div>
@@ -41,7 +40,7 @@ class Profile extends Component {
             <p>Daily Potential: {this.props.points.daily_potential[0]}/{this.props.points.daily_potential[1]}</p>
           </div>
         </div>
-        <Tabs className="home-tabs" onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >
+        <Tabs className="home-tabs" onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected}>
           <TabList>
             <Tab>Tasks</Tab>
             <Tab>Stats</Tab>
@@ -53,25 +52,25 @@ class Profile extends Component {
           </TabList>
 
           <TabPanel>
-            <TasksView />
+            <TasksView/>
           </TabPanel>
           <TabPanel>
-            <StatsView />
+            <StatsView/>
           </TabPanel>
           <TabPanel>
-            <FriendsView />
+            <FriendsView/>
           </TabPanel>
           <TabPanel>
-            <GroupsView />
+            <GroupsView/>
           </TabPanel>
           <TabPanel>
-            <WagersView />
+            <WagersView/>
           </TabPanel>
           <TabPanel>
-            <RequestsView />
+            <RequestsView/>
           </TabPanel>
           <TabPanel>
-            <PurchasesView />
+            <PurchasesView/>
           </TabPanel>
         </Tabs>
       </div>
@@ -79,8 +78,8 @@ class Profile extends Component {
   }
 }
 
-function mapStateToProps(state){
-  return {picture:state.session.picture, points:state.points}
+function mapStateToProps(state) {
+  return {picture: state.session.picture, points: state.points}
 }
 
 export default connect(mapStateToProps)(Profile)

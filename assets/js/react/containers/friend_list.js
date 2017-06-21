@@ -11,12 +11,10 @@ class FriendList extends Component {
     return this.props.friends.map((friend) => {
       return (
         <li key={friend.username} className="list-group-item row friend-list-item" onClick={() => {this.props.selectFriend(friend)}}>
-          <div className="col-xs-5">
-            <img src={`/static/images/${friend.profile_picture}`} className="img-responsive tiny-avatar" />
+          <div className="list-image">
+            <img src={`/static/images/${friend.profile_picture}`} className="tiny-avatar" />
           </div>
-          <div className="col-xs-6">
-            <p>{friend.username}</p>
-          </div>
+            <p className="list-name">{friend.username}</p>
         </li>
       )
     })

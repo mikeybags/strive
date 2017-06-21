@@ -217,7 +217,7 @@ body {
 
 #task-box {
   height: 300px;
-  overflow: scroll
+  overflow: scroll;
 }
 
 #hello {
@@ -245,25 +245,48 @@ body {
 .store-picture-option {
   height: $small-picture;
   display: block;
+  margin: 5px;
 }
 
 .friend-list {
-  overflow: scroll;
-  height:400px;
+  overflow: hidden;
+  height: auto;
   border: 2px solid #AAA;
   border-radius: 5px;
+  margin: 15px 0;
+  min-width: 176px;
+}
+
+.friend-list-item{
+  width: 100%;
+  margin: 0px;
+  padding-right: 5px;
+  padding-left: 5px;
+  box-shadow: 2px 2px 2px #AAA;
 }
 
 .friend-display {
   padding: 15px;
   background-color: #F2F2F2;
   border-radius: 5px;
-  overflow: scroll;
-  height:400px;
+  overflow-x: scroll;
+  min-height:400px;
 }
 
 .tiny-avatar {
-  height:50px;
+  max-height:50px;
+  width: 66px;
+}
+
+.list-image {
+  margin-right: 5px;
+  width: 66px;
+  display: inline-block;
+}
+
+.list-name {
+  display: inline-block;
+  margin-left: 5px;
 }
 
 .search-result {
@@ -349,6 +372,9 @@ body {
 .profile-picture {
   height: 166px;
   border: 3px ridge $nav-link;
+  @media(max-width:767px) {
+    margin: 0 auto 15px;
+  }
 }
 
 .react-tabs [role=tab] {
@@ -368,10 +394,6 @@ body {
 .friend-placeholder {
   padding-top: 172px;
   text-align: center;
-}
-
-.friend-list-item{
-  box-shadow: 2px 2px 2px #AAA;
 }
 
 .selected {
@@ -401,9 +423,18 @@ body {
   min-height: 140px;
   padding-top: 10px;
   @media(max-width: 767px) {
-    margin-top: 15px;
+    margin: 15px 0px;
   }
 }
+
+// .picture-box {
+//   @media(min-width: 543px){
+//     width: 166px;
+//   }
+//   @media(max-width: 543px){
+//     margin-bottom: 15px;
+//   }
+// }
 
 .no-gutters {
   margin-right: 0;
@@ -411,3 +442,12 @@ body {
   padding-right: 0;
   padding-left: 0;
 }
+
+// .profile-buttons {
+//   @media(min-width:768px){
+//     padding-right: 5px;
+//   }
+//   @media(min-width:544px){
+//     padding-left: 5px;
+//   }
+// }

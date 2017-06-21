@@ -11,7 +11,7 @@ export default function(state = {sent_requests : [], received_requests : [], rec
       sent_active = []
       wagers.map((wager) => {
         wager.end_date = Moment(wager.task__end_date).format('MMMM DD');
-        wager.message = `${wager.wagerer__username} bet ${wager.points} points you won't finish "${wager.task__name} before ${wager.end_date}.`
+        wager.message = `${wager.wagerer__username} bet ${wager.points} points you won't finish "${wager.task__name}" before ${wager.end_date}.`
           if (wager.current_user === wager.wagerer) {
             if (wager.accepted === false) {
               sent_requests.push(wager)

@@ -102,7 +102,8 @@ def add_member(request):
 
 def activity_feed(request):
     if request.method == 'GET':
-        pass
+        friends = User.objects.filter(user_friend__friend_id = request.session['id'], user_friend__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at") | User.objects.filter(friended_users__user_id = request.session['id'], friended_users__accepted=True).values("id","first_name", "last_name", "username", "profile_picture", "tag_line", "open_balance", "wager_balance", "updated_at")
+
     else:
         return JsonResponse({'error': 'Wrong HTTP method'})
 
@@ -214,7 +215,7 @@ def friend_tasks(request, id):
         if request.method == 'GET':
             trailing_points = [0,0,0,0,0]
             rolling_day = datetime.date.today() - datetime.timedelta(days=5)
-            friend_tasks = Task.objects.filter(user__id=id, public=True, completed=False).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
+            friend_tasks = Task.objects.filter(user__id=id, public=True, completed=False, end_date__gte = datetime.date.today()).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'public')
             friends_5day_points = Task.objects.filter(user__id=id, end_date__lte = datetime.date.today(), end_date__gte = rolling_day, completed=True)
             for i in friends_5day_points:
                 if i.end_date == (datetime.date.today() - datetime.timedelta(days=5)):
