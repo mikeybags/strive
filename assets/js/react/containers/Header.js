@@ -4,7 +4,7 @@ import {deleteSession} from '../actions/delete_session';
 import {createSession} from '../actions/create_session';
 import {getSession} from '../actions/get_session';
 import {Link} from 'react-router';
-import { getCookie, expireCookie } from 'redux-cookie';
+import { getCookie, expireCookie, removeCookie } from 'redux-cookie';
 import { Nav, Navbar, NavItem, MenuItem, NavDropdown, FormGroup, FormControl, Button, NavLink } from 'react-bootstrap';
 import {getPoints} from '../actions/get_points';
 import SearchBar from '../components/search_bar';
@@ -15,12 +15,13 @@ class Header extends Component {
     router:PropTypes.object
   };
   onLogout(){
-    this.props.expireCookie("id")
-    this.props.expireCookie("name")
-    this.props.expireCookie("picture")
+    this.props.removeCookie("id")
+    this.props.removeCookie("name")
+    this.props.removeCookie("picture")
     this.props.deleteSession(this.props.session.id)
     this.context.router.push('/')
   }
+  
   componentWillMount(){
     if (!this.props.session.hasOwnProperty("id")){
       const id = this.props.getCookie("id");
@@ -31,11 +32,10 @@ class Header extends Component {
         this.props.getPoints()
       }
     }
-
   }
   render(){
     const session = this.props.session
-    if (!session.hasOwnProperty("id")){
+    if (session.id === undefined){
       const navbarInstance = (
         <Navbar className="navbar navbar-inverse navbar-toggleable-md" id="navbar" fixedTop inverse collapseOnSelect>
           <Navbar.Header>
@@ -85,4 +85,4 @@ function mapStateToProps(state){
   return {session:state.session}
 }
 
-export default connect(mapStateToProps, {deleteSession, getSession, createSession, getCookie, expireCookie, getPoints})(Header);
+export default connect(mapStateToProps, {deleteSession, getSession, createSession, getCookie, expireCookie, removeCookie, getPoints})(Header);

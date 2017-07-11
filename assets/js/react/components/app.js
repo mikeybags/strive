@@ -9,7 +9,7 @@ class App extends Component {
   };
   
   componentWillUpdate() {
-    if (!this.props.session.hasOwnProperty("id") && this.props.getCookie("id") === 'undefined'){
+    if (!this.props.session.hasOwnProperty("id") && this.props.getCookie("id") === undefined){
       const address = location.hash.substr(0, location.hash.indexOf('?'));
      if (address !== '#/' && address !== '#/register') {
       this.context.router.push('/')

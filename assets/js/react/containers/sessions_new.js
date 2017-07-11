@@ -16,10 +16,13 @@ class SessionsNew extends Component {
     }
   }
   componentWillMount() {
-    if (this.props.getCookie("id") !== 'undefined'){
+    if (this.props.getCookie("id") !== undefined ){
       this.context.router.push('home')
+    } else {
+      this.context.router.push('/')
     }
   }
+  
   static contextTypes = {
     router:PropTypes.object
   };

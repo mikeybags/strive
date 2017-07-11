@@ -54,7 +54,7 @@ class UsersNew extends Component {
     router:PropTypes.object
   };
   componentWillMount() {
-    if (this.props.getCookie("id") !== 'undefined') {
+    if (this.props.getCookie("id") !== undefined) {
       this.context.router.push('home')
     }
   }
