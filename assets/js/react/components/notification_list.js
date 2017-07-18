@@ -1,24 +1,18 @@
 import React, {Component} from 'react'
-import { connect } from 'react-redux'
-
 
 class NotificationList extends Component {
 
 
   renderMessages(){
-    return(
-      <div>
-      { this.props.notifications.messages &&
-        <div className="row">
-          <p className="col-sm-12 col-lg-8 request-message">{this.props.notifications.messages}</p>
-        </div>
-      }
-      </div>
-    )
+    if (this.props.message) {
+      return(
+        <li className="request-list list-group-item">{this.props.message}</li>
+      );
+    }
   }
 
   renderNotifications(){
-    if (this.props.notifications) {
+    if (this.props.notifications.length > 0) {
       return this.props.notifications.map((notification) => {
         return (
           <li className="request-list list-group-item" key={notification.message + Math.random()}>
@@ -34,8 +28,19 @@ class NotificationList extends Component {
           </li>
         );
       });
-    };
+    } else {
+      if (this.props.message) {
+        return (
+          <li className="request-list list-group-item">You have no more pending {this.props.type} requests.</li>
+        );
+      } else {
+        return (
+          <li className="request-list list-group-item">You have no pending {this.props.type} requests.</li>
+        );
+      }
+    }
   }
+  
   render(){
     return (
       <ul className="list-group">

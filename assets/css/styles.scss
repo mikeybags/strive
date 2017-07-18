@@ -338,6 +338,14 @@ body {
   border-radius: 5px;
   box-shadow: $list-shadow;
   text-align: center;
+  font-size: 1.25em;
+}
+
+.request-message- {
+  padding: 10px 0;
+  border-radius: 5px;
+  box-shadow: $list-shadow;
+  text-align: center;
   font-size: 1.5em;
 }
 
@@ -355,7 +363,8 @@ body {
 }
 
 .request-notification {
-  margin: 23px 20px;
+  box-shadow: $list-shadow;
+  margin-bottom: 5px;
 }
 
 .request-btn {
@@ -397,7 +406,7 @@ body {
   background-color: #FFF;
   border-radius: 5px;
   width: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .friend-placeholder {

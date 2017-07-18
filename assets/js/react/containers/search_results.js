@@ -65,7 +65,7 @@ class SearchResults extends Component {
         {this.state.users ? <h5>Usernames matching "{this.state.term}" :</h5> : '' }
         {this.state.users && this.state.users.length === 0 && !this.state.message ? <p>No users found matching "{this.state.term}". Enter another term to search again.</p> : ''}
         {this.state.users && this.state.users.length === 0 && this.state.message ? <p>No more users found matching "{this.state.term}". Enter another term to search again.</p> : ''}
-        {this.state.message ? <div className="card text-success request-sent col-xs-12">{this.state.message}</div> : null}
+        {this.state.message ? <div className="card request-sent col-xs-12">{this.state.message}</div> : null}
         {this.renderUsers()}
       </div>
     )

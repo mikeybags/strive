@@ -19,10 +19,10 @@ class WagersView extends Component {
         </TabList>
 
         <TabPanel>
-          <WagerList wagers={this.props.wagers.sent_active} />
+          <WagerList type="sent" wagers={this.props.wagers.sent_active} />
         </TabPanel>
         <TabPanel>
-          <WagerList wagers={this.props.wagers.received_active} />
+          <WagerList type="received" wagers={this.props.wagers.received_active} />
         </TabPanel>
       </Tabs>
     )

@@ -2,13 +2,19 @@ import React, { Component } from 'react'
 
 class WagersList extends Component {
   renderListItems(){
-    return this.props.wagers.map((wager) => {
+    if (this.props.wagers.length > 0) {
+      return this.props.wagers.map((wager) => {
+        return (
+          <li key={wager.message + Math.random()} className="list-group-item">
+            <p>{wager.message}</p>
+          </li>
+        )
+      });
+    } else { 
       return (
-        <li key={wager.message + Math.random()} className="list-group-item">
-          <p>{wager.message}</p>
-        </li>
-      )
-    })
+        <li className="request-list list-group-item">You have no active {this.props.type} wagers.</li>
+      );
+    }
   }
 
   render(){
