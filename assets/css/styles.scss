@@ -332,6 +332,15 @@ body {
     }
   }
 }
+
+.request-sent {
+  padding: 10px 0;
+  border-radius: 5px;
+  box-shadow: $list-shadow;
+  text-align: center;
+  font-size: 1.5em;
+}
+
 .user-detail {
   display: inline-block;
   width: 100%;
