@@ -28,52 +28,48 @@ class FriendsView extends Component {
   render(){
     return (
       <div>
-        <div className="row">
-          <div className="col-sm-4">
-            <FriendList selectFriend={this.selectFriend.bind(this)} />
-          </div>
-          <div className="col-sm-8">
-            {Object.keys(this.state.selected_friend).length === 0 &&
-              <div className="friend-display">
-                <h5 className="friend-placeholder">Select a friend to view their info...</h5>
-              </div>
-            }
-            {Object.keys(this.state.selected_friend).length > 0 &&
-              <div className="friend-display">
-                <h5 className="text-center">{this.state.selected_friend.username}</h5>
-                <div className="row">
-                  <div className="col-xs-12 col-sm-6">
-                    <p>Points Available: {this.state.selected_friend.open_balance}</p>
-                    <p>Points in Limbo: {this.state.selected_friend.wager_balance}</p>
-                  </div>
-                  <div className="col-xs-12 col-sm-6">
-                    <SparklineChart className="sparkline" data={this.props.friend_tasks.spark_data} color="purple" units="K" />
-                  </div>
+        <FriendList selectFriend={this.selectFriend.bind(this)} />
+        <div className="graph-section">
+          {Object.keys(this.state.selected_friend).length === 0 &&
+            <div className="friend-display">
+              <h5 className="friend-placeholder">Select a friend to view their info...</h5>
+            </div>
+          }
+          {Object.keys(this.state.selected_friend).length > 0 &&
+            <div className="friend-display">
+              <h5 className="text-center">{this.state.selected_friend.username}</h5>
+              <div className="row">
+                <div className="col-xs-12 col-sm-6">
+                  <p>Points Available: {this.state.selected_friend.open_balance}</p>
+                  <p>Points in Limbo: {this.state.selected_friend.wager_balance}</p>
                 </div>
-                <h5 className="text-center">Tasks - Click to Wager</h5>
-                {Object.keys(this.state.selected_task).length > 0 &&
-                  <WagerForm friend={this.state.selected_friend} task={this.state.selected_task} balance={this.props.points.open_balance} />
-                }
-                <Tabs onSelect={this.handleSelect} selectedIndex={0}>
-                  <TabList>
-                    <Tab>Regular</Tab>
-                    <Tab>Recurring</Tab>
-                    <Tab>Major</Tab>
-                  </TabList>
-
-                  <TabPanel>
-                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.regular} edit={this.selectTask.bind(this)} />
-                  </TabPanel>
-                  <TabPanel>
-                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.recurring} edit={this.selectTask.bind(this)} />
-                  </TabPanel>
-                  <TabPanel>
-                    <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.major} edit={this.selectTask.bind(this)} />
-                  </TabPanel>
-                </Tabs>
+                <div className="col-xs-12 col-sm-6">
+                  <SparklineChart className="sparkline" data={this.props.friend_tasks.spark_data} color="purple" units="K" />
+                </div>
               </div>
-            }
-          </div>
+              <h5 className="text-center">Tasks - Click to Wager</h5>
+              {Object.keys(this.state.selected_task).length > 0 &&
+                <WagerForm friend={this.state.selected_friend} task={this.state.selected_task} balance={this.props.points.open_balance} />
+              }
+              <Tabs onSelect={this.handleSelect} selectedIndex={0}>
+                <TabList>
+                  <Tab>Regular</Tab>
+                  <Tab>Recurring</Tab>
+                  <Tab>Major</Tab>
+                </TabList>
+
+                <TabPanel>
+                  <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.regular} edit={this.selectTask.bind(this)} />
+                </TabPanel>
+                <TabPanel>
+                  <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.recurring} edit={this.selectTask.bind(this)} />
+                </TabPanel>
+                <TabPanel>
+                  <TaskTable show={[["name","Name"], ["points","Worth"], ["end_date","Due Date"]]} tasks={this.props.friend_tasks.major} edit={this.selectTask.bind(this)} />
+                </TabPanel>
+              </Tabs>
+            </div>
+          }
         </div>
       </div>
     )

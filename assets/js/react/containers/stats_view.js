@@ -114,13 +114,11 @@ class StatsView extends Component {
   }
   render () {
     return (
-      <div className="row">
-        <div className="col-sm-4" id="stats-list">
-          <FriendList selectFriend={this.selectFriend.bind(this)} />
-        </div>
-        <div className="col-sm-8">
-          <p>Click friend to add to chart, click again to remove</p>
-          <Tabs onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >
+      <div id="stats-list">
+        <FriendList selectFriend={this.selectFriend.bind(this)} />
+        <div className="graph-section">
+          <p className="graph-instructions">Click friend to add to chart, click again to remove</p>
+          <Tabs className="graphs" onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected} >
             <TabList>
               <Tab>Completion</Tab>
               <Tab>Wagers</Tab>
@@ -138,7 +136,7 @@ class StatsView extends Component {
             </TabPanel>
 
             <TabPanel>
-              <BarChart width={550} height={300} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+              <BarChart width={550} height={350} data={bardata} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                  <XAxis dataKey="name"/>
                  <YAxis/>
                  <CartesianGrid strokeDasharray="3 3"/>
@@ -152,7 +150,7 @@ class StatsView extends Component {
             </TabPanel>
 
             <TabPanel>
-              <AreaChart width={600} height={400} data={data} margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+              <AreaChart width={550} height={350} data={data} margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                 <XAxis dataKey="name"/>
                 <YAxis/>
                 <CartesianGrid strokeDasharray="3 3"/>

@@ -248,29 +248,84 @@ body {
   margin: 5px;
 }
 
-.friend-list {
-  overflow: hidden;
-  height: auto;
-  border: 2px solid #AAA;
-  border-radius: 5px;
-  margin: 15px 0;
-  min-width: 176px;
+.friend-list-container {
+  margin-right: 15px;
+  display: inline-block;
+  width: 210px;
+  @media(max-width: 767px) {
+    width: 100%;
+    display: block;
+  }
 }
 
-.friend-list-item{
+::-webkit-scrollbar {
+  width: 5px; 
+  height: 5px;  
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+} 
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+} 
+
+.friend-list {
+  overflow-y: auto;
+  height: 460px;
+  border: 2px solid #AAA;
+  background-color: #DDD;
+  border-radius: 5px;
+  width: 210px;
+  @media(max-width: 767px) {
+    height: 89px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+.friend-list-item {
   width: 100%;
   margin: 0px;
   padding-right: 5px;
   padding-left: 5px;
   box-shadow: 2px 2px 2px #AAA;
+  cursor: pointer;
+  
+  @media(max-width: 767px) {
+    display: inline-block;
+    text-align: center;
+    width: 250px;
+  }
 }
 
+.list-group-item {
+  @media(max-width: 767px) {
+    display: inline-block;
+    text-align: center;
+  }
+}
 .friend-display {
   padding: 15px;
   background-color: #F2F2F2;
   border-radius: 5px;
-  overflow-x: scroll;
-  min-height:400px;
+  overflow-x: auto;
+  min-height: 100%;
+}
+
+.graph-section {
+  height: 460px;
+  display: inline-block;
+  width: calc(100% - 225px);
+  overflow-x: auto;
+  @media(max-width: 767px) {
+    margin-top: 15px;
+    display: block;
+    width: 100%;
+  }
 }
 
 .tiny-avatar {
@@ -406,7 +461,6 @@ body {
   background-color: #FFF;
   border-radius: 5px;
   width: 100%;
-  overflow-x: auto;
 }
 
 .friend-placeholder {
@@ -469,3 +523,4 @@ body {
 //     padding-left: 5px;
 //   }
 // }
+

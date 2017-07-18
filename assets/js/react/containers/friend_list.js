@@ -21,8 +21,8 @@ class FriendList extends Component {
   }
   render(){
     return (
-      <div className="friend-list">
-        <ul className="list-group">
+      <div className="friend-list-container">
+        <ul className="list-group friend-list">
           {this.renderFriends()}
         </ul>
       </div>

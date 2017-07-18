@@ -40,7 +40,6 @@ class NotificationList extends Component {
       }
     }
   }
-  
   render(){
     return (
       <ul className="list-group">
