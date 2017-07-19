@@ -114,7 +114,7 @@ class StatsView extends Component {
   }
   render () {
     return (
-      <div id="stats-list">
+      <div id="stats-list" className="body-section">
         <FriendList selectFriend={this.selectFriend.bind(this)} />
         <div className="graph-section">
           <p className="graph-instructions">Click friend to add to chart, click again to remove</p>
@@ -126,7 +126,7 @@ class StatsView extends Component {
             </TabList>
 
             <TabPanel>
-              <LineChart width={550} height={350} data={this.state.completionData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+              <LineChart id="someting" width={550} height={350} data={this.state.completionData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                 {this.renderLines()}
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <XAxis dataKey="name" />

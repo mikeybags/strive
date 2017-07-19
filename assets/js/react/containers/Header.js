@@ -14,6 +14,7 @@ class Header extends Component {
   static contextTypes = {
     router:PropTypes.object
   };
+
   onLogout(){
     this.props.removeCookie("id")
     this.props.removeCookie("name")
@@ -23,15 +24,21 @@ class Header extends Component {
   }
   
   componentWillMount(){
+    console.log(this.props);
     if (!this.props.session.hasOwnProperty("id")){
       const id = this.props.getCookie("id");
       const first_name = this.props.getCookie("name");
       const picture = this.props.getCookie("picture");
-      if (id !== "undefined"){
+      if (id !== undefined){
         this.props.createSession({id, first_name, picture})
         this.props.getPoints()
       }
     }
+  }
+  renderToggle() {
+    return (
+      <div>Menu &nbsp;<i className='fa fa-bars'></i></div>
+    );
   }
   render(){
     const session = this.props.session
@@ -58,7 +65,7 @@ class Header extends Component {
         <Navbar className="navbar navbar-inverse navbar-toggleable-md" id="navbar" fixedTop inverse collapseOnSelect>
           <Navbar.Header>
           <a id="brand" className="navbar-brand" href="#/home">Strive</a>
-            <Navbar.Toggle />
+            <Navbar.Toggle children={this.renderToggle()} />
           </Navbar.Header>
           <Navbar.Collapse>
           <Navbar.Form pullLeft>

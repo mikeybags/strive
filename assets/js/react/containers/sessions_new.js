@@ -56,7 +56,7 @@ class SessionsNew extends Component {
         <ul>
           {this.renderErrors()}
         </ul>
-        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+        <form className="login-form" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <div className={`form-group ${email.touched && email.invalid ? 'has-danger' : ''}`}>
           <label>Email</label>
           <input type="text" className="form-control" {...email} />

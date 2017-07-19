@@ -27,7 +27,7 @@ class FriendsView extends Component {
   }
   render(){
     return (
-      <div>
+      <div className="body-section">
         <FriendList selectFriend={this.selectFriend.bind(this)} />
         <div className="graph-section">
           {Object.keys(this.state.selected_friend).length === 0 &&
