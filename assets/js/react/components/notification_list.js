@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 
 class NotificationList extends Component {
-
-
   renderMessages(){
     if (this.props.message) {
       return(

@@ -71,10 +71,9 @@ class StoreIndex extends Component {
             <option value="All">All</option>
             {this.addCategories()}
           </select>
-
+          <button onClick={this.onBuyClick.bind(this)}>Buy!</button>
         </div>
         {this.renderItems()}
-        <button onClick={this.onBuyClick.bind(this)}>Buy!</button>
       </div>
     )
   }

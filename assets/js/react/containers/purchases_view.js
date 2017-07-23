@@ -57,10 +57,9 @@ class StoreIndex extends Component {
             <option value="All">All</option>
             {this.addCategories()}
           </select>
-
+          <button onClick={this.pictureChange.bind(this)}>Change Avatar</button>
         </div>
         {this.renderPurchases()}
-        <button onClick={this.pictureChange.bind(this)}>Change Avatar</button>
       </div>
     )
   }

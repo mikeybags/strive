@@ -39,6 +39,8 @@ def task(request):
 				errors.append(error)
 			return JsonResponse({'errors':errors})
 		else:
+			if public == 'true':
+				activity = Activity.objects.create_activity(request.session['id'], "created", task['task'].id)
 			return JsonResponse({"name":task['task'].name})
 	elif request.method == 'GET':
 		past_due_tasks = Task.objects.filter(user_id = request.session['id'], completed = False, end_date__lte = datetime.date.today())
@@ -46,7 +48,9 @@ def task(request):
 			wagers = Wager.objects.filter(task__id = task.id)
 			for wager in wagers:
 				if not wager.loser_id:
-					Wager.objects.lose(wager.id, request.session['id'])
+					completed_wager = Wager.objects.lose(wager.id, request.session['id'])
+					Activity.objects.create_activity(completed_wager['wager'].winner.id, "won", completed_wager['wager'].task.id, wager.id)
+					Activity.objects.create_activity(completed_wager['wager'].loser.id, "lost", completed_wager['wager'].task.id, wager.id)
 		tasks = Task.objects.filter(user__id=request.session['id']).values('id', 'name', 'description', 'end_date', 'points', 'start_date', 'task_type', 'created_at', 'public', 'completed', 'updated_at')
 		return JsonResponse({"tasks": list(tasks)})
 	elif request.method == "PATCH":
@@ -62,6 +66,7 @@ def task(request):
 		updated_task = Task.objects.update_task(task_id, name, description, start_date, end_date, points, task_type, public)
 		if body['completed'] == True:
 			updated_task = Task.objects.completed_task(request.session['id'], task_id)
+			activity = Activity.objects.create_activity(request.session['id'], "completed", task_id)
 		if 'errors' in updated_task:
 			errors = []
 			for error in updated_task["errors"]:
@@ -102,7 +107,8 @@ def add_member(request):
 
 def activity_feed(request):
 	if request.method == 'GET':
-		pass
+		activities = Activity.objects.filter(user__user_friend__friend_id = request.session['id'], user__user_friend__accepted=True).values("id", "created_at", "user__username", "user__profile_picture", "task__user__username", "task__user_id", "verb", "task__name", "task__user__username", "task__points", "task__end_date", "wager__task__name", "wager__wagerer__username", "wager__wagerer_id", "wager__loser__username", "wager__winner__username", "wager__winner_id", "wager__loser_id",  "wager__task__end_date", "wager__points").order_by('-created_at') | Activity.objects.filter(user__friended_users__user_id = request.session['id'], user__friended_users__accepted=True).values("id", "created_at", "user__username", "user__profile_picture", "task__user__username", "task__user_id", "verb", "task__name", "task__user__username", "task__points", "task__end_date", "wager__task__name", "wager__wagerer__username", "wager__wagerer_id", "wager__loser__username", "wager__winner__username", "wager__winner_id", "wager__loser_id", "wager__task__end_date", "wager__points").order_by('-created_at')
+		return JsonResponse({'activities': list(activities), 'id': request.session['id']})
 	else:
 		return JsonResponse({'error': 'Wrong HTTP method'})
 
@@ -143,14 +149,14 @@ def request_friend(request):
 				errors.append(error)
 			return JsonResponse({'errors':errors})
 		else:
-			return JsonResponse({'Success':True})
+			return JsonResponse({'success':True})
 	elif request.method == 'PUT':
 		body = json.loads(request.body)
 		if body['status'] == 'accept':
 			friend = Friend.objects.accepted(request.session['id'], body['friend'])
 		else:
 			friend = Friend.objects.denied(body['friendship_id'])
-		return JsonResponse({'Success':'Friend changed'})
+		return JsonResponse({'success':'Friend changed'})
 
 	else:
 		return JsonResponse({'error': 'Wrong HTTP method'})
@@ -317,6 +323,7 @@ def wagers(request):
 		task_id = body['task']
 		wager_amount = int(body['wager'])
 		wager = Wager.objects.create_wager(request.session['id'], task_id, wager_amount)
+		activity = Activity.objects.create_activity(request.session['id'], "wagered", task_id, wager['wager'].id)
 		if 'errors' in wager:
 			errors = []
 			for error in wager["errors"]:
@@ -334,6 +341,7 @@ def wagers(request):
 		body = json.loads(request.body)
 		if body['status'] == 'accept':
 			wager = Wager.objects.accepted(request.session['id'], body['wager'])
+			activity = Activity.objects.create_activity(request.session['id'], "accepted", wager['wager'].task_id, wager['wager'].id)
 		else:
 			wager = Wager.objects.denied(body['wager'])
 		return JsonResponse({'Success':'Wager changed'})

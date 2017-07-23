@@ -5,8 +5,8 @@ class StriveStore extends Component {
   render(){
     return (
       <div>
-        <Link to='store/new'>Admin? Add Product</Link>
-        <Link to='profile/4'>View Purchases</Link>
+        <p><Link to='store/new'>Admin? Add Product</Link></p>
+        <p><Link to='profile/6'>View Purchases</Link></p>
         {this.props.children}
       </div>
     )

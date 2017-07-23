@@ -219,6 +219,7 @@ body {
 
 #task-box {
   height: 300px;
+  width: 100%;
   // overflow: scroll;
 }
 
@@ -254,6 +255,7 @@ body {
   margin-right: 15px;
   display: inline-block;
   width: 210px;
+  vertical-align: top;
   @media(max-width: 991px) {
     width: 100%;
     display: block;
@@ -277,7 +279,7 @@ body {
 
 .friend-list {
   overflow-y: auto;
-  height: 460px;
+  height: 552px;
   border: 2px solid #AAA;
   background-color: #DDD;
   border-radius: 5px;
@@ -311,16 +313,17 @@ body {
     text-align: center;
   }
 }
+
 .friend-display {
   padding: 15px;
   background-color: #F2F2F2;
   border-radius: 5px;
   overflow-x: auto;
-  min-height: 100%;
+  height: 100%
 }
 
 .graph-section {
-  height: 460px;
+  height: 552px;
   display: inline-block;
   width: calc(100% - 225px);
   @media(max-width: 991px) {
@@ -458,7 +461,7 @@ body {
 }
 
 .friend-placeholder {
-  padding-top: 172px;
+  margin-top: 35%;
   text-align: center;
 }
 
@@ -560,6 +563,20 @@ body {
 //   border-top: 0px;
 // }
 
+.friend-display {
+  .react-tabs {
+    .ReactTabs__TabPanel--selected {
+      background-color: white;
+      height: 295px;
+      overflow-y: auto;
+    }
+  }
+}
+
+.react-tabs [role=tab]:focus:after {
+  left: 0px;
+}
+
 .react-tabs [role=tab] {
   border: 1px solid rgba(200, 200, 200, 0.5);
   border-top-right-radius: 5px;
@@ -617,3 +634,33 @@ body {
   margin-bottom: 15px;
 }
 
+
+.feed-item {
+  text-align: left;
+  padding: 10px;
+
+  .feed-timestamp {
+    font-size: .75em;
+    color: #777;
+  }
+
+  .feed-content {
+    margin-bottom: 10px;
+    
+    .feed-picture {
+      width: 50px;
+      height: 50px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    .feed-message {
+      width: calc(100% - 60px);
+      display: inline-block;
+      vertical-align: middle;
+      margin-bottom: 0px;
+    }
+  }
+
+}

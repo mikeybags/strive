@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import Feed from './feed'
 import DashboardTasks from './dashboard_tasks'
 import {connect} from 'react-redux'
+import ActivityFeed from './feed'
 
 
 class Home extends Component {
@@ -25,8 +25,8 @@ class Home extends Component {
           <div className="col-md-4">
             <DashboardTasks />
           </div>
-          <div className="col-md-8">
-            <Feed />
+          <div className="col-md-8 no-gutters">
+            <ActivityFeed />
           </div>
         </div>
       </div>

@@ -45,7 +45,7 @@ class Profile extends Component {
           <NavItem className="nav-pill" eventKey={0}>Tasks</NavItem>
           <NavItem className="nav-pill" eventKey={1}>Stats</NavItem>
           <NavItem className="nav-pill" eventKey={2}>Friends</NavItem>
-          <NavItem className="nav-pill" eventKey={3}>Group Challenges</NavItem>
+          {/*<NavItem className="nav-pill" eventKey={3}>Group Challenges</NavItem>*/}
           <NavItem className="nav-pill" eventKey={4}>Active Wagers</NavItem>
           <NavItem className="nav-pill" eventKey={5}>Requests</NavItem>
           <NavItem className="nav-pill" eventKey={6}>My Swag</NavItem>

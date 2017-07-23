@@ -42,12 +42,15 @@ class TaskManager(models.Manager):
         wagers = Wager.objects.filter(task__id = task.id, accepted=True)
         if len(wagers) > 0:
             for wager in wagers:
-                print timezone.now().date()
-                print task.end_date
-                if timezone.now().date() <= task.end_date:
-                    Wager.objects.win(wager.id, user_id)
-                else:
-                    Wager.objects.lose(wager.id, user_id)
+                if wager.winner is None:
+                    if timezone.now().date() <= task.end_date:
+                        wager = Wager.objects.win(wager.id, user_id)
+                        Activity.objects.create_activity(user_id, "won", task.id, wager['wager'].id)
+                        Activity.objects.create_activity(wager['wager'].loser.id, "lost", task.id, wager['wager'].id)
+                    else:
+                        wager = Wager.objects.lose(wager.id, user_id)
+                        Activity.objects.create_activity(user_id, "lost", task.id, wager['wager'].id)
+                        Activity.objects.create_activity(wager['wager'].winner.id, "won", task.id, wager['wager'].id)
         tomorrow = datetime.date.today() + datetime.timedelta(days=1)
         if task.task_type == "recurring":
             Task.objects.create_task(user.id, task.name, task.description, tomorrow, tomorrow, task.points, task.task_type, task.public)
@@ -100,7 +103,7 @@ class WagerManager(models.Manager):
         user.wager_balance += wager.points
         wager.save()
         user.save()
-        return True
+        return {'wager': wager}
 
     def denied(self, wager_id):
         wager = Wager.objects.get(id=wager_id)
@@ -109,7 +112,6 @@ class WagerManager(models.Manager):
         user.open_balance += wager.points
         user.wager_balance -= wager.points
         user.save()
-        wagerer_user.save()
         return True
 
     def win(self, wager_id, user_id):
@@ -124,7 +126,7 @@ class WagerManager(models.Manager):
         wagerer_user.wager_balance -= wager.points
         user.save()
         wagerer_user.save()
-        return True
+        return {'wager': wager}
 
     def lose(self, wager_id, user_id):
         wager = Wager.objects.get(id=wager_id)
@@ -137,7 +139,7 @@ class WagerManager(models.Manager):
         wagerer_user.wager_balance -= wager.points
         user.wager_balance -= wager.points
         user.save()
-        return True
+        return {'wager': wager}
 
 class FriendManager(models.Manager):
     def create_friend(self, user_id, friending_user_id, accepted=False):
@@ -239,8 +241,15 @@ class UserImageManager(models.Manager):
             return {'image':image.picture}
 
 class ActivityManager(models.Manager):
-    def create_activity(self, user_id, verb, type):
-        pass
+    def create_activity(self, user_id, verb, task_id, wager_id=None):
+        user = User.objects.get(id=user_id)
+        task = Task.objects.get(id=task_id)
+        if wager_id is None:
+            activity = Activity(user=user, task=task, verb=verb)
+        else:     
+            activity = Activity(user=user, task=task, verb=verb, wager_id=wager_id)
+        activity.save()
+        return {'activity': activity}
 
 class Task(models.Model):
     user = models.ForeignKey(User, related_name="user_task")
@@ -324,3 +333,13 @@ class UserImage(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = UserImageManager()
+
+class Activity(models.Model): 
+    user = models.ForeignKey(User, related_name="user_activity")
+    verb = models.TextField()
+    task = models.ForeignKey(Task, related_name="task_activity")
+    wager = models.ForeignKey(Wager, related_name="wager_activity", default=None, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = ActivityManager()

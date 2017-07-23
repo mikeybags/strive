@@ -103,23 +103,23 @@ class RequestsView extends Component {
   render(){
     return (
       <div>
-      <Tabs onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected}>
-        <TabList>
-          <Tab>Friends</Tab>
-          <Tab>Wagers</Tab>
-          <Tab>Groups</Tab>
-        </TabList>
+        <Tabs onSelect={this.handleSelect.bind(this)} selectedIndex={this.state.selected}>
+          <TabList>
+            <Tab>Friends</Tab>
+            <Tab>Wagers</Tab>
+            <Tab>Groups</Tab>
+          </TabList>
 
-        <TabPanel>
-          <NotificationList message={this.state.friend_message} notifications={this.props.notifications.friend} type="friend" acceptClick={this.acceptClick.bind(this)} denyClick={this.denyClick.bind(this)} />
-        </TabPanel>
-        <TabPanel>
-          <NotificationList message={this.state.wager_message} notifications={this.props.wager_requests} type="wager" acceptClick={this.acceptClick.bind(this)} denyClick={this.denyClick.bind(this)} />
-        </TabPanel>
-        <TabPanel>
-          <NotificationList message={this.state.group_message} notifications={this.props.notifications.group} type="group" acceptClick={this.acceptClick.bind(this)} denyClick={this.denyClick.bind(this)} />
-        </TabPanel>
-      </Tabs>
+          <TabPanel>
+            <NotificationList message={this.state.friend_message} notifications={this.props.notifications.friend} type="friend" acceptClick={this.acceptClick.bind(this)} denyClick={this.denyClick.bind(this)} />
+          </TabPanel>
+          <TabPanel>
+            <NotificationList message={this.state.wager_message} notifications={this.props.wager_requests} type="wager" acceptClick={this.acceptClick.bind(this)} denyClick={this.denyClick.bind(this)} />
+          </TabPanel>
+          <TabPanel>
+            <NotificationList message={this.state.group_message} notifications={this.props.notifications.group} type="group" acceptClick={this.acceptClick.bind(this)} denyClick={this.denyClick.bind(this)} />
+          </TabPanel>
+        </Tabs>
       </div>
     )
   }
