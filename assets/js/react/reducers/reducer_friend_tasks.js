@@ -33,9 +33,7 @@ export default function(state = {regular:[], recurring: [], major:[], spark_data
         }
       })
       return {regular, recurring, major, spark_data};
-      break;
     default:
       return state;
-      break;
   }
 }

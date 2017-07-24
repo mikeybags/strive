@@ -31,6 +31,7 @@ class FeedItems extends Component {
 	render() {
 		return (
 			<ul className="list-group">
+				<h4 className="text-center">Recent Activity</h4>
 				{this.renderFeedItems()}
 			</ul>
 		);

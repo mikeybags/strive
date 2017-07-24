@@ -35,7 +35,7 @@ class Profile extends Component {
             <Link to="tasks/edit" className="btn btn-info btn-block">Manage tasks</Link>
           </div>
           <div className="col-md-6 col-xs-12 profile-points-box text-center">
-            <h4>Strive Points</h4>
+            <h4>Your Strive Points</h4>
             <p>Current Points: {this.props.points.open_balance}</p>
             <p>Wagered Points: {this.props.points.wager_balance}</p>
             <p>Daily Potential: {this.props.points.daily_potential[0]}/{this.props.points.daily_potential[1]}</p>
