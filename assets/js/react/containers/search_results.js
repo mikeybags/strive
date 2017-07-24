@@ -5,7 +5,6 @@ import { requestFriend } from '../actions/request_friend'
 class SearchResults extends Component {
   constructor(props){
     super(props);
-    console.log(props);
     this.state = {
       message: '',
       users: props.data.users
@@ -13,7 +12,6 @@ class SearchResults extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('next props', nextProps);
     this.setState({message: '', users: nextProps.data.users});
   }
 
@@ -58,8 +56,6 @@ class SearchResults extends Component {
   }
 
   render(){
-    console.log('props in render', this.props);
-    console.log('state in render', this.state);
     return (
       <div>
         {this.state.users ? <h5>Usernames matching "{this.state.term}" :</h5> : '' }

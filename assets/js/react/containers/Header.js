@@ -24,7 +24,6 @@ class Header extends Component {
   }
   
   componentWillMount(){
-    console.log(this.props);
     if (!this.props.session.hasOwnProperty("id")){
       const id = this.props.getCookie("id");
       const first_name = this.props.getCookie("name");
